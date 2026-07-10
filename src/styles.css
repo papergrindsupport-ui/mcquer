@@ -1,0 +1,375 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-sans: "Sora", ui-sans-serif, system-ui, sans-serif;
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--primary);
+  --color-ring-offset-background: var(--background);
+  --color-surface: var(--surface);
+
+  --animate-fade-in: fade-in 0.5s ease-out both;
+  --animate-fade-up: fade-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-scale-in: scale-in 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-slide-down: slide-down 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes slide-down {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes theme-icon-in {
+  from { opacity: 0; transform: rotate(-140deg) scale(0.4); }
+  to   { opacity: 1; transform: rotate(0) scale(1); }
+}
+.animate-theme-icon {
+  animation: theme-icon-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Circular reveal for dark/light mode switching (View Transitions API) */
+@keyframes theme-clip-in {
+  from { clip-path: circle(0 at var(--vt-x) var(--vt-y)); }
+  to   { clip-path: circle(var(--vt-r) at var(--vt-x) var(--vt-y)); }
+}
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+::view-transition-old(root) {
+  z-index: 1;
+}
+::view-transition-new(root) {
+  z-index: 2;
+  animation: theme-clip-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+/* Suppress the body color transition while the reveal plays,
+   so the new theme snaps in cleanly under the expanding clip. */
+html.theme-transition body {
+  transition: none !important;
+}
+
+/* Palette (accent color) swap — briefly transition color-carrying
+   properties so switching primary color eases in smoothly. */
+html.palette-transition,
+html.palette-transition *,
+html.palette-transition *::before,
+html.palette-transition *::after {
+  transition:
+    background-color 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    color 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    fill 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    stroke 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.45s cubic-bezier(0.22, 1, 0.36, 1) !important;
+}
+
+/* Timer alert animations */
+@keyframes igv-shake-once {
+  0%,100% { transform: translate(0,0); }
+  20% { transform: translate(-6px, 2px); }
+  40% { transform: translate(6px, -2px); }
+  60% { transform: translate(-4px, -1px); }
+  80% { transform: translate(4px, 1px); }
+}
+@keyframes igv-shake-alert {
+  0%,100% { transform: translate(0,0); }
+  10% { transform: translate(-10px, 3px); }
+  20% { transform: translate(10px, -3px); }
+  30% { transform: translate(-8px, -3px); }
+  40% { transform: translate(8px, 3px); }
+  50% { transform: translate(-6px, 2px); }
+  60% { transform: translate(6px, -2px); }
+  70% { transform: translate(-4px, 1px); }
+  80% { transform: translate(4px, -1px); }
+  90% { transform: translate(-2px, 1px); }
+}
+@keyframes igv-flash-warn {
+  0% { background-color: rgba(220, 38, 38, 0); }
+  30% { background-color: rgba(220, 38, 38, 0.28); }
+  100% { background-color: rgba(220, 38, 38, 0); }
+}
+@keyframes igv-flash-alert {
+  0%,100% { background-color: rgba(220, 38, 38, 0); }
+  10%,30%,50%,70% { background-color: rgba(220, 38, 38, 0.4); }
+  20%,40%,60%,80% { background-color: rgba(220, 38, 38, 0.05); }
+}
+.igv-shake-once { animation: igv-shake-once 0.55s cubic-bezier(.36,.07,.19,.97) both; }
+.igv-shake-alert { animation: igv-shake-alert 1.3s cubic-bezier(.36,.07,.19,.97) both; }
+.igv-flash-warn { animation: igv-flash-warn 0.6s ease both; }
+.igv-flash-alert { animation: igv-flash-alert 1.4s ease both; }
+
+/* MCQ option interactions */
+@keyframes mcq-pop {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.06); }
+  70%  { transform: scale(0.98); }
+  100% { transform: scale(1); }
+}
+@keyframes mcq-pop-strong {
+  0%   { transform: scale(1); }
+  30%  { transform: scale(1.18) rotate(-3deg); }
+  60%  { transform: scale(0.94) rotate(2deg); }
+  100% { transform: scale(1) rotate(0); }
+}
+@keyframes mcq-shake {
+  0%,100% { transform: translateX(0); }
+  20% { transform: translateX(-6px); }
+  40% { transform: translateX(6px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(4px); }
+}
+@keyframes mcq-correct-glow {
+  0%   { box-shadow: 0 0 0 0 rgba(16,185,129,0.55); }
+  70%  { box-shadow: 0 0 0 12px rgba(16,185,129,0); }
+  100% { box-shadow: 0 0 0 0 rgba(16,185,129,0); }
+}
+.mcq-pop        { animation: mcq-pop 0.32s cubic-bezier(.34,1.56,.64,1) both; }
+.mcq-pop-strong { animation: mcq-pop-strong 0.5s cubic-bezier(.34,1.56,.64,1) both; }
+.mcq-shake      { animation: mcq-shake 0.5s cubic-bezier(.36,.07,.19,.97) both; }
+.mcq-glow       { animation: mcq-correct-glow 1s ease-out both; }
+
+/* Draggable window handles: grab cursor + no text selection while dragging */
+.tool-drag-handle,
+.timers-drag-handle {
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+}
+.tool-drag-handle:active,
+.timers-drag-handle:active {
+  cursor: grabbing;
+}
+/* While an Rnd item is being dragged, disable text selection page-wide */
+body:has(.react-draggable-dragging) {
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: grabbing;
+}
+
+:root {
+  --radius: 0.75rem;
+  --primary-h: 220;
+  --primary-s: 90%;
+  --primary-l: 55%;
+
+  --background: oklch(0.99 0 0);
+  --foreground: oklch(0.15 0 0);
+  --surface: oklch(0.975 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.15 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.15 0 0);
+  --primary: hsl(var(--primary-h) var(--primary-s) var(--primary-l));
+  --primary-foreground: oklch(0.99 0 0);
+  --secondary: oklch(0.96 0 0);
+  --secondary-foreground: oklch(0.2 0 0);
+  --muted: oklch(0.96 0 0);
+  --muted-foreground: oklch(0.45 0 0);
+  --accent: oklch(0.94 0 0);
+  --accent-foreground: oklch(0.15 0 0);
+  --destructive: oklch(0.6 0.2 25);
+  --destructive-foreground: oklch(0.99 0 0);
+  --border: oklch(0.9 0 0);
+  --input: oklch(0.92 0 0);
+}
+
+.dark {
+  --background: oklch(0 0 0);
+  --foreground: oklch(0.98 0 0);
+  --surface: oklch(0.06 0 0);
+  --card: oklch(0.04 0 0);
+  --card-foreground: oklch(0.98 0 0);
+  --popover: oklch(0.05 0 0);
+  --popover-foreground: oklch(0.98 0 0);
+  --primary: hsl(var(--primary-h) var(--primary-s) var(--primary-l));
+  --primary-foreground: oklch(0.05 0 0);
+  --secondary: oklch(0.1 0 0);
+  --secondary-foreground: oklch(0.98 0 0);
+  --muted: oklch(0.1 0 0);
+  --muted-foreground: oklch(0.65 0 0);
+  --accent: oklch(0.13 0 0);
+  --accent-foreground: oklch(0.98 0 0);
+  --destructive: oklch(0.55 0.2 25);
+  --destructive-foreground: oklch(0.98 0 0);
+  --border: oklch(0.18 0 0);
+  --input: oklch(0.15 0 0);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+  html, body {
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  ::selection {
+    background-color: var(--color-primary);
+    color: var(--color-primary-foreground);
+  }
+}
+
+/* Wysiwyg helpers — theme color & highlight are applied via classes because
+   `hsl(var(--primary))` is invalid (`--primary` is already an `hsl(...)`) and
+   silently drops the inline style. Using a class keeps the visual + the
+   serialised data-theme attribute in sync. */
+.wysiwyg-theme-color { color: var(--primary); }
+.wysiwyg-theme-bg {
+  background: color-mix(in oklab, var(--primary) 25%, transparent);
+  padding: 0 0.25rem;
+  border-radius: 0.25rem;
+}
+
+/* --------- Higher contrast mode (dark only) ---------
+   Lifts card / popover / input surfaces above the pure-black background
+   and uses lighter borders so component edges are clearly visible. */
+html.igv-high-contrast.dark {
+  --background: #000000;
+  --surface: #121212;
+  --card: #121212;
+  --card-foreground: oklch(0.98 0 0);
+  --popover: #121212;
+  --popover-foreground: oklch(0.98 0 0);
+  --secondary: #121212;
+  --muted: #121212;
+  --muted-foreground: oklch(0.75 0 0);
+  --accent: #121212;
+  --accent-foreground: oklch(0.98 0 0);
+  --border: #2e2e2e;
+  --input: #121212;
+}
+html.igv-high-contrast.dark table,
+html.igv-high-contrast.dark th,
+html.igv-high-contrast.dark td {
+  border-color: #2e2e2e !important;
+}
+html.igv-high-contrast.dark table {
+  border: 1px solid #2e2e2e;
+}
+
+/* --------- Reduced motion mode --------- */
+
+/* --------- Settings modal: lift surfaces in dark / high-contrast ---------
+   The global --popover in dark is near-black which makes the modal blend
+   into the backdrop and its inner toggles/borders vanish. Scope a lifted
+   palette to just the settings modal so nothing else is affected. */
+.dark .igv-settings-modal {
+  background-color: #161618;
+  border-color: #2a2a30;
+  color: #f2f2f5;
+}
+.dark .igv-settings-modal .bg-popover { background-color: #161618; }
+.dark .igv-settings-modal .bg-background { background-color: #101013; }
+.dark .igv-settings-modal .bg-muted { background-color: #2e2e34; }
+.dark .igv-settings-modal .border-border { border-color: #2a2a30; }
+.dark .igv-settings-modal .text-muted-foreground { color: #a4a4ad; }
+.dark .igv-settings-modal .hover\:bg-accent\/40:hover { background-color: rgba(255, 255, 255, 0.05); }
+
+html.igv-high-contrast.dark .igv-settings-modal {
+  background-color: #17171b;
+  border-color: #3a3a42;
+  color: #ffffff;
+}
+html.igv-high-contrast.dark .igv-settings-modal .bg-popover { background-color: #17171b; }
+html.igv-high-contrast.dark .igv-settings-modal .bg-background { background-color: #0d0d10; }
+html.igv-high-contrast.dark .igv-settings-modal .bg-muted { background-color: #3a3a42; }
+html.igv-high-contrast.dark .igv-settings-modal .border-border { border-color: #4a4a52; }
+html.igv-high-contrast.dark .igv-settings-modal .text-muted-foreground { color: #cfcfd6; }
+
+html.igv-reduced-motion *,
+html.igv-reduced-motion *::before,
+html.igv-reduced-motion *::after {
+  animation-duration: 0s !important;
+  animation-delay: 0s !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0s !important;
+  transition-delay: 0s !important;
+}
+
+/* --------- Global thin, theme-matching scrollbars ---------
+   Applies to every scrollable element by default. Firefox picks up
+   `scrollbar-*`; WebKit/Chromium/Safari use `::-webkit-scrollbar`.
+   Colors resolve from CSS custom properties so light/dark just work. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in oklab, var(--foreground) 25%, transparent) transparent;
+}
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+*::-webkit-scrollbar-thumb {
+  background-color: color-mix(in oklab, var(--foreground) 20%, transparent);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  transition: background-color 0.2s ease;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background-color: color-mix(in oklab, var(--primary) 60%, var(--foreground) 30%);
+}
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}
+/* Extra-thin variant, e.g. inside chat/tools panels */
+.volto-scroll,
+.scrollbar-thin {
+  scrollbar-width: thin;
+}
+.volto-scroll::-webkit-scrollbar,
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.volto-scroll::-webkit-scrollbar-thumb,
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background-color: color-mix(in oklab, var(--foreground) 22%, transparent);
+  border-radius: 999px;
+  border: 0;
+}
