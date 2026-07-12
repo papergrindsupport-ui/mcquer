@@ -41,6 +41,7 @@ import { ConfirmModal } from "@/components/ConfirmModal";
 import { Collapse } from "@/components/Collapse";
 import { TopicalsSelector } from "@/components/TopicalsSelector";
 import { encodeTopicSelection } from "@/lib/mcq/allQuestions";
+import { LeaderboardSection } from "@/components/Leaderboard";
 
 export const Route = createFileRoute("/")({
   component: Landing,
@@ -339,6 +340,7 @@ function Landing() {
       <RecentPapersSection />
       <DashboardGate />
       <PlannerGate />
+      <LeaderboardSection />
       <div className="pb-24" />
     </div>
   );

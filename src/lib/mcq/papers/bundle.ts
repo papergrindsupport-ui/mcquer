@@ -21,7 +21,27 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
         "id": "bmr7vjtaq-14-sr0xc",
         "block": "intro",
         "content": [
-          "The relationships of four species of bacteria, P, Q, R and S, were compared. "
+          "The relationships of four species of bacteria,",
+          {
+            "text": " P",
+            "bold": true
+          },
+          ", ",
+          {
+            "text": "Q",
+            "bold": true
+          },
+          ", ",
+          {
+            "text": "R",
+            "bold": true
+          },
+          " and ",
+          {
+            "text": "S",
+            "bold": true
+          },
+          ", were compared. "
         ]
       },
       {
@@ -33,11 +53,30 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
           "style": "unordered",
           "items": [
             [
-              "Species P and Q have a more recent common ancestor than either species has with",
-              "species R. "
+              "Species ",
+              {
+                "text": "P",
+                "bold": true
+              },
+              " and ",
+              {
+                "text": "Q",
+                "bold": true
+              },
+              " have a more recent common ancestor than either species has with species R. "
             ],
             [
-              "Species S developed recently from species P. "
+              "Species ",
+              {
+                "text": "S",
+                "bold": true
+              },
+              " developed recently from species ",
+              {
+                "text": "P",
+                "bold": true
+              },
+              ". "
             ]
           ]
         }
@@ -97,10 +136,10 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
         "data": {
           "kind": "image",
           "image": {
-            "src": "https://i.postimg.cc/RF8WP9WJ/Screenshot-2026-07-07-at-7-11-58-PM.png",
+            "src": "https://images2.imgbox.com/aa/05/41ibgjNR_o.png",
             "alt": "Scorpion with pedipalp and legs labelled",
             "invertOnDark": true,
-            "darkSrc": "https://i.postimg.cc/c4ZVCz1B/Screenshot-2026-07-07-at-8-12-01-PM.png"
+            "darkSrc": "https://images2.imgbox.com/80/59/eiMh7Gpd_o.png"
           },
           "size": "md"
         }
@@ -296,8 +335,12 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
       }
     },
     "answer": "D",
-    "topic": "Organisation of the Organism",
-    "lesson": "Cell Structure"
+    "topics": [
+      "Organisation of the Organism"
+    ],
+    "lessons": [
+      "Cell Structure"
+    ]
   },
   {
     "n": 4,
@@ -340,8 +383,12 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
       "shrinkToFit": true
     },
     "answer": "C",
-    "topic": "Organisation of the Organism",
-    "lesson": "Unit Conversion"
+    "topics": [
+      "Organisation of the Organism"
+    ],
+    "lessons": [
+      "Unit Conversion"
+    ]
   },
   {
     "n": 5,
@@ -601,8 +648,12 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
       }
     },
     "answer": "B",
-    "topic": "Movement In & Out of Cells",
-    "lesson": "Osmosis"
+    "topics": [
+      "Movement In & Out of Cells"
+    ],
+    "lessons": [
+      "Osmosis"
+    ]
   },
   {
     "n": 6,
@@ -686,8 +737,12 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
       ]
     },
     "answer": "A",
-    "topic": "Movement In & Out of Cells",
-    "lesson": "Active Transport"
+    "topics": [
+      "Movement In & Out of Cells"
+    ],
+    "lessons": [
+      "Active Transport"
+    ]
   },
   {
     "n": 7,
@@ -735,8 +790,12 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
       }
     },
     "answer": "A",
-    "topic": "Biological Molecules",
-    "lesson": "DNA Structure"
+    "topics": [
+      "Biological Molecules"
+    ],
+    "lessons": [
+      "DNA Structure"
+    ]
   },
   {
     "n": 8,
@@ -809,8 +868,12 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
       }
     },
     "answer": "B",
-    "topic": "Enzymes",
-    "lesson": "Enzymes"
+    "topics": [
+      "Enzymes"
+    ],
+    "lessons": [
+      "Enzymes"
+    ]
   },
   {
     "n": 10,
@@ -869,8 +932,12 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
       }
     ],
     "sharedKeyPosition": "before",
-    "topic": "Plant Nutrition",
-    "lesson": "Rate of Photosynthesis"
+    "topics": [
+      "Plant Nutrition"
+    ],
+    "lessons": [
+      "Rate of Photosynthesis"
+    ]
   },
   {
     "n": 11,
@@ -879,7 +946,7 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
         "id": "bmr7xqwk9-0-ez220",
         "block": "intro",
         "content": [
-          "The photomicrograph shows part of the lower surface of a leaf"
+          "The photomicrograph shows part of the lower surface of a leaf."
         ]
       },
       {
@@ -888,7 +955,7 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
         "data": {
           "kind": "image",
           "image": {
-            "src": "https://i.postimg.cc/L5QHjjXb/Screenshot-2026-07-05-at-6-19-50-PM.png",
+            "src": "https://images2.imgbox.com/de/dd/ckcyDHaD_o.png",
             "alt": "guard cells and stomata and an x is drawn on the \"door\" like structures around stomata"
           },
           "size": "md"
@@ -898,7 +965,12 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
         "id": "bmr7virkr-a-gjcnc",
         "block": "question",
         "content": [
-          "What is the structure labelled X?"
+          "What is the structure labelled ",
+          {
+            "text": "X",
+            "bold": true
+          },
+          "?"
         ]
       }
     ],
@@ -920,8 +992,12 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
       }
     },
     "answer": "A",
-    "topic": "Plant Nutrition",
-    "lesson": "Leaf Structure"
+    "topics": [
+      "Plant Nutrition"
+    ],
+    "lessons": [
+      "Leaf Structure"
+    ]
   },
   {
     "n": 12,
@@ -964,8 +1040,12 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
       }
     },
     "answer": "D",
-    "topic": "Human Nutrition",
-    "lesson": "Deficiencies"
+    "topics": [
+      "Human Nutrition"
+    ],
+    "lessons": [
+      "Deficiencies"
+    ]
   },
   {
     "n": 13,
@@ -1142,8 +1222,12 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
       "orientation": "horizontal"
     },
     "answer": "D",
-    "topic": "Human Nutrition",
-    "lesson": "Teeth"
+    "topics": [
+      "Human Nutrition"
+    ],
+    "lessons": [
+      "Teeth"
+    ]
   },
   {
     "n": 14,
@@ -1174,8 +1258,12 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
       }
     },
     "answer": "B",
-    "topic": "Human Nutrition",
-    "lesson": "Emulsification"
+    "topics": [
+      "Human Nutrition"
+    ],
+    "lessons": [
+      "Emulsification"
+    ]
   },
   {
     "n": 15,
@@ -1206,8 +1294,12 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
       }
     },
     "answer": "B",
-    "topic": "Transport in Plants",
-    "lesson": "Temperature & Wind"
+    "topics": [
+      "Transport in Plants"
+    ],
+    "lessons": [
+      "Temperature & Wind"
+    ]
   },
   {
     "n": 16,
@@ -1271,8 +1363,12 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
       }
     },
     "answer": "C",
-    "topic": "Transport in Animals",
-    "lesson": "Heart Structure"
+    "topics": [
+      "Transport in Animals"
+    ],
+    "lessons": [
+      "Heart Structure"
+    ]
   },
   {
     "n": 17,
@@ -1391,8 +1487,12 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
       ]
     },
     "answer": "D",
-    "topic": "Diseases & Immunity",
-    "lesson": "Vaccination"
+    "topics": [
+      "Diseases & Immunity"
+    ],
+    "lessons": [
+      "Vaccination"
+    ]
   },
   {
     "n": 18,
@@ -1423,8 +1523,12 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
       }
     },
     "answer": "A",
-    "topic": "Gas Exchange",
-    "lesson": "Cartilage"
+    "topics": [
+      "Gas Exchange"
+    ],
+    "lessons": [
+      "Cartilage"
+    ]
   },
   {
     "n": 19,
@@ -1462,8 +1566,12 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
       }
     },
     "answer": "C",
-    "topic": "Respiration",
-    "lesson": "Aerobic Respiration"
+    "topics": [
+      "Respiration"
+    ],
+    "lessons": [
+      "Aerobic Respiration"
+    ]
   },
   {
     "n": 20,
@@ -1500,8 +1608,12 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
       }
     },
     "answer": "D",
-    "topic": "Excretion",
-    "lesson": "Kidney"
+    "topics": [
+      "Excretion"
+    ],
+    "lessons": [
+      "Kidney"
+    ]
   },
   {
     "n": 21,
@@ -1612,8 +1724,12 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
       }
     },
     "answer": "B",
-    "topic": "Characteristics of Living Organisms",
-    "lesson": "Characteristics of Living Organisms"
+    "topics": [
+      "Characteristics of Living Organisms"
+    ],
+    "lessons": [
+      "Characteristics of Living Organisms"
+    ]
   },
   {
     "n": 22,
@@ -1650,7 +1766,13 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
         ]
       }
     },
-    "answer": "D"
+    "answer": "D",
+    "topics": [
+      "Characteristics of Living Organisms"
+    ],
+    "lessons": [
+      "Characteristics of Living Organisms"
+    ]
   },
   {
     "n": 23,
@@ -1754,7 +1876,13 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
         "D": 4
       }
     },
-    "answer": "C"
+    "answer": "C",
+    "topics": [
+      "Characteristics of Living Organisms"
+    ],
+    "lessons": [
+      "Characteristics of Living Organisms"
+    ]
   },
   {
     "n": 24,
@@ -1789,7 +1917,13 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
         ]
       }
     },
-    "answer": "D"
+    "answer": "D",
+    "topics": [
+      "Characteristics of Living Organisms"
+    ],
+    "lessons": [
+      "Characteristics of Living Organisms"
+    ]
   },
   {
     "n": 25,
@@ -1931,6 +2065,12 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
         "symbol": "cross",
         "text": "= no"
       }
+    ],
+    "topics": [
+      "Characteristics of Living Organisms"
+    ],
+    "lessons": [
+      "Characteristics of Living Organisms"
     ]
   },
   {
@@ -2006,7 +2146,13 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
         }
       ]
     },
-    "answer": "D"
+    "answer": "D",
+    "topics": [
+      "Characteristics of Living Organisms"
+    ],
+    "lessons": [
+      "Characteristics of Living Organisms"
+    ]
   },
   {
     "n": 27,
@@ -2036,7 +2182,13 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
         ]
       }
     },
-    "answer": "B"
+    "answer": "B",
+    "topics": [
+      "Characteristics of Living Organisms"
+    ],
+    "lessons": [
+      "Characteristics of Living Organisms"
+    ]
   },
   {
     "n": 28,
@@ -2066,7 +2218,13 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
         ]
       }
     },
-    "answer": "D"
+    "answer": "D",
+    "topics": [
+      "Characteristics of Living Organisms"
+    ],
+    "lessons": [
+      "Characteristics of Living Organisms"
+    ]
   },
   {
     "n": 29,
@@ -2096,7 +2254,13 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
         ]
       }
     },
-    "answer": "C"
+    "answer": "C",
+    "topics": [
+      "Characteristics of Living Organisms"
+    ],
+    "lessons": [
+      "Characteristics of Living Organisms"
+    ]
   },
   {
     "n": 30,
@@ -2126,7 +2290,13 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
         ]
       }
     },
-    "answer": "A"
+    "answer": "A",
+    "topics": [
+      "Characteristics of Living Organisms"
+    ],
+    "lessons": [
+      "Characteristics of Living Organisms"
+    ]
   },
   {
     "n": 31,

@@ -9,6 +9,7 @@ import {
   LuPipette,
   LuPencil,
   LuSearch,
+  LuGraduationCap,
 } from "react-icons/lu";
 import { useTheme, PALETTES, type PaletteId } from "@/lib/theme";
 import { ColorWheel } from "./ColorWheel";
@@ -37,7 +38,7 @@ export function Header() {
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
         <Link to="/" className="group flex cursor-pointer items-center gap-2">
           <span className="grid h-9 w-9 place-items-center rounded-lg bg-primary text-primary-foreground transition-transform group-hover:scale-105">
-            <LuVault size={18} />
+            <LuGraduationCap size={18} />
           </span>
           <span className="text-lg font-semibold tracking-tight">MCQuer</span>
         </Link>

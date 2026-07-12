@@ -2,7 +2,7 @@ import { useSyncExternalStore } from "react";
 import type { PaperQuestions, Question } from "@/lib/mcq/types";
 import type { SubjectId, SessionId } from "@/lib/papers-data";
 import { emptyQuestion, normalizeQuestion } from "./migrate";
-import { makePaperId, type PaperId } from "./paperId";
+import { makePaperId, parsePaperId, type PaperId } from "./paperId";
 
 export type Paper = {
   id: PaperId;
@@ -91,6 +91,34 @@ export function hydrateFromStorage() {
     }
   } catch {
     /* corrupt */
+  }
+  // Seed any papers from src/lib/mcq/papers/bundle.ts that aren't already in
+  // localStorage. This means clearing storage doesn't lose bundled papers.
+  try {
+    const mods = import.meta.glob("../mcq/papers/bundle.ts", { eager: true }) as Record<
+      string,
+      { BUILDER_PAPERS?: Record<string, PaperQuestions> }
+    >;
+    const merged: Record<string, PaperQuestions> = {};
+    for (const mod of Object.values(mods)) {
+      if (mod.BUILDER_PAPERS) Object.assign(merged, mod.BUILDER_PAPERS);
+    }
+    const next = { ...state };
+    let changed = false;
+    for (const [id, qs] of Object.entries(merged)) {
+      if (next[id]) continue;
+      const parsed = parsePaperId(id);
+      if (!parsed) continue;
+      const questions = padQuestions(qs.map(normalizeQuestion));
+      next[id] = { id, ...parsed, questions };
+      changed = true;
+    }
+    if (changed) {
+      state = next;
+      persist();
+    }
+  } catch {
+    /* no bundle */
   }
   hydrated = true;
   emit();

@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SearchRouteImport } from './routes/search'
+import { Route as LeaderboardRouteImport } from './routes/leaderboard'
 import { Route as BuilderRouteImport } from './routes/builder'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as McqIndexRouteImport } from './routes/mcq.index'
@@ -25,6 +26,11 @@ import { Route as McqSubjectYearSessionVariantRouteImport } from './routes/mcq.$
 const SearchRoute = SearchRouteImport.update({
   id: '/search',
   path: '/search',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LeaderboardRoute = LeaderboardRouteImport.update({
+  id: '/leaderboard',
+  path: '/leaderboard',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BuilderRoute = BuilderRouteImport.update({
@@ -88,6 +94,7 @@ const McqSubjectYearSessionVariantRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/builder': typeof BuilderRoute
+  '/leaderboard': typeof LeaderboardRoute
   '/search': typeof SearchRoute
   '/mcq/bookmarks': typeof McqBookmarksRoute
   '/topical/$subject': typeof TopicalSubjectRoute
@@ -102,6 +109,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/builder': typeof BuilderRoute
+  '/leaderboard': typeof LeaderboardRoute
   '/search': typeof SearchRoute
   '/mcq/bookmarks': typeof McqBookmarksRoute
   '/topical/$subject': typeof TopicalSubjectRoute
@@ -117,6 +125,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/builder': typeof BuilderRoute
+  '/leaderboard': typeof LeaderboardRoute
   '/search': typeof SearchRoute
   '/mcq/bookmarks': typeof McqBookmarksRoute
   '/topical/$subject': typeof TopicalSubjectRoute
@@ -133,6 +142,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/builder'
+    | '/leaderboard'
     | '/search'
     | '/mcq/bookmarks'
     | '/topical/$subject'
@@ -147,6 +157,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/builder'
+    | '/leaderboard'
     | '/search'
     | '/mcq/bookmarks'
     | '/topical/$subject'
@@ -161,6 +172,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/builder'
+    | '/leaderboard'
     | '/search'
     | '/mcq/bookmarks'
     | '/topical/$subject'
@@ -176,6 +188,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   BuilderRoute: typeof BuilderRoute
+  LeaderboardRoute: typeof LeaderboardRoute
   SearchRoute: typeof SearchRoute
   McqBookmarksRoute: typeof McqBookmarksRoute
   TopicalSubjectRoute: typeof TopicalSubjectRoute
@@ -195,6 +208,13 @@ declare module '@tanstack/react-router' {
       path: '/search'
       fullPath: '/search'
       preLoaderRoute: typeof SearchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/leaderboard': {
+      id: '/leaderboard'
+      path: '/leaderboard'
+      fullPath: '/leaderboard'
+      preLoaderRoute: typeof LeaderboardRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/builder': {
@@ -280,6 +300,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   BuilderRoute: BuilderRoute,
+  LeaderboardRoute: LeaderboardRoute,
   SearchRoute: SearchRoute,
   McqBookmarksRoute: McqBookmarksRoute,
   TopicalSubjectRoute: TopicalSubjectRoute,
