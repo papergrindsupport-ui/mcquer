@@ -78,7 +78,13 @@ function SearchPage() {
 
   const results = useMemo(() => {
     if (!s.q.trim()) {
-      return filtered.map((doc) => ({ doc, score: 0, ranges: [] }));
+      return filtered.map((doc) => ({
+        doc,
+        score: 0,
+        ranges: [],
+        terms: [],
+        primaryField: "intro" as const,
+      }));
     }
     return search(s.q, filtered, { ...ctx.settings, strict: Boolean(s.strict) }, 500);
   }, [s.q, s.strict, filtered, ctx.settings]);
@@ -299,7 +305,7 @@ function SearchPage() {
                 <li
                   key={`${r.doc.subject}-${r.doc.year}-${r.doc.session}-${r.doc.variant}-${r.doc.n}`}
                 >
-                  <ResultCard result={r} />
+                  <ResultCard result={r} query={s.q} />
                 </li>
               ))}
             </ul>

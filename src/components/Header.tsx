@@ -39,7 +39,7 @@ export function Header() {
           <span className="grid h-9 w-9 place-items-center rounded-lg bg-primary text-primary-foreground transition-transform group-hover:scale-105">
             <LuVault size={18} />
           </span>
-          <span className="text-lg font-semibold tracking-tight">IGVault</span>
+          <span className="text-lg font-semibold tracking-tight">MCQuer</span>
         </Link>
 
         <div className="flex items-center gap-1">
@@ -225,7 +225,7 @@ export function Footer() {
   return (
     <footer className="border-t border-border py-8 text-center text-xs text-muted-foreground">
       <div className="mx-auto max-w-6xl px-4">
-        IGVault — digitalized auto-marked IGCSE Paper 2 past papers
+        MCQuer — digitalized auto-marked IGCSE Paper 2 past papers
       </div>
     </footer>
   );

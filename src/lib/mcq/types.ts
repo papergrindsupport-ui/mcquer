@@ -514,6 +514,9 @@ export type Question = {
 
   topics?: string[];
   lessons?: string[];
+  /** Legacy singular fields — kept for compatibility with older paper bundles. */
+  topic?: string;
+  lesson?: string;
 };
 
 export type PaperQuestions = Question[];

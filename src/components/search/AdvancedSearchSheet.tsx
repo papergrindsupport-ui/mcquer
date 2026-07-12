@@ -53,10 +53,21 @@ export function AdvancedSearchSheet({
         </button>
       </header>
       <div className="max-h-[60vh] flex-1 overflow-auto px-4 py-1">
-        <Row label="Strict mode" hint="Exact phrase match — disables fuzzy scoring.">
+        <Row label="Strict phrase" hint="Only match the exact phrase you typed.">
           <CustomCheckbox
             checked={settings.strict}
             onChange={(v) => updateSettings({ strict: v })}
+          />
+        </Row>
+        <Row
+          label="Match whole words"
+          hint={
+            'Treat every word as if it were "quoted" — no partial or fuzzy matches. Wrap individual words in quotes to force this per-word.'
+          }
+        >
+          <CustomCheckbox
+            checked={settings.wholeWords}
+            onChange={(v) => updateSettings({ wholeWords: v })}
           />
         </Row>
         <Row label="Typo tolerance" hint={`Max edits per word: ${settings.maxEditDistance}`}>
@@ -80,6 +91,22 @@ export function AdvancedSearchSheet({
             onChange={(v) => updateSettings({ requireAllTokens: v })}
           />
         </Row>
+        <Row
+          label="Require correct order"
+          hint="Matched words must appear in the same order as your query."
+        >
+          <CustomCheckbox
+            checked={settings.requireOrder}
+            onChange={(v) => updateSettings({ requireOrder: v })}
+          />
+        </Row>
+        <Row label="Ignore punctuation" hint="Treat punctuation and symbols as spaces.">
+          <CustomCheckbox
+            checked={settings.ignorePunctuation}
+            onChange={(v) => updateSettings({ ignorePunctuation: v })}
+          />
+        </Row>
+
         <Row
           label="Reward correct order"
           hint={`Weight: ${Math.round(settings.orderBoost * 100)}%`}

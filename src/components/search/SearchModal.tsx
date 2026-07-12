@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { LuSearch, LuX, LuImageUp, LuSettings2, LuArrowUpRight, LuLoader } from "react-icons/lu";
 import { useSearchCtx } from "@/lib/search/context";
-import { scopeDocs, search } from "@/lib/search";
+import { scopeDocs, search, LENIENT_SETTINGS } from "@/lib/search";
 import { runOcr } from "@/lib/search/ocr";
 import { ResultCard } from "./ResultCard";
 import { AdvancedSearchSheet } from "./AdvancedSearchSheet";
@@ -52,6 +52,9 @@ export function SearchModal() {
   async function handleImage(file: File) {
     setOcrRunning(true);
     setOcrProgress(0);
+    // OCR text is inherently noisy — switch to the lenient preset so users
+    // still find their question even with typos / missing words.
+    updateSettings(LENIENT_SETTINGS);
     try {
       const text = await runOcr(file, (p) => setOcrProgress(p.progress));
       const cleaned = text.replace(/\s+/g, " ").trim();
@@ -231,7 +234,13 @@ export function SearchModal() {
                 <li
                   key={`${r.doc.subject}-${r.doc.year}-${r.doc.session}-${r.doc.variant}-${r.doc.n}`}
                 >
-                  <ResultCard result={r} active={i === activeIdx} onNavigate={close} compact />
+                  <ResultCard
+                    result={r}
+                    active={i === activeIdx}
+                    onNavigate={close}
+                    compact
+                    query={query}
+                  />
                 </li>
               ))}
             </ul>

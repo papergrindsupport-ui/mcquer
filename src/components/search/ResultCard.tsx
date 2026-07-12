@@ -8,9 +8,10 @@ type Props = {
   active?: boolean;
   onNavigate?: () => void;
   compact?: boolean;
+  query?: string;
 };
 
-export function ResultCard({ result, active, onNavigate, compact }: Props) {
+export function ResultCard({ result, active, onNavigate, compact, query }: Props) {
   const navigate = useNavigate();
   const { doc } = result;
   const subj = getSubject(doc.subject);
@@ -67,7 +68,7 @@ export function ResultCard({ result, active, onNavigate, compact }: Props) {
           <span className="ml-auto truncate text-muted-foreground">{doc.topics[0]}</span>
         )}
       </div>
-      <QuestionPreview q={doc.q} compact={compact} />
+      <QuestionPreview q={doc.q} compact={compact} query={query ?? ""} extraTerms={result.terms} />
     </div>
   );
 }

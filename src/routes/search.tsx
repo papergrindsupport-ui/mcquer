@@ -24,7 +24,7 @@ const PAGE_SIZE = 24;
 
 const searchSchema = z.object({
   q: fallback(z.string(), "").default(""),
-  strict: fallback(z.number(), 1).default(1),
+  strict: fallback(z.number(), 0).default(0),
   subject: fallback(z.array(z.string()), []).default([]),
   year: fallback(z.array(z.number()), []).default([]),
   session: fallback(z.array(z.string()), []).default([]),
@@ -38,13 +38,13 @@ export const Route = createFileRoute("/search")({
   validateSearch: zodValidator(searchSchema),
   head: () => ({
     meta: [
-      { title: "Search — IGVault" },
+      { title: "Search — MCQuer" },
       {
         name: "description",
         content:
           "Search across every IGCSE Paper 2 question with typo tolerance, filters, and OCR image search.",
       },
-      { property: "og:title", content: "Search — IGVault" },
+      { property: "og:title", content: "Search — MCQuer" },
       {
         property: "og:description",
         content:
@@ -92,7 +92,13 @@ function SearchPage() {
 
   const results = useMemo(() => {
     if (!s.q.trim()) {
-      return filtered.map((doc) => ({ doc, score: 0, ranges: [] }));
+      return filtered.map((doc) => ({
+        doc,
+        score: 0,
+        ranges: [],
+        terms: [],
+        primaryField: "intro" as const,
+      }));
     }
     return search(s.q, filtered, { ...ctx.settings, strict: Boolean(s.strict) }, 2000);
   }, [s.q, s.strict, filtered, ctx.settings]);
@@ -310,7 +316,7 @@ function SearchPage() {
               <li
                 key={`${r.doc.subject}-${r.doc.year}-${r.doc.session}-${r.doc.variant}-${r.doc.n}`}
               >
-                <ResultCard result={r} />
+                <ResultCard result={r} query={s.q} />
               </li>
             ))}
           </ul>

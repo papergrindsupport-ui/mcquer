@@ -1,6 +1,7 @@
 import { Fragment } from "react";
 import katex from "katex";
 import "katex/dist/katex.min.css";
+import { useHighlightRegex, highlightText } from "@/lib/search/highlight";
 
 export type RichNode =
   | string
@@ -106,8 +107,8 @@ const SIZE_CLASS: Record<NonNullable<Extract<RichNode, { text: string }>["size"]
   "2xl": "text-2xl",
 };
 
-function renderNode(node: RichNode, i: number) {
-  if (typeof node === "string") return <Fragment key={i}>{node}</Fragment>;
+function renderNode(node: RichNode, i: number, hl: RegExp | null) {
+  if (typeof node === "string") return <Fragment key={i}>{highlightText(node, hl)}</Fragment>;
   if ("br" in node) return <br key={i} />;
   if ("symbol" in node)
     return (
@@ -154,7 +155,7 @@ function renderNode(node: RichNode, i: number) {
 
   const content = (
     <span className={classes.join(" ")} style={Object.keys(style).length ? style : undefined}>
-      {node.text}
+      {highlightText(node.text, hl)}
     </span>
   );
   if (node.sub) return <sub key={i}>{content}</sub>;
@@ -163,6 +164,7 @@ function renderNode(node: RichNode, i: number) {
 }
 
 export function Rich({ nodes, className }: { nodes: RichNode[]; className?: string }) {
+  const hl = useHighlightRegex();
   const out: React.ReactNode[] = [];
   let i = 0;
   while (i < nodes.length) {
@@ -189,7 +191,7 @@ export function Rich({ nodes, className }: { nodes: RichNode[]; className?: stri
       }
       i += count;
     } else {
-      out.push(renderNode(n, i));
+      out.push(renderNode(n, i, hl));
       i++;
     }
   }

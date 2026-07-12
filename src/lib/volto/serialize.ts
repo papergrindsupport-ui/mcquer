@@ -1,5 +1,18 @@
 import type { RichNode } from "@/lib/mcq/rich";
-import type { Question, OptionId, OptionsLayout, IntroData } from "@/lib/mcq/types";
+import type {
+  Question,
+  OptionId,
+  OptionsLayout,
+  IntroData,
+  GraphSpec,
+  FlowchartSpec,
+  TableLayoutCell,
+  MergedTableCell,
+  OptionKeyValue,
+  KeyItem,
+} from "@/lib/mcq/types";
+import { OPTION_IDS } from "@/lib/mcq/types";
+import { getBlocks } from "@/lib/builder/migrate";
 
 /** Flatten a RichNode[] into plain text suitable for feeding to an LLM. */
 export function richToText(nodes: RichNode[] | undefined): string {
@@ -31,36 +44,137 @@ export function richToText(nodes: RichNode[] | undefined): string {
     .join("");
 }
 
+function compactJoin(parts: Array<string | undefined | null>, sep = " "): string {
+  return parts
+    .map((p) => (p ?? "").replace(/\s+/g, " ").trim())
+    .filter(Boolean)
+    .join(sep);
+}
+
+function imageToText(image?: { alt?: string; caption?: RichNode[] }): string {
+  if (!image) return "";
+  return compactJoin([
+    image.alt ? `image ${image.alt}` : "image",
+    image.caption?.length ? richToText(image.caption) : "",
+  ]);
+}
+
+function keyValueToText(value?: OptionKeyValue): string {
+  if (!value) return "";
+  const items = Array.isArray(value) ? value : [value];
+  return compactJoin(items.map((item) => item.text ?? item.symbol ?? ""));
+}
+
+function keyItemsToText(items?: KeyItem[]): string {
+  if (!items?.length) return "";
+  return compactJoin(items.map((item) => compactJoin([item.symbol, richToText(item.label)])));
+}
+
+function graphSpecToText(spec: GraphSpec | undefined): string {
+  if (!spec) return "";
+  const series = spec.series
+    .map((s) => {
+      if (s.kind === "pie") {
+        return compactJoin([s.name, ...s.slices.map((slice) => `${slice.name} ${slice.value}`)]);
+      }
+      if (s.kind === "bar") {
+        return compactJoin([s.name, ...s.bars.map((bar) => `${bar.label ?? bar.x} ${bar.y}`)]);
+      }
+      return compactJoin([s.name, ...s.points.map(([x, y]) => `${x} ${y}`)]);
+    })
+    .join(" | ");
+  const labels = spec.labels?.map((label) => `${label.text} ${label.x} ${label.y}`).join(" | ");
+  return compactJoin([
+    "graph",
+    spec.xLabel ? `x axis ${spec.xLabel}` : "",
+    spec.yLabel ? `y axis ${spec.yLabel}` : "",
+    `x ${spec.xMin} to ${spec.xMax}`,
+    `y ${spec.yMin} to ${spec.yMax}`,
+    series,
+    labels,
+  ]);
+}
+
+function flowchartSpecToText(spec: FlowchartSpec | undefined): string {
+  if (!spec) return "";
+  const cells: string[] = [];
+  for (let r = 0; r < spec.rows; r++) {
+    for (let c = 0; c < spec.cols; c++) {
+      const cell = spec.cells[r]?.[c];
+      if (!cell) continue;
+      const text = richToText(cell.content ?? []);
+      const arrows = cell.arrows?.length ? `arrows ${cell.arrows.join(" ")}` : "";
+      if (text || arrows) cells.push(compactJoin([text, arrows]));
+    }
+  }
+  return compactJoin(["flowchart", ...cells]);
+}
+
+function tableCellToText(cell?: TableLayoutCell | MergedTableCell): string {
+  if (!cell) return "";
+  const image = "image" in cell ? imageToText(cell.image) : "";
+  return compactJoin([richToText(cell.content), image]);
+}
+
+function gridToText(grid?: TableLayoutCell[][] | MergedTableCell[][]): string {
+  if (!grid?.length) return "";
+  return grid
+    .map((row) =>
+      row
+        .map((cell) => tableCellToText(cell))
+        .filter(Boolean)
+        .join(" | "),
+    )
+    .filter(Boolean)
+    .join("\n");
+}
+
 function introDataToText(d: IntroData): string {
   if (d.kind === "image") {
-    return `[Image${d.caption ? `: ${richToText(d.caption)}` : ` — ${d.image.alt}`}]`;
+    return compactJoin([imageToText(d.image), d.caption ? richToText(d.caption) : ""]);
   }
   if (d.kind === "graph") {
-    const s = d.spec;
-    return `[Graph: x=${s.xLabel ?? "x"} (${s.xMin}..${s.xMax}), y=${s.yLabel ?? "y"} (${s.yMin}..${s.yMax}), ${s.series.length} series${d.caption ? ` — ${richToText(d.caption)}` : ""}]`;
+    return compactJoin([graphSpecToText(d.spec), d.caption ? richToText(d.caption) : ""]);
   }
   if (d.kind === "table") {
+    if (d.grid && d.grid.length) {
+      return compactJoin([
+        "table",
+        gridToText(d.grid),
+        keyItemsToText(d.keyItems),
+        richToText(d.caption),
+      ]);
+    }
     const header = d.header.map(richToText).join(" | ");
+    const subHeader = d.subHeader?.map(richToText).join(" | ");
+    const subHeaderRows = d.subHeaderRows?.map((row) => row.map(richToText).join(" | ")).join("\n");
+    const extraLabelHeaders = d.rowLabelHeaders?.map(richToText).join(" | ");
     const rows = d.rows
       .map((r, i) => {
         const lbl = d.rowLabels?.[i] ? `${richToText(d.rowLabels[i])} | ` : "";
-        return lbl + r.map(richToText).join(" | ");
+        const extra = (d.rowLabelCols ?? [])
+          .map((col) => (col[i] ? richToText(col[i]) : ""))
+          .filter(Boolean)
+          .join(" | ");
+        return compactJoin([lbl, extra, r.map(richToText).join(" | ")], " | ");
       })
       .join("\n");
-    return `Table:\n${header}\n${rows}${d.caption ? `\n(${richToText(d.caption)})` : ""}`;
+    return compactJoin(
+      [
+        "table",
+        extraLabelHeaders,
+        header,
+        subHeader,
+        subHeaderRows,
+        rows,
+        richToText(d.caption),
+        keyItemsToText(d.keyItems),
+      ],
+      "\n",
+    );
   }
   if (d.kind === "flowchart") {
-    const parts: string[] = [];
-    for (let r = 0; r < d.spec.rows; r++) {
-      for (let c = 0; c < d.spec.cols; c++) {
-        const cell = d.spec.cells[r]?.[c];
-        if (cell && cell.content?.length) {
-          const arr = cell.arrows?.length ? ` (arrows: ${cell.arrows.join(",")})` : "";
-          parts.push(`[${r},${c}] ${richToText(cell.content)}${arr}`);
-        }
-      }
-    }
-    return `Flowchart:\n${parts.join("\n")}${d.caption ? `\n(${richToText(d.caption)})` : ""}`;
+    return compactJoin([flowchartSpecToText(d.spec), d.caption ? richToText(d.caption) : ""]);
   }
   if (d.kind === "circuit") return `Circuit${d.caption ? ` (${richToText(d.caption)})` : ""}`;
 
@@ -71,47 +185,103 @@ function introDataToText(d: IntroData): string {
   return items;
 }
 
+function layoutQuestionText(layout: OptionsLayout): string {
+  return "questionText" in layout ? richToText(layout.questionText) : "";
+}
+
+function optionDecorText(layout: OptionsLayout, id: OptionId): string {
+  const withKeys = layout as {
+    keys?: Partial<Record<OptionId, OptionKeyValue>>;
+    sharedKey?: OptionKeyValue;
+  };
+  return compactJoin([keyValueToText(withKeys.keys?.[id]), keyValueToText(withKeys.sharedKey)]);
+}
+
 function optionsToText(layout: OptionsLayout): Record<OptionId, string> {
   const out: Record<OptionId, string> = { A: "", B: "", C: "", D: "" };
-  const ids: OptionId[] = ["A", "B", "C", "D"];
+  const ids: OptionId[] = OPTION_IDS;
   switch (layout.type) {
     case "text-vertical":
     case "text-horizontal":
     case "text-2x2":
-      for (const id of ids) out[id] = richToText(layout.options[id]);
+      for (const id of ids)
+        out[id] = compactJoin([richToText(layout.options[id]), optionDecorText(layout, id)]);
       break;
     case "text-refs":
       for (const id of ids) out[id] = richToText(layout.options[id].label);
       break;
+    case "combined-choice":
+      for (const id of ids) {
+        const statementText = (layout.options[id] ?? [])
+          .map((ref) => richToText(layout.statements[ref - 1] ?? []))
+          .join(" | ");
+        out[id] = compactJoin([richToText(layout.optionLabels?.[id]), statementText]);
+      }
+      break;
     case "images":
-      for (const id of ids) out[id] = `[Image: ${layout.options[id].alt}]`;
+      for (const id of ids) out[id] = imageToText(layout.options[id]);
       break;
     case "image-hotspots":
       for (const id of ids)
         out[id] =
-          `[Hotspot on image at ${layout.hotspots[id].xPct}%, ${layout.hotspots[id].yPct}%]`;
+          `${imageToText(layout.image)} hotspot ${layout.hotspots[id].xPct}% ${layout.hotspots[id].yPct}%`;
+      break;
+    case "image-refs":
+      for (const id of ids) {
+        const option = layout.options[id];
+        const refs = option.refs
+          .map((ref) => imageToText(layout.images[ref - 1]))
+          .filter(Boolean)
+          .join(" | ");
+        out[id] = compactJoin([
+          richToText(option.label),
+          richToText(layout.optionLabels?.[id]),
+          refs,
+        ]);
+      }
+      break;
+    case "image-zones":
+      for (const id of ids) {
+        const option = layout.options[id];
+        const refs = option.refs
+          .map((ref) => layout.zones[ref - 1]?.label ?? `zone ${ref}`)
+          .join(" | ");
+        out[id] = compactJoin([
+          imageToText(layout.image),
+          richToText(option.label),
+          richToText(layout.optionLabels?.[id]),
+          refs,
+        ]);
+      }
       break;
     case "graphs":
-      for (const id of ids) out[id] = `[Graph option ${id}]`;
+      for (const id of ids) out[id] = graphSpecToText(layout.options[id]);
       break;
     case "flowcharts":
-      for (const id of ids) {
-        const cells: string[] = [];
-        const spec = layout.options[id];
-        for (let r = 0; r < spec.rows; r++) {
-          for (let c = 0; c < spec.cols; c++) {
-            const cell = spec.cells[r]?.[c];
-            if (cell && cell.content?.length) cells.push(richToText(cell.content));
-          }
-        }
-        out[id] = `[Flowchart: ${cells.join(" → ")}]`;
-      }
+      for (const id of ids) out[id] = flowchartSpecToText(layout.options[id]);
       break;
     case "circuits":
       for (const id of ids) out[id] = `[Circuit option ${id}]`;
       break;
     case "graph-hotspots":
-      for (const id of ids) out[id] = `[Point on graph ${id}]`;
+      for (const id of ids)
+        out[id] = compactJoin([
+          graphSpecToText(layout.spec),
+          `point ${id} ${layout.hotspots[id].xPct}% ${layout.hotspots[id].yPct}%`,
+        ]);
+      break;
+    case "table":
+      for (const id of ids) {
+        const cellRef = layout.optionCells?.[id];
+        if (cellRef) out[id] = tableCellToText(layout.grid[cellRef.r]?.[cellRef.c]);
+        else if (layout.optionsAxis === "rows")
+          out[id] = layout.grid[layout.optionAt[id]]?.map(tableCellToText).join(" | ") ?? "";
+        else
+          out[id] = layout.grid
+            .map((row) => tableCellToText(row[layout.optionAt[id]]))
+            .filter(Boolean)
+            .join(" | ");
+      }
       break;
     case "table-rows":
       for (const id of ids) out[id] = layout.rows[id].map(richToText).join(" | ");
@@ -133,8 +303,39 @@ function optionsToText(layout: OptionsLayout): Record<OptionId, string> {
         out[id] = richToText(layout.grid[r]?.[c]);
       }
       break;
+    case "table-rows-subcols":
+    case "table-cols-subrows":
+    case "table-subcols-options":
+    case "table-subrows-options":
+      for (const id of ids)
+        out[id] = compactJoin([
+          `table option ${id}`,
+          gridToText(layout.grid),
+          keyItemsToText(layout.keyItems),
+        ]);
+      break;
   }
+  const qText = layoutQuestionText(layout);
+  if (qText) for (const id of ids) out[id] = compactJoin([qText, out[id]]);
   return out;
+}
+
+function blocksToText(q: Question): { intro: string; data: string; question: string } {
+  const intro: string[] = [];
+  const data: string[] = [];
+  const question: string[] = [];
+  for (const block of getBlocks(q)) {
+    if (block.block === "intro") intro.push(richToText(block.content));
+    else if (block.block === "introData") data.push(introDataToText(block.data));
+    else question.push(richToText(block.content));
+  }
+  const layoutQuestion = layoutQuestionText(q.layout);
+  if (layoutQuestion) question.push(layoutQuestion);
+  return {
+    intro: compactJoin(intro),
+    data: compactJoin(data),
+    question: compactJoin(question),
+  };
 }
 
 /** Full serialized question payload for the AI. */
@@ -146,11 +347,12 @@ export function serializeQuestion(q: Question): {
   options: Record<OptionId, string>;
   answer: OptionId;
 } {
+  const blocks = blocksToText(q);
   return {
     n: q.n,
-    intro: richToText(q.intro),
-    data: q.introData ? introDataToText(q.introData) : "",
-    question: richToText(q.question),
+    intro: blocks.intro,
+    data: blocks.data,
+    question: blocks.question,
     options: optionsToText(q.layout),
     answer: q.answer,
   };
