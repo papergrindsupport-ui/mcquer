@@ -1,4 +1,5 @@
 import type { SubjectId, SessionId } from "@/lib/papers-data";
+import type { TopicSelection } from "./allQuestions";
 
 export type ProgressEntry = {
   subject: SubjectId;
@@ -10,6 +11,11 @@ export type ProgressEntry = {
   submitted: boolean;
   score?: number;
   updatedAt: number;
+  kind?: "paper" | "topical";
+  selection?: TopicSelection;
+  limit?: number;
+  topics?: string[];
+  lessons?: string[];
 };
 
 const KEY = "igv-paper-progress-v1";
@@ -93,4 +99,3 @@ export function subscribeProgress(cb: () => void) {
     window.removeEventListener("storage", wrap);
   };
 }
-

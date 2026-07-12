@@ -1,20 +1,10 @@
 import { useState } from "react";
-import {
-  LuX,
-  LuChevronDown,
-  LuSettings,
-  LuDownload,
-  LuArrowLeftRight,
-  LuLoaderCircle,
-} from "react-icons/lu";
+import { LuX, LuChevronDown, LuSettings, LuDownload, LuLoaderCircle } from "react-icons/lu";
 import { useSettings, type SubmissionMode } from "@/lib/settings";
 import { Collapse } from "@/components/Collapse";
 import type { PaperQuestions, OptionId } from "@/lib/mcq/types";
 import { OPTION_IDS } from "@/lib/mcq/types";
-import {
-  downloadPaperPdf,
-  type PaperExportMode,
-} from "@/lib/mcq/paper-export";
+import { downloadPaperPdf, type PaperExportMode } from "@/lib/mcq/paper-export";
 import type { PrintSelections } from "@/components/mcq/PaperPrint";
 
 export type PaperSettingsContext = {
@@ -27,16 +17,14 @@ export type PaperSettingsContext = {
 
 type Props = { open: boolean; onClose: () => void; paper?: PaperSettingsContext };
 
-type SectionId = "submission" | "export" | "shift" | "timers" | "other";
+type SectionId = "submission" | "export" | "timers" | "appearance" | "question" | "navigation";
 
 function readSelection(storageKey: string, n: number): OptionId | null {
   try {
     const raw = localStorage.getItem(`${storageKey}-q${n}`);
     if (!raw) return null;
     const v = JSON.parse(raw);
-    return typeof v === "string" && OPTION_IDS.includes(v as OptionId)
-      ? (v as OptionId)
-      : null;
+    return typeof v === "string" && OPTION_IDS.includes(v as OptionId) ? (v as OptionId) : null;
   } catch {
     return null;
   }
@@ -52,16 +40,9 @@ export function SettingsModal({ open, onClose, paper }: Props) {
   const [exportAnswers, setExportAnswers] = useState(true);
   const [exporting, setExporting] = useState(false);
 
-  // Shift state
-  const [shiftDir, setShiftDir] = useState<"left" | "right">("right");
-  const [shiftAmount, setShiftAmount] = useState<1 | 2 | 3>(1);
-  const [shiftConfirm, setShiftConfirm] = useState("");
-  const [shiftMsg, setShiftMsg] = useState<string | null>(null);
-
   if (!open) return null;
 
-  const toggleSection = (s: SectionId) =>
-    setOpenSection((cur) => (cur === s ? null : s));
+  const toggleSection = (s: SectionId) => setOpenSection((cur) => (cur === s ? null : s));
 
   const handleExport = async () => {
     if (!paper || exporting) return;
@@ -89,34 +70,6 @@ export function SettingsModal({ open, onClose, paper }: Props) {
       setExporting(false);
     }
   };
-
-  const handleShift = () => {
-    if (!paper || shiftConfirm.trim().toLowerCase() !== "yes shift") return;
-    const delta = (shiftDir === "right" ? 1 : -1) * shiftAmount;
-    let count = 0;
-    for (const q of paper.questions) {
-      const cur = readSelection(paper.storageKey, q.n);
-      if (!cur) continue;
-      const idx = OPTION_IDS.indexOf(cur);
-      const next = OPTION_IDS[(((idx + delta) % 4) + 4) % 4];
-      try {
-        localStorage.setItem(`${paper.storageKey}-q${q.n}`, JSON.stringify(next));
-        count++;
-      } catch {}
-    }
-    try {
-      window.dispatchEvent(new CustomEvent("igv:answers-shifted"));
-    } catch {}
-    setShiftConfirm("");
-    setShiftMsg(
-      count > 0
-        ? `Shifted ${count} answer${count === 1 ? "" : "s"} ${shiftDir} by ${shiftAmount}.`
-        : "No answers to shift yet.",
-    );
-    setTimeout(() => setShiftMsg(null), 4000);
-  };
-
-  const confirmOk = shiftConfirm.trim().toLowerCase() === "yes shift";
 
   return (
     <div
@@ -180,16 +133,10 @@ export function SettingsModal({ open, onClose, paper }: Props) {
             >
               <div className="space-y-4">
                 <SegRow label="Theme">
-                  <Seg
-                    active={exportMode === "dark"}
-                    onClick={() => setExportMode("dark")}
-                  >
+                  <Seg active={exportMode === "dark"} onClick={() => setExportMode("dark")}>
                     Dark
                   </Seg>
-                  <Seg
-                    active={exportMode === "light"}
-                    onClick={() => setExportMode("light")}
-                  >
+                  <Seg active={exportMode === "light"} onClick={() => setExportMode("light")}>
                     Light
                   </Seg>
                 </SegRow>
@@ -197,10 +144,7 @@ export function SettingsModal({ open, onClose, paper }: Props) {
                   <Seg active={exportColored} onClick={() => setExportColored(true)}>
                     Colour
                   </Seg>
-                  <Seg
-                    active={!exportColored}
-                    onClick={() => setExportColored(false)}
-                  >
+                  <Seg active={!exportColored} onClick={() => setExportColored(false)}>
                     Black &amp; white
                   </Seg>
                 </SegRow>
@@ -235,70 +179,6 @@ export function SettingsModal({ open, onClose, paper }: Props) {
             </Section>
           )}
 
-          {paper && (
-            <Section
-              title="Shift my answers"
-              open={openSection === "shift"}
-              onToggle={() => toggleSection("shift")}
-            >
-              <div className="space-y-4">
-                <p className="text-xs text-muted-foreground">
-                  Move every selected answer to a different option. A → B → C → D
-                  and wraps around.
-                </p>
-                <SegRow label="Direction">
-                  <Seg
-                    active={shiftDir === "left"}
-                    onClick={() => setShiftDir("left")}
-                  >
-                    Left
-                  </Seg>
-                  <Seg
-                    active={shiftDir === "right"}
-                    onClick={() => setShiftDir("right")}
-                  >
-                    Right
-                  </Seg>
-                </SegRow>
-                <SegRow label="By">
-                  {([1, 2, 3] as const).map((a) => (
-                    <Seg
-                      key={a}
-                      active={shiftAmount === a}
-                      onClick={() => setShiftAmount(a)}
-                    >
-                      {a}
-                    </Seg>
-                  ))}
-                </SegRow>
-                <div>
-                  <label className="mb-1.5 block text-xs font-medium text-muted-foreground">
-                    Type <span className="font-semibold text-foreground">yes shift</span> to confirm
-                  </label>
-                  <input
-                    value={shiftConfirm}
-                    onChange={(e) => setShiftConfirm(e.target.value)}
-                    placeholder="yes shift"
-                    className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground outline-none focus:border-primary"
-                  />
-                </div>
-                <button
-                  onClick={handleShift}
-                  disabled={!confirmOk}
-                  className="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg border border-primary bg-primary/10 px-4 py-2.5 text-sm font-semibold text-primary transition-transform active:scale-95 disabled:cursor-not-allowed disabled:opacity-40"
-                >
-                  <LuArrowLeftRight size={15} /> Shift answers {shiftDir} by{" "}
-                  {shiftAmount}
-                </button>
-                {shiftMsg && (
-                  <p className="text-center text-xs font-medium text-primary">
-                    {shiftMsg}
-                  </p>
-                )}
-              </div>
-            </Section>
-          )}
-
           <Section
             title="Timers"
             open={openSection === "timers"}
@@ -314,11 +194,10 @@ export function SettingsModal({ open, onClose, paper }: Props) {
             </div>
           </Section>
 
-
           <Section
-            title="Other"
-            open={openSection === "other"}
-            onToggle={() => toggleSection("other")}
+            title="Question display"
+            open={openSection === "question"}
+            onToggle={() => toggleSection("question")}
           >
             <div className="space-y-3">
               <Toggle
@@ -334,16 +213,10 @@ export function SettingsModal({ open, onClose, paper }: Props) {
                 onChange={(v) => update("eliminator", v)}
               />
               <Toggle
-                label="Higher contrast (dark mode)"
-                desc="Lift cards, popovers and borders above pure black in dark mode."
-                value={settings.highContrast}
-                onChange={(v) => update("highContrast", v)}
-              />
-              <Toggle
-                label="Reduced motion"
-                desc="Remove animations across the site."
-                value={settings.reducedMotion}
-                onChange={(v) => update("reducedMotion", v)}
+                label="Hide bookmark button"
+                desc="Hide the bookmark / mark-for-review button on each question."
+                value={settings.hideBookmarkButton}
+                onChange={(v) => update("hideBookmarkButton", v)}
               />
               <Toggle
                 label="Remove tools button"
@@ -351,12 +224,15 @@ export function SettingsModal({ open, onClose, paper }: Props) {
                 value={settings.hideTools}
                 onChange={(v) => update("hideTools", v)}
               />
-              <Toggle
-                label="Hide bookmark button"
-                desc="Hide the bookmark / mark-for-review button on each question."
-                value={settings.hideBookmarkButton}
-                onChange={(v) => update("hideBookmarkButton", v)}
-              />
+            </div>
+          </Section>
+
+          <Section
+            title="Navigation"
+            open={openSection === "navigation"}
+            onToggle={() => toggleSection("navigation")}
+          >
+            <div className="space-y-3">
               <Toggle
                 label="Show navigation strip"
                 desc="Sticky collapsible strip of question circles that jump you to any question."
@@ -385,6 +261,27 @@ export function SettingsModal({ open, onClose, paper }: Props) {
                   </div>
                 </div>
               )}
+            </div>
+          </Section>
+
+          <Section
+            title="Appearance & accessibility"
+            open={openSection === "appearance"}
+            onToggle={() => toggleSection("appearance")}
+          >
+            <div className="space-y-3">
+              <Toggle
+                label="Higher contrast (dark mode)"
+                desc="Lift cards, popovers and borders above pure black in dark mode."
+                value={settings.highContrast}
+                onChange={(v) => update("highContrast", v)}
+              />
+              <Toggle
+                label="Reduced motion"
+                desc="Remove animations across the site."
+                value={settings.reducedMotion}
+                onChange={(v) => update("reducedMotion", v)}
+              />
             </div>
           </Section>
         </div>
@@ -423,18 +320,10 @@ function Section({
   );
 }
 
-function SegRow({
-  label,
-  children,
-}: {
-  label: string;
-  children: React.ReactNode;
-}) {
+function SegRow({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div>
-      <div className="mb-1.5 text-xs font-medium text-muted-foreground">
-        {label}
-      </div>
+      <div className="mb-1.5 text-xs font-medium text-muted-foreground">{label}</div>
       <div className="flex gap-1.5">{children}</div>
     </div>
   );
@@ -481,9 +370,7 @@ function ModeRadio({
     <button
       onClick={() => onChange(value)}
       className={`w-full cursor-pointer rounded-lg border p-3 text-left transition-colors ${
-        active
-          ? "border-primary bg-primary/10"
-          : "border-border bg-background hover:bg-accent/40"
+        active ? "border-primary bg-primary/10" : "border-border bg-background hover:bg-accent/40"
       }`}
     >
       <div className="flex items-center gap-2 text-sm font-medium">

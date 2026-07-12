@@ -16,6 +16,7 @@ import {
   LuChevronDown,
   LuChevronUp,
   LuTrash2,
+  LuLayers,
 } from "react-icons/lu";
 import { getBookmarks, subscribeBookmarks } from "@/lib/mcq/bookmarks";
 import {
@@ -38,6 +39,8 @@ import { Dashboard } from "@/components/Dashboard";
 import { PlannerSection } from "@/components/Planner";
 import { ConfirmModal } from "@/components/ConfirmModal";
 import { Collapse } from "@/components/Collapse";
+import { TopicalsSelector } from "@/components/TopicalsSelector";
+import { encodeTopicSelection } from "@/lib/mcq/allQuestions";
 
 export const Route = createFileRoute("/")({
   component: Landing,
@@ -79,6 +82,7 @@ function Landing() {
     null,
     (v): v is string | null => v === null || typeof v === "string",
   );
+  const [topicalsOpen, setTopicalsOpen] = useState(false);
 
   const sessions = useMemo(
     () => (subject && year ? getSessionsFor(subject, year) : []),
@@ -109,6 +113,7 @@ function Landing() {
     setYear(null);
     setSession(null);
     setVariant(null);
+    setTopicalsOpen(false);
     setTimeout(() => {
       document
         .getElementById("select-details")
@@ -172,7 +177,7 @@ function Landing() {
       {/* Choose Subject */}
       <section id="choose-subject" className="pb-8">
         <SectionHeader index="01" title="Choose Subject" />
-        <div className="mt-8 grid gap-4 sm:grid-cols-3">
+        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {SUBJECTS.map((s, i) => {
             const Icon = SUBJECT_ICONS[s.id];
             const active = subject === s.id;
@@ -187,7 +192,7 @@ function Landing() {
                 onClick={() => chooseSubject(s.id)}
                 className={`group relative flex animate-fade-up cursor-pointer flex-col items-start gap-6 overflow-hidden rounded-2xl border p-6 text-left transition-all duration-300 hover:-translate-y-1 sm:p-8 ${
                   active
-                    ? "bg-surface"
+                    ? "border-[color:var(--subj)] bg-card"
                     : "border-border bg-card hover:border-[color:var(--subj)]/60"
                 }`}
                 style={{
@@ -197,13 +202,8 @@ function Landing() {
                   boxShadow: active ? "0 0 0 1px var(--subj)" : undefined,
                 }}
               >
-                <span
-                  aria-hidden
-                  className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full opacity-40 blur-3xl transition-opacity duration-300 group-hover:opacity-70"
-                  style={{ backgroundColor: "var(--subj-soft)" }}
-                />
                 <div
-                  className="grid h-14 w-14 place-items-center rounded-xl transition-colors"
+                  className="grid h-14 w-14 place-items-center rounded-xl transition-transform duration-400 ease-out hover:rotate-25"
                   style={{
                     backgroundColor: active ? "var(--subj)" : "var(--subj-soft)",
                     color: active ? "white" : "var(--subj)",
@@ -230,6 +230,40 @@ function Landing() {
               </button>
             );
           })}
+          <button
+            onClick={() => {
+              setSubject(null);
+              setYear(null);
+              setSession(null);
+              setVariant(null);
+              setTopicalsOpen(true);
+              setTimeout(() => {
+                document
+                  .getElementById("topicals-section")
+                  ?.scrollIntoView({ behavior: "smooth", block: "start" });
+              }, 50);
+            }}
+            className="group relative flex animate-fade-up cursor-pointer flex-col items-start gap-6 overflow-hidden rounded-2xl border border-border  bg-card p-6 text-left transition-all duration-300 hover:-translate-y-1 hover:border-primary/60 sm:p-8"
+            style={{ animationDelay: `${SUBJECTS.length * 80}ms` }}
+          >
+            {/* <span
+              aria-hidden
+              className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-primary/15 opacity-40 blur-3xl transition-opacity duration-300 group-hover:opacity-70"
+            /> */}
+            <div className="grid h-14 w-14 place-items-center rounded-xl bg-primary/15 text-primary">
+              <LuLayers size={26} />
+            </div>
+            <div>
+              <div className="text-xl font-semibold tracking-tight">Topicals</div>
+              <div className="mt-1 text-sm text-muted-foreground">
+                Classified by topic &amp; lesson
+              </div>
+            </div>
+            <div className="mt-auto flex items-center gap-1.5 text-xs text-muted-foreground">
+              <span>Open</span>
+              <LuArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
+            </div>
+          </button>
         </div>
       </section>
 
@@ -293,6 +327,15 @@ function Landing() {
         </section>
       )}
 
+      {topicalsOpen && (
+        <section id="topicals-section" className="mt-8 animate-fade-up scroll-mt-24 pb-8">
+          <SectionHeader index={subject ? "03" : "02"} title="Topicals" />
+          <div className="mt-8">
+            <TopicalsSelector />
+          </div>
+        </section>
+      )}
+
       <RecentPapersSection />
       <DashboardGate />
       <PlannerGate />
@@ -303,13 +346,15 @@ function Landing() {
 
 function DashboardGate() {
   const entries = useProgressEntries();
-  if (entries.length === 0) return null;
+  const visible = entries.filter((entry) => entry.kind !== "topical");
+  if (visible.length === 0) return null;
   return <Dashboard />;
 }
 
 function PlannerGate() {
   const entries = useProgressEntries();
-  if (entries.length === 0) return null;
+  const visible = entries.filter((entry) => entry.kind !== "topical");
+  if (visible.length === 0) return null;
   return <PlannerSection />;
 }
 
@@ -344,6 +389,7 @@ function RecentPapersSection() {
   const [visibleCount, setVisibleCount] = useState(6);
   const [bookmarkCount, setBookmarkCount] = useState<number>(0);
   const [collapsed, setCollapsed] = useState(false);
+  const [expandedCards, setExpandedCards] = useState<Record<string, boolean>>({});
   const [confirmClear, setConfirmClear] = useState(false);
 
   useEffect(() => {
@@ -351,6 +397,10 @@ function RecentPapersSection() {
     upd();
     return subscribeBookmarks(upd);
   }, []);
+
+  const toggleCardDetails = (cardKey: string) => {
+    setExpandedCards((prev) => ({ ...prev, [cardKey]: !prev[cardKey] }));
+  };
   // Reset visible count when filters change
   useEffect(() => {
     setVisibleCount(6);
@@ -486,7 +536,23 @@ function RecentPapersSection() {
               } as React.CSSProperties;
               const sessLabel = SESSIONS.find((x) => x.id === e.session)?.short ?? e.session;
               const pct = e.total > 0 ? Math.round((e.answered / e.total) * 100) : 0;
-              const goto = () =>
+              const isTopical = e.kind === "topical";
+              const topicSummary = e.topics?.[0]?.slice(0, -3) ?? "";
+              const lessonSummary = (e.lessons ?? []).slice(0, 2).join(", ");
+              const cardKey = `${e.subject}-${e.year}-${e.session}-${e.variant}-${i}`;
+              const isExpanded = expandedCards[cardKey] ?? false;
+              const goto = () => {
+                if (isTopical) {
+                  navigate({
+                    to: "/topical/$subject",
+                    params: { subject: e.subject },
+                    search: {
+                      topics: encodeTopicSelection(e.selection ?? {}),
+                      limit: e.limit ?? e.total,
+                    } as never,
+                  });
+                  return;
+                }
                 navigate({
                   to: "/mcq/$subject/$year/$session/$variant",
                   params: {
@@ -496,6 +562,7 @@ function RecentPapersSection() {
                     variant: e.variant,
                   },
                 });
+              };
               return (
                 <button
                   key={i}
@@ -516,10 +583,12 @@ function RecentPapersSection() {
                       </div>
                       <div>
                         <div className="text-sm font-semibold tracking-tight">
-                          {s.name} {e.year}
+                          {isTopical ? `${s.name} topical set` : `${s.name} ${e.year}`}
                         </div>
                         <div className="text-xs text-muted-foreground">
-                          {sessLabel} · {e.variant} · Paper {s.code}
+                          {isTopical
+                            ? `${`${topicSummary}.., ...` || "Selected topics"}`
+                            : `${sessLabel} · ${e.variant} · Paper ${s.code}`}
                         </div>
                       </div>
                     </div>
@@ -534,7 +603,77 @@ function RecentPapersSection() {
                     </span>
                   </div>
 
-                  {e.submitted ? (
+                  {isTopical ? (
+                    <div className="space-y-3 rounded-xl border border-border bg-surface p-3 text-sm">
+                      <div className="flex items-center justify-between text-xs uppercase tracking-widest text-muted-foreground">
+                        <span>Progress</span>
+                        <span>
+                          {e.answered}/{e.total}
+                        </span>
+                      </div>
+                      {!e.submitted ? (
+                        <>
+                          <div className="h-2 overflow-hidden rounded-full bg-muted">
+                            <div
+                              className="h-full rounded-full transition-all duration-500"
+                              style={{ width: `${pct}%`, backgroundColor: "var(--subj)" }}
+                            />
+                          </div>
+                        </>
+                      ) : (
+                        <div className="flex items-center justify-between text-[11px] uppercase tracking-widest text-muted-foreground">
+                          <span>Submitted</span>
+                          <span>
+                            {e.score ?? 0}/{e.total}
+                          </span>
+                        </div>
+                      )}
+                      <button
+                        type="button"
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          toggleCardDetails(cardKey);
+                        }}
+                        className="inline-flex items-center gap-1 text-xs font-medium text-primary"
+                      >
+                        {isExpanded ? "Hide details" : "Show topics & lessons"}
+                      </button>
+                      <Collapse open={isExpanded} className="space-y-2">
+                        <div className="rounded-lg border border-border/70 bg-background/70 p-3">
+                          <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+                            Topics
+                          </div>
+                          <div className="mt-2 flex flex-wrap gap-2">
+                            {(e.topics?.length ? e.topics : ["No topics selected"]).map((topic) => (
+                              <span
+                                key={topic}
+                                className="rounded-full border border-border bg-card px-2.5 py-1 text-xs text-foreground"
+                              >
+                                {topic}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                        <div className="rounded-lg border border-border/70 bg-background/70 p-3">
+                          <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+                            Lessons
+                          </div>
+                          <div className="mt-2 flex flex-wrap gap-2">
+                            {(e.lessons?.length ? e.lessons : ["No lessons selected"]).map(
+                              (lesson) => (
+                                <span
+                                  key={lesson}
+                                  className="rounded-full border border-border bg-card px-2.5 py-1 text-xs text-muted-foreground"
+                                >
+                                  {lesson}
+                                </span>
+                              ),
+                            )}
+                          </div>
+                        </div>
+                      </Collapse>
+                    </div>
+                  ) : e.submitted ? (
                     <div className="flex items-end justify-between rounded-xl border border-border bg-surface p-3">
                       <span className="text-xs uppercase tracking-widest text-muted-foreground">
                         Your mark

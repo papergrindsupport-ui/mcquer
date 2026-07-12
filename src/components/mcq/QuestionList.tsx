@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useScrollToHash } from "@/hooks/use-scroll-to-hash";
 import { LuSend, LuRotateCcw, LuTrash2 } from "react-icons/lu";
 import type { PaperQuestions, OptionId } from "@/lib/mcq/types";
 import type { SubjectId, SessionId } from "@/lib/papers-data";
 import { QuestionCard } from "./QuestionCard";
 import { useSettings } from "@/lib/settings";
 import { getGradeInfo, type GradeSystem, computeGrade } from "@/lib/mcq/grade-boundaries";
+import type { TopicSelection } from "@/lib/mcq/allQuestions";
 import { ResultsCard } from "./ResultsCard";
 import { AIFeedback } from "./AIFeedback";
 import { EmptyQuestionsPrompt } from "./EmptyQuestionsPrompt";
@@ -16,7 +18,15 @@ import { recordPaperSubmit } from "@/lib/mcq/stats";
 import { ConfirmModal } from "@/components/ConfirmModal";
 import { downloadResultsPdf } from "@/lib/pdf-export";
 import { getSubject } from "@/lib/papers-data";
+import { getNextPaper, formatPaperLabel } from "@/lib/mcq/next-paper";
+import { useNavigate } from "@tanstack/react-router";
 
+type SourceMeta = {
+  year: number;
+  session: SessionId;
+  variant: string;
+  originalQuestionNumber: number;
+};
 
 type Props = {
   questions: PaperQuestions;
@@ -24,7 +34,12 @@ type Props = {
   subject: SubjectId;
   year: number;
   session: SessionId;
+  disableProgress?: boolean;
   variant: string;
+  questionMeta?: SourceMeta[];
+  topicalSelection?: TopicSelection;
+  topicalLimit?: number;
+  showNextPaper?: boolean;
 };
 
 const IDS: OptionId[] = ["A", "B", "C", "D"];
@@ -56,8 +71,35 @@ export function QuestionList({
   year,
   session,
   variant,
+  questionMeta,
+  topicalSelection,
+  topicalLimit,
+  showNextPaper = true,
+  disableProgress = false,
 }: Props) {
   const { settings } = useSettings();
+  const navigate = useNavigate();
+  useScrollToHash();
+
+  const nextCoord = useMemo(
+    () => getNextPaper(subject, year, session, variant),
+    [subject, year, session, variant],
+  );
+  const goNextPaper = useCallback(() => {
+    if (!nextCoord) return;
+    const subj = getSubject(nextCoord.subject);
+    navigate({
+      to: "/mcq/$subject/$year/$session/$variant",
+      params: {
+        subject: subj.shortcut,
+        year: String(nextCoord.year),
+        session: nextCoord.session,
+        variant: nextCoord.variant,
+      },
+    });
+    setTimeout(() => window.scrollTo({ top: 0, behavior: "smooth" }), 30);
+  }, [navigate, nextCoord]);
+
   const [submittedAll, setSubmittedAll] = usePersistedState<boolean>(
     `${storageKey}-submitted-all`,
     false,
@@ -85,7 +127,6 @@ export function QuestionList({
       window.removeEventListener("storage", onStorage);
     };
   }, [bumpTick, storageKey]);
-
 
   useEffect(() => {
     if (submittedAll) bumpTick();
@@ -116,6 +157,8 @@ export function QuestionList({
 
   // Persist progress whenever selections change (or submission state changes).
   useEffect(() => {
+    if (disableProgress) return;
+
     if (answered === 0 && !submittedAll) return;
     upsertProgress({
       subject,
@@ -127,8 +170,25 @@ export function QuestionList({
       submitted: submittedAll,
       score: submittedAll ? score : undefined,
       updatedAt: Date.now(),
+      kind: topicalSelection && Object.keys(topicalSelection).length > 0 ? "topical" : "paper",
+      selection: topicalSelection,
+      limit: topicalLimit,
+      topics: topicalSelection ? Object.keys(topicalSelection) : undefined,
+      lessons: topicalSelection ? Object.values(topicalSelection).flat() : undefined,
     });
-  }, [answered, submittedAll, score, subject, year, session, variant, questions.length]);
+  }, [
+    answered,
+    submittedAll,
+    score,
+    subject,
+    year,
+    session,
+    variant,
+    questions.length,
+    disableProgress,
+    topicalSelection,
+    topicalLimit,
+  ]);
 
   const gradeInfo = getGradeInfo(subject, year, session, variant);
   const availableSystems: GradeSystem[] = gradeInfo
@@ -150,7 +210,6 @@ export function QuestionList({
   const [pendingDontShow, setPendingDontShow] = useState(false);
   const [confirmReset, setConfirmReset] = useState(false);
   const [resetNonce, setResetNonce] = useState(0);
-
 
   const resultsRef = useRef<HTMLDivElement | null>(null);
   const questionsRef = useRef<HTMLDivElement | null>(null);
@@ -226,7 +285,6 @@ export function QuestionList({
     setConfirmReset(true);
   };
 
-
   const handleDownload = () => {
     const subj = getSubject(subject);
     const grades = availableSystems.map((sys) => {
@@ -267,6 +325,8 @@ export function QuestionList({
             onReview={handleReview}
             onDownload={handleDownload}
             onRetry={handleRetry}
+            onNextPaper={showNextPaper && nextCoord ? goNextPaper : undefined}
+            nextPaperLabel={nextCoord ? formatPaperLabel(nextCoord) : null}
           />
           <AIFeedback
             questions={questions}
@@ -280,10 +340,11 @@ export function QuestionList({
         </div>
       )}
 
-      <div ref={questionsRef} aria-hidden className="sr-only">Questions</div>
+      <div ref={questionsRef} aria-hidden className="sr-only">
+        Questions
+      </div>
 
-
-      {questions.map((q) => (
+      {questions.map((q, index) => (
         <QuestionCard
           key={`${q.n}-${resetNonce}`}
           q={q}
@@ -293,6 +354,7 @@ export function QuestionList({
           year={year}
           session={session}
           variant={variant}
+          sourceMeta={questionMeta?.[index]}
         />
       ))}
 
@@ -375,6 +437,5 @@ export function QuestionList({
         }}
       />
     </section>
-
   );
 }

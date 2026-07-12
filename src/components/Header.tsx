@@ -1,9 +1,19 @@
 import { Link } from "@tanstack/react-router";
 import { useState, useEffect, useRef } from "react";
-import { LuSun, LuMoon, LuPalette, LuVault, LuArrowLeft, LuPipette, LuPencil } from "react-icons/lu";
+import {
+  LuSun,
+  LuMoon,
+  LuPalette,
+  LuVault,
+  LuArrowLeft,
+  LuPipette,
+  LuPencil,
+  LuSearch,
+} from "react-icons/lu";
 import { useTheme, PALETTES, type PaletteId } from "@/lib/theme";
 import { ColorWheel } from "./ColorWheel";
 import { getStats, subscribeStats } from "@/lib/mcq/stats";
+import { useSearchCtx } from "@/lib/search/context";
 
 export function Header() {
   const { mode, toggleMode, palette, setPalette, customColor, setCustomColor } = useTheme();
@@ -33,6 +43,7 @@ export function Header() {
         </Link>
 
         <div className="flex items-center gap-1">
+          <SearchButton />
           <PencilBadge />
           <div className="relative" ref={ref}>
             <button
@@ -102,16 +113,28 @@ export function Header() {
             aria-label="Toggle dark mode"
             className="theme-toggle relative grid h-10 w-10 cursor-pointer place-items-center overflow-hidden rounded-lg text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
           >
-            <span
-              key={mode}
-              className="inline-flex animate-theme-icon"
-            >
+            <span key={mode} className="inline-flex animate-theme-icon">
               {mode === "dark" ? <LuSun size={18} /> : <LuMoon size={18} />}
             </span>
           </button>
         </div>
       </div>
     </header>
+  );
+}
+
+function SearchButton() {
+  const { open } = useSearchCtx();
+  return (
+    <button
+      onClick={() => open()}
+      aria-label="Search"
+      title="Search"
+      className="mr-1 inline-flex h-9 cursor-pointer items-center gap-2 rounded-full border border-border bg-card px-2.5 text-xs text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground"
+    >
+      <LuSearch size={14} />
+      {/* <span className="hidden sm:inline">Search</span> */}
+    </button>
   );
 }
 
@@ -184,9 +207,7 @@ function CustomSwatch({
         style={{
           background:
             "conic-gradient(from 0deg, hsl(0 90% 55%), hsl(60 90% 55%), hsl(120 90% 55%), hsl(180 90% 55%), hsl(240 90% 55%), hsl(300 90% 55%), hsl(360 90% 55%))",
-          boxShadow: active
-            ? `0 0 0 2px hsl(${color.h} ${color.s}% ${color.l}%)`
-            : undefined,
+          boxShadow: active ? `0 0 0 2px hsl(${color.h} ${color.s}% ${color.l}%)` : undefined,
         }}
       >
         <LuPipette

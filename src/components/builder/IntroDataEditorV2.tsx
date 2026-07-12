@@ -6,6 +6,9 @@ import { Wysiwyg } from "./Wysiwyg";
 import { CustomSelect } from "@/components/CustomSelect";
 import { CustomCheckbox, CustomRadio } from "./CustomToggles";
 import { GraphBuilder } from "./GraphBuilder";
+import { CircuitBuilder } from "./CircuitBuilder";
+import { defaultCircuit } from "@/lib/mcq/circuit";
+
 import { IntroDataRenderer } from "@/components/mcq/QuestionCard";
 import { copyClip, pasteClip, useClipHas } from "@/lib/builder/clipboard";
 import { IntroTableBuilder, makeDefaultIntroGrid } from "./IntroTableBuilder";
@@ -46,6 +49,8 @@ function defaultData(kind: Kind): IntroData {
       return { kind: "flowchart", spec: makeDefaultFlowchart() };
     case "list":
       return { kind: "list", ordered: true, style: "ordered", items: [[{ text: "Item 1" }]] };
+    case "circuit":
+      return { kind: "circuit", spec: defaultCircuit() };
   }
 }
 
@@ -68,6 +73,7 @@ export function IntroDataEditor({
             { value: "flowchart", label: "Flowchart" },
             { value: "table", label: "Table" },
             { value: "list", label: "List" },
+            { value: "circuit", label: "Circuit" },
           ]}
           onChange={(k) => k !== value.kind && onChange(defaultData(k))}
         />
@@ -90,6 +96,11 @@ export function IntroDataEditor({
             value={value.caption}
             onChange={(caption) => onChange({ ...value, caption })}
           />
+        </div>
+      )} {value.kind === "circuit" && (
+        <div className="space-y-2">
+          <CircuitBuilder value={value.spec} onChange={(spec) => onChange({ ...value, spec })} />
+          <CaptionEditor value={value.caption} onChange={(caption) => onChange({ ...value, caption })} />
         </div>
       )}
       {value.kind === "table" && <TableEditor value={value} onChange={onChange} />}

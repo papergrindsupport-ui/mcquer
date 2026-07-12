@@ -33,7 +33,6 @@ function evaluate(expr: string): string {
   const cleaned = e.replace(/Math\.\w+|fact/g, "");
   if (/[a-zA-Z_]/.test(cleaned)) throw new Error("bad ident");
   const fact = (n: number): number => (n <= 1 ? 1 : n * fact(n - 1));
-  // eslint-disable-next-line no-new-func
   const val = new Function("fact", `return (${e})`)(fact);
   if (typeof val !== "number" || !isFinite(val)) throw new Error("bad result");
   return String(Math.round(val * 1e12) / 1e12);
@@ -97,7 +96,7 @@ export function Calculator({ onClose, onMinimize }: Props) {
       minWidth={260}
       minHeight={380}
     >
-      <div className="flex h-full flex-col p-3">
+      <div className="flex h-full flex-col p-3 bg-black text-white dark:bg-black">
         <input
           value={expr}
           onChange={(e) => setExpr(e.target.value)}
@@ -105,7 +104,7 @@ export function Calculator({ onClose, onMinimize }: Props) {
             if (e.key === "Enter") compute();
           }}
           placeholder="Type or click..."
-          className="w-full rounded-lg border border-border bg-background px-3 py-2 font-mono text-sm outline-none focus:border-primary"
+          className="w-full rounded-lg border border-zinc-800 bg-black px-3 py-2 font-mono text-sm text-white outline-none focus:border-primary"
         />
         <div className="mt-1 h-6 text-right font-mono text-sm text-muted-foreground">
           {result && `= ${result}`}
@@ -200,10 +199,10 @@ function KeyBtn({
 }) {
   const styles =
     variant === "primary"
-      ? "bg-primary text-primary-foreground hover:opacity-90"
+      ? "bg-primary text-primary-foreground hover:opacity-90 dark:shadow-[0_4px_14px_-4px_hsl(var(--primary-h)_var(--primary-s)_var(--primary-l)/0.55)]"
       : variant === "warn"
-        ? "bg-destructive/10 text-destructive hover:bg-destructive/20"
-        : "bg-accent text-foreground hover:bg-accent/70";
+        ? "bg-destructive/10 text-destructive hover:bg-destructive/20 dark:bg-destructive/15 dark:hover:bg-destructive/25"
+        : "bg-zinc-900 text-white hover:bg-zinc-800 border border-zinc-800";
   return (
     <button
       onClick={onClick}

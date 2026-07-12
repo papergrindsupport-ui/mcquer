@@ -1,6 +1,7 @@
 import React, { useMemo, useRef } from "react";
 import { LuPlus, LuTrash2, LuAlignLeft, LuAlignCenter, LuAlignRight } from "react-icons/lu";
-
+import { CircuitBuilder } from "./CircuitBuilder";
+import { defaultCircuit } from "@/lib/mcq/circuit";
 import type {
   OptionsLayout,
   OptionId,
@@ -59,6 +60,7 @@ const LAYOUT_TYPES: { value: OptionsLayout["type"]; label: string }[] = [
   { value: "images", label: "Images" },
   { value: "image-hotspots", label: "Image with hotspots" },
   { value: "image-refs", label: "Image references (Q22 with images)" },
+  { value: "circuits", label: "Circuits" },
   { value: "image-zones", label: "Image zones (Q22 with quadrilateral regions)" },
   { value: "graphs", label: "Graphs" },
   { value: "flowcharts", label: "Flowcharts" },
@@ -204,6 +206,17 @@ function makeLayout(type: OptionsLayout["type"]): OptionsLayout {
       const mk = () => makeDefaultFlowchart();
       return { type, options: { A: mk(), B: mk(), C: mk(), D: mk() } };
     }
+    case "circuits":
+      return {
+        type,
+
+        options: {
+          A: defaultCircuit(),
+          B: defaultCircuit(),
+          C: defaultCircuit(),
+          D: defaultCircuit(),
+        },
+      };
     case "graph-hotspots":
       return {
         type,
@@ -431,6 +444,7 @@ export function LayoutEditor({
       {value.type === "graphs" && <GraphsLayoutEditor value={value} onChange={onChange} />}
 
       {value.type === "flowcharts" && <FlowchartsLayoutEditor value={value} onChange={onChange} />}
+      {value.type === "circuits" && <CircuitsLayoutEditor value={value} onChange={onChange} />}
       {value.type === "image-hotspots" && (
         <ImageHotspotsLayoutEditor value={value} onChange={onChange} />
       )}
@@ -1552,6 +1566,42 @@ function GraphsLayoutEditor({
             </summary>
             <div className="mt-2">
               <GraphBuilder
+                value={value.options[id]}
+                onChange={(spec) =>
+                  onChange({ ...value, options: { ...value.options, [id]: spec } })
+                }
+              />
+            </div>
+          </details>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function CircuitsLayoutEditor({
+  value,
+  onChange,
+}: {
+  value: Extract<OptionsLayout, { type: "circuits" }>;
+  onChange: (v: OptionsLayout) => void;
+}) {
+  return (
+    <div className="space-y-3">
+      <OrientationField
+        value={value.orientation}
+        onChange={(o) => onChange({ ...value, orientation: o })}
+      />
+
+      <div className="grid gap-2">
+        {OPTION_IDS.map((id) => (
+          <details key={id} className="rounded border border-border bg-background p-2">
+            <summary className="cursor-pointer text-xs font-semibold text-primary">
+              {id} — edit circuit
+            </summary>
+
+            <div className="mt-2">
+              <CircuitBuilder
                 value={value.options[id]}
                 onChange={(spec) =>
                   onChange({ ...value, options: { ...value.options, [id]: spec } })

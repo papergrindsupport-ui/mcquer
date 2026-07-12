@@ -6,6 +6,8 @@ import {
   LuCircleDashed,
   LuCircleHelp,
 } from "react-icons/lu";
+import { CircuitRenderer } from "./Circuit";
+import { CircuitOptions } from "./CircuitOptions";
 
 import { Flowchart } from "./Flowchart";
 
@@ -85,6 +87,13 @@ function SharedKeyBar({ q, position }: { q: Question; position: "before" | "afte
   );
 }
 
+type SourceMeta = {
+  year: number;
+  session: SessionId;
+  variant: string;
+  originalQuestionNumber: number;
+};
+
 type Props = {
   q: Question;
   storageKey: string;
@@ -93,6 +102,7 @@ type Props = {
   year: number;
   session: SessionId;
   variant: string;
+  sourceMeta?: SourceMeta;
   onRevealedChange?: (n: number, revealed: boolean) => void;
 };
 
@@ -104,9 +114,14 @@ export function QuestionCard({
   year,
   session,
   variant,
+  sourceMeta,
   onRevealedChange,
 }: Props) {
   const { settings, hydrated: settingsHydrated } = useSettings();
+  const effectiveYear = sourceMeta?.year ?? year;
+  const effectiveSession = sourceMeta?.session ?? session;
+  const effectiveVariant = sourceMeta?.variant ?? variant;
+  const effectiveQuestionNumber = sourceMeta?.originalQuestionNumber ?? q.n;
   const [selected, setSelected] = usePersistedState<OptionId | null>(
     `${storageKey}-q${q.n}`,
     null,
@@ -232,12 +247,18 @@ export function QuestionCard({
             <div className="-mb-4 flex justify-end">
               <BookmarkButton
                 subject={subject}
-                year={year}
-                session={session}
-                variant={variant}
-                n={q.n}
+                year={effectiveYear}
+                session={effectiveSession}
+                variant={effectiveVariant}
+                n={effectiveQuestionNumber}
                 storageKey={storageKey}
               />
+            </div>
+          )}
+          {sourceMeta && (
+            <div className="mb-3 text-[11px] font-medium uppercase tracking-[0.2em] text-muted-foreground/80">
+              {effectiveYear} {SESSION_SHORT[effectiveSession]} {effectiveVariant} · Q
+              {effectiveQuestionNumber}
             </div>
           )}
           {groups.map((group, gi) => {
@@ -340,9 +361,9 @@ export function QuestionCard({
                   q={q}
                   selected={selected}
                   subject={subject}
-                  year={year}
-                  session={session}
-                  variant={variant}
+                  year={effectiveYear}
+                  session={effectiveSession}
+                  variant={effectiveVariant}
                 />
               )}
               {(showCheckButton || instantRevealed) &&
@@ -677,6 +698,20 @@ export function IntroDataRenderer({ data }: { data: IntroData }) {
       </div>
     );
   }
+  if (data.kind === "circuit") {
+    return (
+      <div className="space-y-2">
+        <div className="rounded-xl border border-border bg-card p-3 shadow-sm flex justify-center">
+          <CircuitRenderer spec={data.spec} />
+        </div>
+        {data.caption && (
+          <p className="text-center text-xs italic text-muted-foreground">
+            <Rich nodes={data.caption} />
+          </p>
+        )}
+      </div>
+    );
+  }
   // list
   const style = data.style ?? (data.ordered ? "ordered" : "unordered");
   const ListTag = style === "ordered" ? "ol" : "ul";
@@ -918,6 +953,10 @@ export function LayoutRenderer({
           keys={keys}
           {...common}
         />
+      );
+    case "circuits":
+      return (
+        <CircuitOptions options={layout.options} orientation={layout.orientation} {...common} />
       );
 
     case "graph-hotspots":

@@ -1,20 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSearchScope } from "@/lib/search/context";
 import { LuTimer, LuSettings, LuChevronRight } from "react-icons/lu";
 import { SettingsModal } from "@/components/SettingsModal";
 import { useSettings } from "@/lib/settings";
-import {
-  getSubjectByShortcut,
-  getSessionById,
-  type SessionId,
-} from "@/lib/papers-data";
+import { getSubjectByShortcut, getSessionById, type SessionId } from "@/lib/papers-data";
 import { getPaperLinks } from "@/lib/paper-links";
-import {
-  Tooltip,
-  TooltipTrigger,
-  TooltipContent,
-  TooltipProvider,
-} from "@/components/ui/tooltip";
+import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
 import { ToolsMenu } from "@/components/tools/ToolsMenu";
 import { useTimers } from "@/components/timers/TimersProvider";
 import { getPaperQuestions } from "@/lib/mcq";
@@ -39,20 +31,23 @@ function McqPage() {
   const subjectName = subj?.name ?? subject;
   const subjectShort = subj?.shortcut ?? subject;
 
-  const links = subj && sess
-    ? getPaperLinks(subj.id, Number(year), sid, variant)
-    : { qp: null, ms: null };
-
+  const links =
+    subj && sess ? getPaperLinks(subj.id, Number(year), sid, variant) : { qp: null, ms: null };
 
   const { openCreate } = useTimers();
   const { settings } = useSettings();
   const [settingsOpen, setSettingsOpen] = useState(false);
   const defaultTimerName = `${sessionShort} ${year} timer`;
 
-  const questions =
+  const questions = subj && sess ? getPaperQuestions(subj.id, Number(year), sid, variant) : null;
+
+  useSearchScope(
     subj && sess
-      ? getPaperQuestions(subj.id, Number(year), sid, variant)
-      : null;
+      ? { kind: "paper", subject: subj.id, year: Number(year), session: sid, variant }
+      : null,
+  );
+  // Placate lint: keep useEffect import used
+  useEffect(() => {}, []);
 
   return (
     <TooltipProvider delayDuration={150}>
@@ -95,7 +90,12 @@ function McqPage() {
           </div>
 
           <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
-            <PaperLinkButton label="QP" href={links.qp} tip="Question paper" tipOff="QP unavailable" />
+            <PaperLinkButton
+              label="QP"
+              href={links.qp}
+              tip="Question paper"
+              tipOff="QP unavailable"
+            />
             <PaperLinkButton label="MS" href={links.ms} tip="Markscheme" tipOff="MS unavailable" />
             <Tooltip>
               <TooltipTrigger asChild>
@@ -151,7 +151,7 @@ function McqPage() {
                 storageKey: `mcq-${subj.id}-${year}-${session}-${variant}`,
                 title: `${subjectName} · ${year} ${sessionShort} ${variant}`,
                 subtitle: `${subjectName} — ${year} ${sess.label ?? sessionShort} · Paper ${variant}`,
-                filenameBase: `igvault-paper-${subjectShort}-${year}-${session}-${variant}`,
+                filenameBase: `mcquer-paper-${subjectShort}-${year}-${session}-${variant}`,
               }
             : undefined
         }

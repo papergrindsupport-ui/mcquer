@@ -62,6 +62,8 @@ function introDataToText(d: IntroData): string {
     }
     return `Flowchart:\n${parts.join("\n")}${d.caption ? `\n(${richToText(d.caption)})` : ""}`;
   }
+  if (d.kind === "circuit") return `Circuit${d.caption ? ` (${richToText(d.caption)})` : ""}`;
+
   // list
   const items = d.items
     .map((it, i) => (d.ordered ? `${i + 1}. ${richToText(it)}` : `- ${richToText(it)}`))
@@ -104,6 +106,9 @@ function optionsToText(layout: OptionsLayout): Record<OptionId, string> {
         }
         out[id] = `[Flowchart: ${cells.join(" → ")}]`;
       }
+      break;
+    case "circuits":
+      for (const id of ids) out[id] = `[Circuit option ${id}]`;
       break;
     case "graph-hotspots":
       for (const id of ids) out[id] = `[Point on graph ${id}]`;

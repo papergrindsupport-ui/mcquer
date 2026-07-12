@@ -2,9 +2,10 @@ import { useState } from "react";
 import { LuSparkles, LuChevronDown, LuLoader, LuBrain } from "react-icons/lu";
 import type { PaperQuestions, OptionId, Question } from "@/lib/mcq/types";
 import { serializeQuestion } from "@/lib/volto/serialize";
-import { completeJSON } from "@/lib/volto/client";
+import { completeJSON, type ChatContentPart } from "@/lib/volto/client";
 import { Markdown } from "@/components/volto/Markdown";
 import { getSubject, getSessionById, type SubjectId, type SessionId } from "@/lib/papers-data";
+import { collectQuestionImages, buildImageParts } from "@/lib/volto/images";
 
 type Props = {
   questions: PaperQuestions;
@@ -72,20 +73,30 @@ export function AIFeedback({
         "(e.g. Atomic structure, Stoichiometry, Acids and bases). For each topic, " +
         "compute strength as round(correct/total*100). Every question must belong to " +
         "exactly one topic. Return ONLY valid JSON matching the schema, no prose. " +
-        "Use markdown (headings, bold, bullet lists) inside `summary` and `feedback`.";
+        "Use markdown (headings, bold, bullet lists) inside `summary` and `feedback`. " +
+        "The user message may include images of diagrams, apparatus, graphs, or tables that " +
+        "belong to specific questions — factor them into your analysis and feedback.";
 
-      const user =
+      // Attach diagrams/graphs for the questions the student got WRONG or skipped,
+      // so the model can actually see what tripped them up.
+      const missImages = selections
+        .filter(({ q, sel }) => sel !== q.answer)
+        .flatMap(({ q }) => collectQuestionImages(q));
+      const { parts: imageParts, captions } = await buildImageParts(missImages, 16);
+      const userText =
         `Paper: ${paperLabel}\nScore: ${score} / ${questions.length}\n\n` +
         `Return JSON with this exact shape:\n` +
         `{\n  "summary": "markdown overview of performance",\n` +
         `  "feedback": "markdown personal feedback, encouraging and specific",\n` +
         `  "improvements": ["short bullet", "..."],\n` +
         `  "topics": [{"name": "Topic name", "strength": 0-100, "correct": n, "total": n, "questions": [1,2], "tip": "1-2 sentence study tip"}]\n}\n\n` +
-        `Questions and answers:\n${JSON.stringify(items)}`;
+        `Questions and answers:\n${JSON.stringify(items)}` +
+        (captions.length ? `\n\nAttached figures (in order):\n${captions.join("\n")}` : "");
+      const content: ChatContentPart[] = [{ type: "text", text: userText }, ...imageParts];
 
       const res = await completeJSON<AIResponse>([
         { role: "system", content: system },
-        { role: "user", content: user },
+        { role: "user", content },
       ]);
       setData(res);
     } catch (e) {
@@ -115,9 +126,7 @@ export function AIFeedback({
             </>
           )}
         </button>
-        {error && (
-          <p className="mt-2 text-center text-xs text-red-500">{error}</p>
-        )}
+        {error && <p className="mt-2 text-center text-xs text-red-500">{error}</p>}
       </div>
     );
   }

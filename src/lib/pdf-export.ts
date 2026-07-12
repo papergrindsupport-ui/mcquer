@@ -24,7 +24,9 @@ function hslToRgb(h: number, s: number, l: number): [number, number, number] {
   const c = (1 - Math.abs(2 * l - 1)) * s;
   const hp = (h % 360) / 60;
   const x = c * (1 - Math.abs((hp % 2) - 1));
-  let r = 0, g = 0, b = 0;
+  let r = 0,
+    g = 0,
+    b = 0;
   if (0 <= hp && hp < 1) [r, g, b] = [c, x, 0];
   else if (hp < 2) [r, g, b] = [x, c, 0];
   else if (hp < 3) [r, g, b] = [0, c, x];
@@ -83,7 +85,12 @@ export type ResultsPdfInput = {
   score: number;
   total: number;
   grades: { system: string; grade: string | null | undefined }[];
-  rows: { n: number; selected: string | null; correct: string; status: "correct" | "incorrect" | "unattempted" }[];
+  rows: {
+    n: number;
+    selected: string | null;
+    correct: string;
+    status: "correct" | "incorrect" | "unattempted";
+  }[];
 };
 
 export function downloadResultsPdf(input: ResultsPdfInput) {
@@ -132,23 +139,15 @@ export function downloadResultsPdf(input: ResultsPdfInput) {
   // Eyebrow
   doc.setFontSize(9);
   doc.setTextColor(...MUTED);
-  doc.text("IGVAULT · RESULTS", heroX + 24, heroY + 28);
+  doc.text("MCQUER · RESULTS", heroX + 24, heroY + 28);
 
   // Title
   doc.setFontSize(20);
   doc.setTextColor(...FG);
-  doc.text(
-    `${input.subject}`,
-    heroX + 24,
-    heroY + 54,
-  );
+  doc.text(`${input.subject}`, heroX + 24, heroY + 54);
   doc.setFontSize(11);
   doc.setTextColor(...MUTED);
-  doc.text(
-    `${input.year} · ${input.session} · Paper ${input.variant}`,
-    heroX + 24,
-    heroY + 72,
-  );
+  doc.text(`${input.year} · ${input.session} · Paper ${input.variant}`, heroX + 24, heroY + 72);
 
   // Big score number
   doc.setFontSize(72);
@@ -186,7 +185,10 @@ export function downloadResultsPdf(input: ResultsPdfInput) {
     doc.setFontSize(8);
     doc.setTextColor(...MUTED);
     doc.text(
-      gradesWithVal.map((g) => g.system).join(" · ").toUpperCase(),
+      gradesWithVal
+        .map((g) => g.system)
+        .join(" · ")
+        .toUpperCase(),
       ringCx,
       ringCy + 20,
       { align: "center" },
@@ -234,8 +236,7 @@ export function downloadResultsPdf(input: ResultsPdfInput) {
   const cellGap = 2;
   const cellW = (stripW - cellGap * (input.rows.length - 1)) / input.rows.length;
   input.rows.forEach((r, i) => {
-    const c =
-      r.status === "correct" ? GREEN : r.status === "incorrect" ? RED : [50, 50, 56];
+    const c = r.status === "correct" ? GREEN : r.status === "incorrect" ? RED : [50, 50, 56];
     doc.setFillColor(...(c as [number, number, number]));
     doc.roundedRect(heroX + i * (cellW + cellGap), y, cellW, 10, 2, 2, "F");
   });
@@ -273,7 +274,9 @@ export function downloadResultsPdf(input: ResultsPdfInput) {
       3: { halign: "center", fontStyle: "bold" },
     },
     alternateRowStyles: { fillColor: [16, 16, 20] },
-    willDrawPage: (data) => { if (data.pageNumber > 1) paintBackground(doc); },
+    willDrawPage: (data) => {
+      if (data.pageNumber > 1) paintBackground(doc);
+    },
     didParseCell: (data) => {
       if (data.section !== "body") return;
       const s = input.rows[data.row.index]?.status;
@@ -293,10 +296,10 @@ export function downloadResultsPdf(input: ResultsPdfInput) {
   });
 
   paintAllPages(doc);
-  footer(doc, `IGVault — ${input.subject} ${input.year} ${input.session} ${input.variant}`);
+  footer(doc, `MCQuer — ${input.subject} ${input.year} ${input.session} ${input.variant}`);
   download(
     doc,
-    `igvault-results-${input.subjectShort}-${input.year}-${input.session}-${input.variant}.pdf`,
+    `mcquer-results-${input.subjectShort}-${input.year}-${input.session}-${input.variant}.pdf`,
   );
 }
 
@@ -381,7 +384,7 @@ export function downloadDashboardPdf(input: DashboardPdfInput) {
   doc.roundedRect(32, 32, w - 64, 76, 12, 12, "F");
   doc.setTextColor(...MUTED);
   doc.setFontSize(9);
-  doc.text("IGVAULT · DASHBOARD EXPORT", 52, 58);
+  doc.text("MCQUER · DASHBOARD EXPORT", 52, 58);
   doc.setTextColor(...FG);
   doc.setFontSize(18);
   doc.text(`Performance summary`, 52, 82);
@@ -467,7 +470,9 @@ export function downloadDashboardPdf(input: DashboardPdfInput) {
         fontStyle: "bold",
       },
       alternateRowStyles: { fillColor: [16, 16, 20] },
-      willDrawPage: (data) => { if (data.pageNumber > 1) paintBackground(doc); },
+      willDrawPage: (data) => {
+        if (data.pageNumber > 1) paintBackground(doc);
+      },
       didParseCell: (data) => {
         if (data.section !== "body" || data.column.index !== 4) return;
         const pct = input.papers[data.row.index]?.pct ?? 0;
@@ -479,8 +484,8 @@ export function downloadDashboardPdf(input: DashboardPdfInput) {
   }
 
   paintAllPages(doc);
-  footer(doc, "IGVault — dashboard export");
-  download(doc, `igvault-dashboard-${input.generatedAt.toISOString().slice(0, 10)}.pdf`);
+  footer(doc, "MCQuer — dashboard export");
+  download(doc, `mcquer-dashboard-${input.generatedAt.toISOString().slice(0, 10)}.pdf`);
 }
 
 /* ========================================================
@@ -520,18 +525,15 @@ export function downloadPlannerPdf(input: PlannerPdfInput) {
   doc.roundedRect(24, 24, 5, 82, 3, 3, "F");
   doc.setTextColor(...MUTED);
   doc.setFontSize(9);
-  doc.text("IGVAULT · PLANNER", 44, 48);
+  doc.text("MCQUER · PLANNER", 44, 48);
   doc.setTextColor(...FG);
   doc.setFontSize(20);
   doc.text(`${input.subject} — study plan`, 44, 74);
   doc.setFontSize(10);
   doc.setTextColor(...MUTED);
-  const pct = input.totalCount > 0 ? Math.round((input.completedCount / input.totalCount) * 100) : 0;
-  doc.text(
-    `${input.completedCount} / ${input.totalCount} papers completed  ·  ${pct}%`,
-    44,
-    92,
-  );
+  const pct =
+    input.totalCount > 0 ? Math.round((input.completedCount / input.totalCount) * 100) : 0;
+  doc.text(`${input.completedCount} / ${input.totalCount} papers completed  ·  ${pct}%`, 44, 92);
   doc.setFontSize(9);
   doc.text(input.generatedAt.toLocaleString(), w - 44, 92, { align: "right" });
 
@@ -560,8 +562,7 @@ export function downloadPlannerPdf(input: PlannerPdfInput) {
     String(r.year),
     ...r.cells.map((c) => {
       if (c.state === "missing") return "";
-      const mark =
-        c.state === "checked" ? "✓" : c.state === "auto" ? "◐" : "·";
+      const mark = c.state === "checked" ? "✓" : c.state === "auto" ? "◐" : "·";
       return c.pin ? `${mark}  ${c.pin.short}` : mark;
     }),
   ]);
@@ -591,7 +592,9 @@ export function downloadPlannerPdf(input: PlannerPdfInput) {
       0: { fontStyle: "bold", halign: "left", cellWidth: 52 },
     },
     alternateRowStyles: { fillColor: [16, 16, 20] },
-    willDrawPage: (data) => { if (data.pageNumber > 1) paintBackground(doc); },
+    willDrawPage: (data) => {
+      if (data.pageNumber > 1) paintBackground(doc);
+    },
     didParseCell: (data) => {
       if (data.section !== "body" || data.column.index === 0) return;
       const cell = input.rows[data.row.index]?.cells[data.column.index - 1];
@@ -658,15 +661,17 @@ export function downloadPlannerPdf(input: PlannerPdfInput) {
       },
       headStyles: { fillColor: PRIMARY, textColor: [255, 255, 255], fontStyle: "bold" },
       alternateRowStyles: { fillColor: [16, 16, 20] },
-      willDrawPage: (data) => { if (data.pageNumber > 1) paintBackground(doc); },
+      willDrawPage: (data) => {
+        if (data.pageNumber > 1) paintBackground(doc);
+      },
       margin: { left: 32, right: 32, top: 40, bottom: 40 },
     });
   }
 
   paintAllPages(doc);
-  footer(doc, `IGVault — ${input.subject} planner`);
+  footer(doc, `MCQuer — ${input.subject} planner`);
   download(
     doc,
-    `igvault-planner-${input.subjectShort}-${input.generatedAt.toISOString().slice(0, 10)}.pdf`,
+    `mcquer-planner-${input.subjectShort}-${input.generatedAt.toISOString().slice(0, 10)}.pdf`,
   );
 }

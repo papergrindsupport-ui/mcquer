@@ -5,7 +5,13 @@ export type PaletteId = "blue" | "emerald" | "amber" | "rose" | "violet" | "cust
 
 export type HSL = { h: number; s: number; l: number };
 
-export const PALETTES: { id: Exclude<PaletteId, "custom">; name: string; h: number; s: number; l: number }[] = [
+export const PALETTES: {
+  id: Exclude<PaletteId, "custom">;
+  name: string;
+  h: number;
+  s: number;
+  l: number;
+}[] = [
   { id: "blue", name: "Blue", h: 220, s: 90, l: 58 },
   { id: "emerald", name: "Emerald", h: 158, s: 64, l: 45 },
   { id: "amber", name: "Amber", h: 38, s: 92, l: 55 },
@@ -45,12 +51,12 @@ function applyPalette(id: PaletteId, custom: HSL) {
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [mode, setModeState] = useState<Mode>("dark");
-  const [palette, setPaletteState] = useState<PaletteId>("blue");
+  const [palette, setPaletteState] = useState<PaletteId>("rose");
   const [customColor, setCustomColorState] = useState<HSL>(DEFAULT_CUSTOM);
 
   useEffect(() => {
     const storedMode = (localStorage.getItem("igv-mode") as Mode | null) ?? "dark";
-    const storedPalette = (localStorage.getItem("igv-palette") as PaletteId | null) ?? "blue";
+    const storedPalette = (localStorage.getItem("igv-palette") as PaletteId | null) ?? "rose";
     const storedCustomRaw = localStorage.getItem("igv-custom");
     let storedCustom = DEFAULT_CUSTOM;
     if (storedCustomRaw) {

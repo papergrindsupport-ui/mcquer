@@ -17,10 +17,10 @@ export type Settings = {
 };
 
 const DEFAULTS: Settings = {
-  submissionMode: "per-question",
+  submissionMode: "end",
   showResultIcons: true,
   eliminator: false,
-  highContrast: false,
+  highContrast: true,
   reducedMotion: false,
   hideTools: false,
   autoSubmitOnTimerEnd: false,

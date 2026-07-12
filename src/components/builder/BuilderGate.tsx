@@ -2,8 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { LuLock, LuTriangleAlert } from "react-icons/lu";
 
-const PASSWORD_HASH =
-  "15bae07d130d1ea36b5a883e0f80ccf197c914831630090bf4854428affa34df";
+const PASSWORD_HASH = "bde08528a1bf98cf3cabefe8f29ecec33123392503f60e8cb082eff38aab6c6c";
 const UNLOCK_KEY = "builder:unlocked:v1";
 const BLOCK_KEY = "builder:blocked:v1";
 const ATTEMPTS_KEY = "builder:attempts:v1";
@@ -157,9 +156,7 @@ export function BuilderGate({ children }: { children: React.ReactNode }) {
           </form>
         )}
 
-        {error && (
-          <p className="mt-3 text-xs text-red-500">{error}</p>
-        )}
+        {error && <p className="mt-3 text-xs text-red-500">{error}</p>}
         {countdown !== null && (
           <p className="mt-2 text-xs text-muted-foreground">
             Redirecting to homepage in {countdown}s…
@@ -167,7 +164,8 @@ export function BuilderGate({ children }: { children: React.ReactNode }) {
         )}
         {!blocked && attempts > 0 && countdown === null && (
           <p className="mt-2 text-[11px] text-muted-foreground">
-            {MAX_ATTEMPTS - attempts} attempt{MAX_ATTEMPTS - attempts === 1 ? "" : "s"} remaining before permanent block.
+            {MAX_ATTEMPTS - attempts} attempt{MAX_ATTEMPTS - attempts === 1 ? "" : "s"} remaining
+            before permanent block.
           </p>
         )}
       </div>

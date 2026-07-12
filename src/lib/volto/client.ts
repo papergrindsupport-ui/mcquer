@@ -1,8 +1,16 @@
 /**
  * Streaming SSE parser for /api/ai/chat. Yields delta text chunks.
  */
+export type ChatContentPart =
+  | { type: "text"; text: string }
+  | { type: "image_url"; image_url: { url: string } };
+export type ChatMessage = {
+  role: "system" | "user" | "assistant";
+  content: string | ChatContentPart[];
+};
+
 export async function streamChat(
-  messages: { role: "system" | "user" | "assistant"; content: string }[],
+  messages: ChatMessage[],
   onDelta: (delta: string) => void,
   signal?: AbortSignal,
 ): Promise<string> {
@@ -46,10 +54,7 @@ export async function streamChat(
   return full;
 }
 
-export async function completeJSON<T>(
-  messages: { role: "system" | "user" | "assistant"; content: string }[],
-  signal?: AbortSignal,
-): Promise<T> {
+export async function completeJSON<T>(messages: ChatMessage[], signal?: AbortSignal): Promise<T> {
   const res = await fetch("/api/ai/complete", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -70,10 +75,7 @@ export async function completeJSON<T>(
   return JSON.parse(cleaned) as T;
 }
 
-export async function completeText(
-  messages: { role: "system" | "user" | "assistant"; content: string }[],
-  signal?: AbortSignal,
-): Promise<string> {
+export async function completeText(messages: ChatMessage[], signal?: AbortSignal): Promise<string> {
   const res = await fetch("/api/ai/complete", {
     method: "POST",
     headers: { "Content-Type": "application/json" },

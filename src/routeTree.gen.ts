@@ -9,9 +9,11 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SearchRouteImport } from './routes/search'
 import { Route as BuilderRouteImport } from './routes/builder'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as McqIndexRouteImport } from './routes/mcq.index'
+import { Route as TopicalSubjectRouteImport } from './routes/topical.$subject'
 import { Route as McqBookmarksRouteImport } from './routes/mcq.bookmarks'
 import { Route as McqSubjectIndexRouteImport } from './routes/mcq.$subject.index'
 import { Route as ApiAiCompleteRouteImport } from './routes/api/ai.complete'
@@ -20,6 +22,11 @@ import { Route as McqSubjectYearIndexRouteImport } from './routes/mcq.$subject.$
 import { Route as McqSubjectYearSessionIndexRouteImport } from './routes/mcq.$subject.$year.$session.index'
 import { Route as McqSubjectYearSessionVariantRouteImport } from './routes/mcq.$subject.$year.$session.$variant'
 
+const SearchRoute = SearchRouteImport.update({
+  id: '/search',
+  path: '/search',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BuilderRoute = BuilderRouteImport.update({
   id: '/builder',
   path: '/builder',
@@ -33,6 +40,11 @@ const IndexRoute = IndexRouteImport.update({
 const McqIndexRoute = McqIndexRouteImport.update({
   id: '/mcq/',
   path: '/mcq/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TopicalSubjectRoute = TopicalSubjectRouteImport.update({
+  id: '/topical/$subject',
+  path: '/topical/$subject',
   getParentRoute: () => rootRouteImport,
 } as any)
 const McqBookmarksRoute = McqBookmarksRouteImport.update({
@@ -76,7 +88,9 @@ const McqSubjectYearSessionVariantRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/builder': typeof BuilderRoute
+  '/search': typeof SearchRoute
   '/mcq/bookmarks': typeof McqBookmarksRoute
+  '/topical/$subject': typeof TopicalSubjectRoute
   '/mcq/': typeof McqIndexRoute
   '/api/ai/chat': typeof ApiAiChatRoute
   '/api/ai/complete': typeof ApiAiCompleteRoute
@@ -88,7 +102,9 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/builder': typeof BuilderRoute
+  '/search': typeof SearchRoute
   '/mcq/bookmarks': typeof McqBookmarksRoute
+  '/topical/$subject': typeof TopicalSubjectRoute
   '/mcq': typeof McqIndexRoute
   '/api/ai/chat': typeof ApiAiChatRoute
   '/api/ai/complete': typeof ApiAiCompleteRoute
@@ -101,7 +117,9 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/builder': typeof BuilderRoute
+  '/search': typeof SearchRoute
   '/mcq/bookmarks': typeof McqBookmarksRoute
+  '/topical/$subject': typeof TopicalSubjectRoute
   '/mcq/': typeof McqIndexRoute
   '/api/ai/chat': typeof ApiAiChatRoute
   '/api/ai/complete': typeof ApiAiCompleteRoute
@@ -115,7 +133,9 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/builder'
+    | '/search'
     | '/mcq/bookmarks'
+    | '/topical/$subject'
     | '/mcq/'
     | '/api/ai/chat'
     | '/api/ai/complete'
@@ -127,7 +147,9 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/builder'
+    | '/search'
     | '/mcq/bookmarks'
+    | '/topical/$subject'
     | '/mcq'
     | '/api/ai/chat'
     | '/api/ai/complete'
@@ -139,7 +161,9 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/builder'
+    | '/search'
     | '/mcq/bookmarks'
+    | '/topical/$subject'
     | '/mcq/'
     | '/api/ai/chat'
     | '/api/ai/complete'
@@ -152,7 +176,9 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   BuilderRoute: typeof BuilderRoute
+  SearchRoute: typeof SearchRoute
   McqBookmarksRoute: typeof McqBookmarksRoute
+  TopicalSubjectRoute: typeof TopicalSubjectRoute
   McqIndexRoute: typeof McqIndexRoute
   ApiAiChatRoute: typeof ApiAiChatRoute
   ApiAiCompleteRoute: typeof ApiAiCompleteRoute
@@ -164,6 +190,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/search': {
+      id: '/search'
+      path: '/search'
+      fullPath: '/search'
+      preLoaderRoute: typeof SearchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/builder': {
       id: '/builder'
       path: '/builder'
@@ -183,6 +216,13 @@ declare module '@tanstack/react-router' {
       path: '/mcq'
       fullPath: '/mcq/'
       preLoaderRoute: typeof McqIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/topical/$subject': {
+      id: '/topical/$subject'
+      path: '/topical/$subject'
+      fullPath: '/topical/$subject'
+      preLoaderRoute: typeof TopicalSubjectRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/mcq/bookmarks': {
@@ -240,7 +280,9 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   BuilderRoute: BuilderRoute,
+  SearchRoute: SearchRoute,
   McqBookmarksRoute: McqBookmarksRoute,
+  TopicalSubjectRoute: TopicalSubjectRoute,
   McqIndexRoute: McqIndexRoute,
   ApiAiChatRoute: ApiAiChatRoute,
   ApiAiCompleteRoute: ApiAiCompleteRoute,

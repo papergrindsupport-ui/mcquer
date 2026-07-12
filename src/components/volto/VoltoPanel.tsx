@@ -1,9 +1,19 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { LuX, LuSend, LuSparkles, LuMessageCircle, LuFlaskConical, LuCircleCheck, LuCircleX, LuRotateCcw } from "react-icons/lu";
+import {
+  LuX,
+  LuSend,
+  LuSparkles,
+  LuMessageCircle,
+  LuFlaskConical,
+  LuCircleCheck,
+  LuCircleX,
+  LuRotateCcw,
+} from "react-icons/lu";
 import { Markdown } from "./Markdown";
 import type { VoltoContextValue } from "@/lib/volto/context";
 import { serializeQuestion, questionTopicHint } from "@/lib/volto/serialize";
-import { streamChat, completeJSON } from "@/lib/volto/client";
+import { streamChat, completeJSON, type ChatMessage } from "@/lib/volto/client";
+import { collectQuestionImages, buildImageParts } from "@/lib/volto/images";
 import type { OptionId } from "@/lib/mcq/types";
 
 type ChatMsg = {
@@ -136,24 +146,53 @@ export function VoltoPanel({
     setInitialLoading(true);
     setInitialError(null);
     setInitialText("");
-    const msgs =
-      context.kind === "explain"
-        ? buildExplainMessages(context)
-        : buildFeedbackMessages(context);
-    streamChat(
-      msgs,
-      (delta) => {
+    (async () => {
+      let msgs: ChatMessage[] =
+        context.kind === "explain" ? buildExplainMessages(context) : buildFeedbackMessages(context);
+      // For explain: attach any images/diagrams belonging to this question so
+      // the model can actually see the figure it's explaining.
+      if (context.kind === "explain") {
+        const imgs = collectQuestionImages(context.question);
+        if (imgs.length > 0) {
+          const { parts, captions } = await buildImageParts(imgs, 6);
+          if (parts.length > 0) {
+            const lastIdx = msgs.length - 1;
+            const last = msgs[lastIdx];
+            const originalText = typeof last.content === "string" ? last.content : "";
+            msgs = [
+              ...msgs.slice(0, lastIdx),
+              {
+                role: last.role,
+                content: [
+                  {
+                    type: "text",
+                    text: `${originalText}\n\nAttached figures:\n${captions.join("\n")}`,
+                  },
+                  ...parts,
+                ],
+              },
+            ];
+          }
+        }
+      }
+      try {
+        await streamChat(
+          msgs,
+          (delta) => {
+            if (cancelled) return;
+            setInitialText((t) => t + delta);
+          },
+          ctrl.signal,
+        );
+        if (!cancelled) setInitialLoading(false);
+      } catch (e) {
         if (cancelled) return;
-        setInitialText((t) => t + delta);
-      },
-      ctrl.signal,
-    )
-      .then(() => !cancelled && setInitialLoading(false))
-      .catch((e) => {
-        if (cancelled) return;
-        setInitialError(String(e?.message ?? e));
+        setInitialError(String((e as Error)?.message ?? e));
+
         setInitialLoading(false);
-      });
+      }
+    })();
+
     return () => {
       cancelled = true;
       ctrl.abort();
@@ -228,9 +267,7 @@ export function VoltoPanel({
           history,
           (delta) => {
             setMessages((prev) =>
-              prev.map((m) =>
-                m.id === asstId ? { ...m, content: m.content + delta } : m,
-              ),
+              prev.map((m) => (m.id === asstId ? { ...m, content: m.content + delta } : m)),
             );
           },
           ctrl.signal,
@@ -238,15 +275,11 @@ export function VoltoPanel({
       } catch (e) {
         setMessages((prev) =>
           prev.map((m) =>
-            m.id === asstId
-              ? { ...m, content: `⚠️ ${String((e as Error)?.message ?? e)}` }
-              : m,
+            m.id === asstId ? { ...m, content: `⚠️ ${String((e as Error)?.message ?? e)}` } : m,
           ),
         );
       } finally {
-        setMessages((prev) =>
-          prev.map((m) => (m.id === asstId ? { ...m, streaming: false } : m)),
-        );
+        setMessages((prev) => prev.map((m) => (m.id === asstId ? { ...m, streaming: false } : m)));
         setSending(false);
       }
     },
@@ -345,10 +378,7 @@ export function VoltoPanel({
         </header>
 
         {/* Body */}
-        <div
-          ref={scrollRef}
-          className="volto-scroll flex-1 overflow-y-auto px-4 py-4"
-        >
+        <div ref={scrollRef} className="volto-scroll flex-1 overflow-y-auto px-4 py-4">
           {mode === "initial" ? (
             <div className="space-y-4">
               <div className="rounded-xl border border-border bg-background/40 p-3">
@@ -358,9 +388,7 @@ export function VoltoPanel({
                     Volto is thinking…
                   </div>
                 )}
-                {initialError && (
-                  <div className="text-sm text-red-500">⚠️ {initialError}</div>
-                )}
+                {initialError && <div className="text-sm text-red-500">⚠️ {initialError}</div>}
                 {initialText && <Markdown>{initialText}</Markdown>}
               </div>
               {!initialLoading && !initialError && (
@@ -381,7 +409,12 @@ export function VoltoPanel({
                 setMessages((prev) =>
                   prev.map((m) =>
                     m.id === msgId && m.mcq
-                      ? { ...m, mcq: { ...m.mcq, _selected: id } as GeneratedMCQ & { _selected?: OptionId } }
+                      ? {
+                          ...m,
+                          mcq: { ...m.mcq, _selected: id } as GeneratedMCQ & {
+                            _selected?: OptionId;
+                          },
+                        }
                       : m,
                   ),
                 );
@@ -485,9 +518,7 @@ function MessageBubble({
     <div className={`flex ${isUser ? "justify-end" : "justify-start"}`}>
       <div
         className={`max-w-[90%] rounded-2xl px-3 py-2 ${
-          isUser
-            ? "bg-primary text-primary-foreground"
-            : "border border-border bg-background/60"
+          isUser ? "bg-primary text-primary-foreground" : "border border-border bg-background/60"
         }`}
       >
         {isUser ? (
@@ -502,11 +533,7 @@ function MessageBubble({
               </span>
             )}
             {msg.mcq && (
-              <InlineMcq
-                mcq={msg.mcq}
-                onSelect={onSelectMcqOption}
-                onRegenerate={onRegenerate}
-              />
+              <InlineMcq mcq={msg.mcq} onSelect={onSelectMcqOption} onRegenerate={onRegenerate} />
             )}
           </>
         )}
@@ -541,24 +568,18 @@ function InlineMcq({
           if (revealed) {
             cls = cls.replace("cursor-pointer", "cursor-default");
             if (isCorrect)
-              cls += " !border-emerald-500 !bg-emerald-500/10 text-emerald-600 dark:text-emerald-400";
+              cls +=
+                " !border-emerald-500 !bg-emerald-500/10 text-emerald-600 dark:text-emerald-400";
             else if (isSelected && !isCorrect)
               cls += " !border-red-500 !bg-red-500/10 text-red-600 dark:text-red-400";
           }
           return (
-            <button
-              key={id}
-              disabled={revealed}
-              onClick={() => onSelect(id)}
-              className={cls}
-            >
+            <button key={id} disabled={revealed} onClick={() => onSelect(id)} className={cls}>
               <span className="font-semibold">{id}.</span>
               <span className="flex-1">
                 <Markdown>{mcq.options[id]}</Markdown>
               </span>
-              {revealed && isCorrect && (
-                <LuCircleCheck size={14} className="mt-0.5 shrink-0" />
-              )}
+              {revealed && isCorrect && <LuCircleCheck size={14} className="mt-0.5 shrink-0" />}
               {revealed && isSelected && !isCorrect && (
                 <LuCircleX size={14} className="mt-0.5 shrink-0" />
               )}

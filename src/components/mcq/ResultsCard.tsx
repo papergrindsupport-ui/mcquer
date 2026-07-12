@@ -7,6 +7,7 @@ import {
   LuLink,
   LuTrophy,
   LuSparkles,
+  LuArrowRight,
 } from "react-icons/lu";
 import type { GradeInfo, GradeSystem } from "@/lib/mcq/grade-boundaries";
 import { computeGrade, gradeSystemLabel } from "@/lib/mcq/grade-boundaries";
@@ -46,6 +47,8 @@ export type ResultsCardProps = {
   onReview: () => void;
   onDownload: () => void;
   onRetry: () => void;
+  onNextPaper?: () => void;
+  nextPaperLabel?: string | null;
 };
 
 /**
@@ -78,6 +81,8 @@ export function ResultsCard({
   onReview,
   onDownload,
   onRetry,
+  onNextPaper,
+  nextPaperLabel,
 }: ResultsCardProps) {
   const pct = total > 0 ? Math.round((score / total) * 100) : 0;
   const bucket: ResultsBucket = pct >= 70 ? "high" : pct >= 50 ? "mid" : "low";
@@ -85,10 +90,25 @@ export function ResultsCard({
 
   const accent =
     bucket === "high"
-      ? { text: "text-emerald-500", ring: "ring-emerald-500/40", bg: "bg-emerald-500/10", border: "border-emerald-500/40" }
+      ? {
+          text: "text-emerald-500",
+          ring: "ring-emerald-500/40",
+          bg: "bg-emerald-500/10",
+          border: "border-emerald-500/40",
+        }
       : bucket === "mid"
-        ? { text: "text-amber-500", ring: "ring-amber-500/40", bg: "bg-amber-500/10", border: "border-amber-500/40" }
-        : { text: "text-red-500", ring: "ring-red-500/40", bg: "bg-red-500/10", border: "border-red-500/40" };
+        ? {
+            text: "text-amber-500",
+            ring: "ring-amber-500/40",
+            bg: "bg-amber-500/10",
+            border: "border-amber-500/40",
+          }
+        : {
+            text: "text-red-500",
+            ring: "ring-red-500/40",
+            bg: "bg-red-500/10",
+            border: "border-red-500/40",
+          };
 
   const available: GradeSystem[] = gradeInfo
     ? (Object.keys(gradeInfo.boundaries) as GradeSystem[])
@@ -207,6 +227,15 @@ export function ResultsCard({
         >
           <LuRotateCcw size={14} /> Retry paper
         </button>
+        {onNextPaper && (
+          <button
+            onClick={onNextPaper}
+            className={`inline-flex cursor-pointer items-center gap-1.5 rounded-md px-4 py-2 text-sm font-semibold transition-transform active:scale-95 ${accent.bg} border-2 ${accent.border} ${accent.text} hover:opacity-90`}
+            title={nextPaperLabel ? `Continue to ${nextPaperLabel}` : "Next paper"}
+          >
+            Next {nextPaperLabel ? ` · ${nextPaperLabel}` : ""} <LuArrowRight size={14} />
+          </button>
+        )}
         {links.ag && (
           <a
             href={links.ag}

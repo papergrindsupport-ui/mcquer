@@ -194,6 +194,7 @@ export type IntroData =
     }
   | { kind: "graph"; spec: GraphSpec; caption?: RichNode[] }
   | { kind: "flowchart"; spec: FlowchartSpec; caption?: RichNode[] }
+  | { kind: "circuit"; spec: import("./circuit").CircuitSpec; caption?: RichNode[] }
   | {
       kind: "list";
       /** Legacy boolean. Prefer `style`. */
@@ -381,6 +382,13 @@ export type OptionsLayout =
       orientation?: Orientation;
     }
   | {
+      type: "circuits";
+
+      options: Record<OptionId, import("./circuit").CircuitSpec>;
+
+      orientation?: Orientation;
+    }
+  | {
       type: "combined-choice";
       statements: RichNode[][];
       options: Record<OptionId, number[]>;
@@ -404,6 +412,9 @@ export type OptionsLayout =
       options: Record<OptionId, { label?: RichNode[]; refs: number[] }>;
       optionLabels?: Partial<Record<OptionId, RichNode[]>>;
       orientation?: Orientation;
+      /** Optional question text rendered between the reference images
+       *  and the option grid. */
+      questionText?: RichNode[];
     }
   | {
       type: "image-zones";
@@ -426,6 +437,7 @@ export type OptionsLayout =
        *  highlighted (hovered or sticky-selected). Removes any visible trace
        *  of the zones on the plain image. */
       hideBorders?: boolean;
+      questionText?: RichNode[];
     }
   | {
       type: "graph-hotspots";
@@ -499,6 +511,9 @@ export type Question = {
    *  supported layouts (text-vertical / -horizontal / -2x2). */
   keys?: OptionKeys;
   keyPosition?: KeyPosition;
+
+  topics?: string[];
+  lessons?: string[];
 };
 
 export type PaperQuestions = Question[];

@@ -1,6 +1,14 @@
 import { useEffect, useState } from "react";
 import { LuTrash2, LuCopy, LuClipboardPaste, LuMaximize2, LuX } from "react-icons/lu";
-import type { Question, OptionId, OptionKey, OptionKeyValue, KeyPosition, OptionsLayout, OptionKeys } from "@/lib/mcq/types";
+import type {
+  Question,
+  OptionId,
+  OptionKey,
+  OptionKeyValue,
+  KeyPosition,
+  OptionsLayout,
+  OptionKeys,
+} from "@/lib/mcq/types";
 import { OPTION_IDS } from "@/lib/mcq/types";
 import type { SymbolName } from "@/lib/mcq/rich";
 import { SYMBOL_MAP } from "@/lib/mcq/rich";
@@ -13,6 +21,7 @@ import { getAnswer } from "@/lib/mcq/markScheme";
 import { CustomRadio } from "./CustomToggles";
 import { copyClip, pasteClip, useClipHas } from "@/lib/builder/clipboard";
 import { ThemeColorInput } from "./ThemeColorInput";
+import { getTopicsFor, getLessonsForTopics, getFirstTopicAndLesson } from "@/lib/topics";
 
 /** Normalize any OptionKeyValue into an OptionKey[]. */
 function toArr(v?: OptionKeyValue): OptionKey[] {
@@ -60,8 +69,37 @@ export function QuestionEditor({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [autoAnswer, q.n]);
 
+  // Default topic/lesson to first-of-subject when missing or invalid.
+  useEffect(() => {
+    const allTopics = getTopicsFor(subject);
+    if (!allTopics.length) return;
+    const topicNames = new Set(allTopics.map((t) => t.name));
+    let topics = (q.topics && q.topics.length ? q.topics : q.topic ? [q.topic] : []).filter((t) =>
+      topicNames.has(t),
+    );
+    if (!topics.length) {
+      const { topic } = getFirstTopicAndLesson(subject);
+      topics = topic ? [topic] : [];
+    }
+    const allowed = new Set(getLessonsForTopics(subject, topics));
+    let lessons = (q.lessons && q.lessons.length ? q.lessons : q.lesson ? [q.lesson] : []).filter(
+      (l) => allowed.has(l),
+    );
+    if (!lessons.length && allowed.size) lessons = [allowed.values().next().value as string];
+    const same =
+      arrEq(topics, q.topics ?? []) && arrEq(lessons, q.lessons ?? []) && !q.topic && !q.lesson;
+    if (!same) {
+      const next: Question = { ...q, topics, lessons };
+      delete next.topic;
+      delete next.lesson;
+      onChange(next);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [subject, q.n]);
+
   const clearQuestion = () => {
-    if (!window.confirm(`Clear question ${q.n}? All blocks, options, keys and layout will reset.`)) return;
+    if (!window.confirm(`Clear question ${q.n}? All blocks, options, keys and layout will reset.`))
+      return;
     onChange({
       n: q.n,
       blocks: [],
@@ -97,38 +135,48 @@ export function QuestionEditor({
             </button>
           </div>
         </div>
-
         <BlocksEditor blocks={blocks} onChange={(b) => onChange({ ...q, blocks: b })} />
-
         <SharedKeyEditor
           value={q.sharedKey}
           position={q.sharedKeyPosition ?? "after"}
           onValueChange={(v) => onChange({ ...q, sharedKey: v })}
           onPositionChange={(p) => onChange({ ...q, sharedKeyPosition: p })}
         />
-
         <PerOptionKeysEditor
           keys={q.keys}
           keyPosition={q.keyPosition ?? "inline-right"}
           onKeysChange={(keys) => onChange({ ...q, keys })}
           onPositionChange={(keyPosition) => onChange({ ...q, keyPosition })}
         />
-
         <LayoutEditor
           value={q.layout}
           onChange={(layout) => onChange({ ...q, layout })}
           answer={autoAnswer ?? q.answer}
           onAnswerChange={(answer) => onChange({ ...q, answer })}
           answerSource={autoAnswer ? "auto" : "manual"}
+        />{" "}
+        <TopicLessonPicker
+          subject={subject}
+          topics={q.topics ?? (q.topic ? [q.topic] : [])}
+          lessons={q.lessons ?? (q.lesson ? [q.lesson] : [])}
+          onChange={(topics, lessons) => {
+            const next = { ...q, topics, lessons };
+            delete next.topic;
+            delete next.lesson;
+            onChange(next);
+          }}
         />
       </div>
       <aside className="min-w-0">
         <div className="sticky top-4">
-          <div className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Live preview</div>
+          <div className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+            Live preview
+          </div>
           <QuestionCard
             q={{
               ...q,
               blocks,
+
               answer: autoAnswer ?? q.answer,
               // Also flow question-level keys into layout for the preview so
               // text-vertical / -horizontal / -2x2 render them.
@@ -279,7 +327,10 @@ function SharedKeyEditor({
   const display = items.length ? items : [{}];
   const anyShown = items.some((k) => k.symbol || k.text);
   return (
-    <details className="rounded border border-dashed border-primary/30 bg-primary/5 p-2 text-xs" open={anyShown}>
+    <details
+      className="rounded border border-dashed border-primary/30 bg-primary/5 p-2 text-xs"
+      open={anyShown}
+    >
       <summary className="cursor-pointer text-[11px] font-semibold uppercase text-primary">
         Shared keys (labels above or below ALL options)
       </summary>
@@ -298,21 +349,30 @@ function SharedKeyEditor({
             type="button"
             onClick={add}
             className="ml-auto rounded border border-primary/40 bg-primary/10 px-2 py-0.5 text-[11px] text-primary hover:bg-primary/20"
-          >+ another shared key</button>
+          >
+            + another shared key
+          </button>
         </div>
         {display.map((k, i) => (
-          <div key={i} className="flex flex-wrap items-center gap-2 rounded border border-border/50 bg-background p-1.5">
+          <div
+            key={i}
+            className="flex flex-wrap items-center gap-2 rounded border border-border/50 bg-background p-1.5"
+          >
             <span className="text-[10px] text-muted-foreground">#{i + 1}</span>
             <label className="inline-flex items-center gap-1">
               <span className="text-muted-foreground">Symbol</span>
               <select
                 value={k.symbol ?? ""}
-                onChange={(e) => setAt(i, { symbol: (e.target.value || undefined) as SymbolName | undefined })}
+                onChange={(e) =>
+                  setAt(i, { symbol: (e.target.value || undefined) as SymbolName | undefined })
+                }
                 className="rounded border border-border bg-background px-1 py-0.5"
               >
                 <option value="">—</option>
                 {(Object.keys(SYMBOL_MAP) as SymbolName[]).map((n) => (
-                  <option key={n} value={n}>{SYMBOL_MAP[n]} {n}</option>
+                  <option key={n} value={n}>
+                    {SYMBOL_MAP[n]} {n}
+                  </option>
                 ))}
               </select>
             </label>
@@ -330,13 +390,20 @@ function SharedKeyEditor({
               <ThemeColorInput value={k.color} onChange={(v) => setAt(i, { color: v ?? "" })} />
             </label>
             {(k.symbol || k.text) && (
-              <span className="inline-flex items-center gap-1 rounded border border-border/60 bg-muted/40 px-1.5 py-0.5" style={k.color ? { color: k.color } : undefined}>
+              <span
+                className="inline-flex items-center gap-1 rounded border border-border/60 bg-muted/40 px-1.5 py-0.5"
+                style={k.color ? { color: k.color } : undefined}
+              >
                 {k.symbol && <span>{SYMBOL_MAP[k.symbol]}</span>}
                 {k.text && <span>{k.text}</span>}
               </span>
             )}
             {items.length > 0 && (
-              <button type="button" onClick={() => removeAt(i)} className="ml-auto cursor-pointer text-muted-foreground hover:text-destructive">
+              <button
+                type="button"
+                onClick={() => removeAt(i)}
+                className="ml-auto cursor-pointer text-muted-foreground hover:text-destructive"
+              >
                 <LuTrash2 size={11} />
               </button>
             )}
@@ -385,7 +452,10 @@ function PerOptionKeysEditor({
   };
   const any = OPTION_IDS.some((id) => toArr(keys?.[id]).length);
   return (
-    <details className="rounded border border-dashed border-border/60 bg-muted/10 p-2 text-xs" open={any}>
+    <details
+      className="rounded border border-dashed border-border/60 bg-muted/10 p-2 text-xs"
+      open={any}
+    >
       <summary className="cursor-pointer text-[11px] font-semibold uppercase text-muted-foreground">
         Per-option keys (only rendered on text-vertical / horizontal / 2×2)
       </summary>
@@ -414,7 +484,9 @@ function PerOptionKeysEditor({
                   type="button"
                   onClick={() => addAt(id)}
                   className="ml-auto rounded border border-primary/40 bg-primary/10 px-1.5 py-0 text-[10px] text-primary hover:bg-primary/20"
-                >+ key</button>
+                >
+                  + key
+                </button>
               </div>
               {display.map((k, i) => (
                 <div key={i} className="flex flex-wrap items-center gap-2">
@@ -423,12 +495,18 @@ function PerOptionKeysEditor({
                     <span className="text-muted-foreground">Symbol</span>
                     <select
                       value={k.symbol ?? ""}
-                      onChange={(e) => setAt(id, i, { symbol: (e.target.value || undefined) as SymbolName | undefined })}
+                      onChange={(e) =>
+                        setAt(id, i, {
+                          symbol: (e.target.value || undefined) as SymbolName | undefined,
+                        })
+                      }
                       className="rounded border border-border bg-background px-1 py-0.5"
                     >
                       <option value="">—</option>
                       {(Object.keys(SYMBOL_MAP) as SymbolName[]).map((n) => (
-                        <option key={n} value={n}>{SYMBOL_MAP[n]} {n}</option>
+                        <option key={n} value={n}>
+                          {SYMBOL_MAP[n]} {n}
+                        </option>
                       ))}
                     </select>
                   </label>
@@ -443,10 +521,17 @@ function PerOptionKeysEditor({
                   </label>
                   <label className="inline-flex items-center gap-1">
                     <span className="text-muted-foreground">Color</span>
-                    <ThemeColorInput value={k.color} onChange={(v) => setAt(id, i, { color: v ?? "" })} />
+                    <ThemeColorInput
+                      value={k.color}
+                      onChange={(v) => setAt(id, i, { color: v ?? "" })}
+                    />
                   </label>
                   {items.length > 0 && (
-                    <button type="button" onClick={() => removeAt(id, i)} className="ml-auto cursor-pointer text-muted-foreground hover:text-destructive">
+                    <button
+                      type="button"
+                      onClick={() => removeAt(id, i)}
+                      className="ml-auto cursor-pointer text-muted-foreground hover:text-destructive"
+                    >
                       <LuTrash2 size={11} />
                     </button>
                   )}
@@ -458,4 +543,100 @@ function PerOptionKeysEditor({
       </div>
     </details>
   );
+}
+
+function TopicLessonPicker({
+  subject,
+  topics,
+  lessons,
+  onChange,
+}: {
+  subject: SubjectId;
+  topics: string[];
+  lessons: string[];
+  onChange: (topics: string[], lessons: string[]) => void;
+}) {
+  const allTopics = getTopicsFor(subject);
+  const availableLessons = getLessonsForTopics(subject, topics);
+  const toggleTopic = (name: string) => {
+    const has = topics.includes(name);
+    const nextTopics = has ? topics.filter((t) => t !== name) : [...topics, name];
+    // Drop lessons that no longer belong to any selected topic.
+    const allowed = new Set(getLessonsForTopics(subject, nextTopics));
+    const nextLessons = lessons.filter((l) => allowed.has(l));
+    onChange(nextTopics, nextLessons);
+  };
+  const toggleLesson = (name: string) => {
+    const has = lessons.includes(name);
+    onChange(topics, has ? lessons.filter((l) => l !== name) : [...lessons, name]);
+  };
+  const Chip = ({
+    label,
+    active,
+    onClick,
+  }: {
+    label: string;
+    active: boolean;
+    onClick: () => void;
+  }) => (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`cursor-pointer rounded-full border px-2 py-0.5 text-[11px] transition ${
+        active
+          ? "border-primary bg-primary/15 text-primary"
+          : "border-border bg-background text-muted-foreground hover:border-primary/50 hover:text-foreground"
+      }`}
+    >
+      {label}
+    </button>
+  );
+  return (
+    <div className="space-y-2 rounded-md border border-border bg-background px-3 py-2 text-xs">
+      <div className="flex items-center justify-between">
+        <span className="font-semibold uppercase tracking-wide text-muted-foreground">
+          Classification
+        </span>
+        <span className="text-[10px] text-muted-foreground">
+          {topics.length} topic{topics.length === 1 ? "" : "s"} · {lessons.length} lesson
+          {lessons.length === 1 ? "" : "s"}
+        </span>
+      </div>
+      <div>
+        <div className="mb-1 text-[10px] uppercase tracking-wide text-muted-foreground">Topics</div>
+        <div className="flex flex-wrap gap-1">
+          {allTopics.map((t) => (
+            <Chip
+              key={t.name}
+              label={t.name}
+              active={topics.includes(t.name)}
+              onClick={() => toggleTopic(t.name)}
+            />
+          ))}
+        </div>
+      </div>
+      {availableLessons.length > 0 && (
+        <div>
+          <div className="mb-1 text-[10px] uppercase tracking-wide text-muted-foreground">
+            Lessons
+          </div>
+          <div className="flex flex-wrap gap-1">
+            {availableLessons.map((l) => (
+              <Chip
+                key={l}
+                label={l}
+                active={lessons.includes(l)}
+                onClick={() => toggleLesson(l)}
+              />
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+function arrEq(a: string[], b: string[]) {
+  if (a.length !== b.length) return false;
+  for (let i = 0; i < a.length; i++) if (a[i] !== b[i]) return false;
+  return true;
 }

@@ -154,9 +154,7 @@ function ElementModal({ el, onClose }: { el: Element; onClose: () => void }) {
           </button>
 
           <div className="font-mono text-sm opacity-80">{el.number}</div>
-          <div className="mt-2 text-7xl font-black leading-none tracking-tighter">
-            {el.symbol}
-          </div>
+          <div className="mt-2 text-7xl font-black leading-none tracking-tighter">{el.symbol}</div>
           <div className="mt-3 font-mono text-base opacity-80">{el.mass}</div>
         </div>
 
@@ -188,7 +186,6 @@ function ElementModal({ el, onClose }: { el: Element; onClose: () => void }) {
     </div>
   );
 }
-
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (

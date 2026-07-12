@@ -17,6 +17,7 @@ import { Header, Footer } from "../components/Header";
 import { TimersProvider } from "../components/timers/TimersProvider";
 import { SettingsProvider } from "../lib/settings";
 import { VoltoProvider } from "../lib/volto/context";
+import { SearchProvider } from "../lib/search/context";
 
 function NotFoundComponent() {
   return (
@@ -83,13 +84,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "IGVault — Auto-marked IGCSE Paper 2 Past Papers" },
+      { title: "MCQuer — Auto-marked IGCSE Paper 2 Past Papers" },
       {
         name: "description",
         content:
           "Digitalized, auto-marked IGCSE Paper 2 past papers for Biology, Chemistry, and Physics. Practice, submit, and get instant results.",
       },
-      { property: "og:title", content: "IGVault — Auto-marked IGCSE Paper 2 Past Papers" },
+      { property: "og:title", content: "MCQuer — Auto-marked IGCSE Paper 2 Past Papers" },
       {
         property: "og:description",
         content:
@@ -100,7 +101,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     ],
     links: [
       { rel: "stylesheet", href: appCss },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "icon", href: "/favicon.ico", type: "image/ico" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
@@ -154,14 +155,16 @@ function RootComponent() {
         <SettingsProvider>
           <TimersProvider>
             <VoltoProvider>
-              <div className="flex min-h-screen flex-col">
-                <Header />
-                <main className="flex-1">
-                  <Outlet />
-                </main>
-                <Footer />
-              </div>
-              <ThemedToaster />
+              <SearchProvider>
+                <div className="flex min-h-screen flex-col">
+                  <Header />
+                  <main className="flex-1">
+                    <Outlet />
+                  </main>
+                  <Footer />
+                </div>
+                <ThemedToaster />
+              </SearchProvider>
             </VoltoProvider>
           </TimersProvider>
         </SettingsProvider>

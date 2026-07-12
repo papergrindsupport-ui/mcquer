@@ -14,6 +14,8 @@ import { QuestionCard } from "@/components/mcq/QuestionCard";
 import { ToolsMenu } from "@/components/tools/ToolsMenu";
 import type { Question } from "@/lib/mcq/types";
 import type { SubjectId, SessionId } from "@/lib/papers-data";
+import { useSearchScope } from "@/lib/search/context";
+import { useScrollToHash } from "@/hooks/use-scroll-to-hash";
 
 export const Route = createFileRoute("/mcq/bookmarks")({
   component: BookmarksPage,
@@ -25,6 +27,7 @@ function BookmarksPage() {
   const [bookmarks, setBookmarks] = useState<Bookmark[]>(() => getBookmarks());
   const [settingsOpen, setSettingsOpen] = useState(false);
   const { settings } = useSettings();
+  useScrollToHash();
 
   useEffect(() => {
     const upd = () => setBookmarks(getBookmarks());
@@ -46,7 +49,16 @@ function BookmarksPage() {
     }
     return out;
   }, [bookmarks]);
-
+  useSearchScope({
+    kind: "bookmarks",
+    refs: bookmarks.map((b) => ({
+      subject: b.subject as SubjectId,
+      year: b.year,
+      session: b.session as SessionId,
+      variant: b.variant,
+      n: b.n,
+    })),
+  });
   return (
     <>
       <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6 sm:py-24">
@@ -83,12 +95,13 @@ function BookmarksPage() {
       {resolved.length > 0 && (
         <div className="mx-auto max-w-5xl space-y-6 px-2 pb-24 sm:px-4">
           {resolved.map(({ b, q }) => (
-            <div key={`${b.subject}-${b.year}-${b.session}-${b.variant}-${b.n}`} className="relative">
+            <div
+              key={`${b.subject}-${b.year}-${b.session}-${b.variant}-${b.n}`}
+              className="relative"
+            >
               <div className="mb-2 flex items-center justify-between px-1 text-xs text-muted-foreground">
                 <span>
-                  <span className="font-medium text-foreground capitalize">
-                    {b.subject}
-                  </span>
+                  <span className="font-medium text-foreground capitalize">{b.subject}</span>
                   {" · "}
                   {b.year} {b.session.toUpperCase()} {b.variant} · Q{b.n}
                 </span>

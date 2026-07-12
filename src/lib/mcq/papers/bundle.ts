@@ -73,7 +73,13 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
         ]
       }
     },
-    "answer": "C"
+    "answer": "C",
+    "topics": [
+      "Characteristics of Living Organisms"
+    ],
+    "lessons": [
+      "Classification Systems"
+    ]
   },
   {
     "n": 2,
@@ -124,7 +130,13 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
         ]
       }
     },
-    "answer": "A"
+    "answer": "A",
+    "topics": [
+      "Characteristics of Living Organisms"
+    ],
+    "lessons": [
+      "Features of Organisms"
+    ]
   },
   {
     "n": 3,
@@ -283,7 +295,9 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
         "D": 4
       }
     },
-    "answer": "D"
+    "answer": "D",
+    "topic": "Organisation of the Organism",
+    "lesson": "Cell Structure"
   },
   {
     "n": 4,
@@ -325,7 +339,9 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
       },
       "shrinkToFit": true
     },
-    "answer": "C"
+    "answer": "C",
+    "topic": "Organisation of the Organism",
+    "lesson": "Unit Conversion"
   },
   {
     "n": 5,
@@ -364,11 +380,12 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
         [
           {
             "content": [
-              "direction of watermovement "
+              "direction of water movement "
             ],
             "rowSpan": 2,
             "colSpan": 1,
-            "align": "center"
+            "align": "center",
+            "header": true
           },
           {
             "content": [
@@ -419,25 +436,29 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
             "content": [
               "W"
             ],
-            "align": "center"
+            "align": "center",
+            "header": true
           },
           {
             "content": [
               "X"
             ],
-            "align": "center"
+            "align": "center",
+            "header": true
           },
           {
             "content": [
               "Y"
             ],
-            "align": "center"
+            "align": "center",
+            "header": true
           },
           {
             "content": [
               "Z"
             ],
-            "align": "center"
+            "align": "center",
+            "header": true
           }
         ],
         [
@@ -579,7 +600,9 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
         "D": 5
       }
     },
-    "answer": "B"
+    "answer": "B",
+    "topic": "Movement In & Out of Cells",
+    "lesson": "Osmosis"
   },
   {
     "n": 6,
@@ -662,7 +685,9 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
         }
       ]
     },
-    "answer": "A"
+    "answer": "A",
+    "topic": "Movement In & Out of Cells",
+    "lesson": "Active Transport"
   },
   {
     "n": 7,
@@ -709,7 +734,9 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
         ]
       }
     },
-    "answer": "A"
+    "answer": "A",
+    "topic": "Biological Molecules",
+    "lesson": "DNA Structure"
   },
   {
     "n": 8,
@@ -745,7 +772,13 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
         ]
       }
     },
-    "answer": "C"
+    "answer": "C",
+    "topics": [
+      "Biological Molecules"
+    ],
+    "lessons": [
+      "Biological Molecules"
+    ]
   },
   {
     "n": 9,
@@ -775,7 +808,9 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
         ]
       }
     },
-    "answer": "B"
+    "answer": "B",
+    "topic": "Enzymes",
+    "lesson": "Enzymes"
   },
   {
     "n": 10,
@@ -833,7 +868,9 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
         "text": "------ respiration"
       }
     ],
-    "sharedKeyPosition": "before"
+    "sharedKeyPosition": "before",
+    "topic": "Plant Nutrition",
+    "lesson": "Rate of Photosynthesis"
   },
   {
     "n": 11,
@@ -882,7 +919,9 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
         ]
       }
     },
-    "answer": "A"
+    "answer": "A",
+    "topic": "Plant Nutrition",
+    "lesson": "Leaf Structure"
   },
   {
     "n": 12,
@@ -924,7 +963,9 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
         ]
       }
     },
-    "answer": "D"
+    "answer": "D",
+    "topic": "Human Nutrition",
+    "lesson": "Deficiencies"
   },
   {
     "n": 13,
@@ -1100,7 +1141,9 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
       "showZoneLabels": false,
       "orientation": "horizontal"
     },
-    "answer": "D"
+    "answer": "D",
+    "topic": "Human Nutrition",
+    "lesson": "Teeth"
   },
   {
     "n": 14,
@@ -1130,7 +1173,9 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
         ]
       }
     },
-    "answer": "B"
+    "answer": "B",
+    "topic": "Human Nutrition",
+    "lesson": "Emulsification"
   },
   {
     "n": 15,
@@ -1160,7 +1205,9 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
         ]
       }
     },
-    "answer": "B"
+    "answer": "B",
+    "topic": "Transport in Plants",
+    "lesson": "Temperature & Wind"
   },
   {
     "n": 16,
@@ -1223,7 +1270,9 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
         ]
       }
     },
-    "answer": "C"
+    "answer": "C",
+    "topic": "Transport in Animals",
+    "lesson": "Heart Structure"
   },
   {
     "n": 17,
@@ -1341,7 +1390,9 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
         "Which components are memory cells?"
       ]
     },
-    "answer": "D"
+    "answer": "D",
+    "topic": "Diseases & Immunity",
+    "lesson": "Vaccination"
   },
   {
     "n": 18,
@@ -1371,7 +1422,9 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
         ]
       }
     },
-    "answer": "A"
+    "answer": "A",
+    "topic": "Gas Exchange",
+    "lesson": "Cartilage"
   },
   {
     "n": 19,
@@ -1408,7 +1461,9 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
         ]
       }
     },
-    "answer": "C"
+    "answer": "C",
+    "topic": "Respiration",
+    "lesson": "Aerobic Respiration"
   },
   {
     "n": 20,
@@ -1444,7 +1499,9 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
         ]
       }
     },
-    "answer": "D"
+    "answer": "D",
+    "topic": "Excretion",
+    "lesson": "Kidney"
   },
   {
     "n": 21,
@@ -1554,7 +1611,9 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
         "D": 4
       }
     },
-    "answer": "B"
+    "answer": "B",
+    "topic": "Characteristics of Living Organisms",
+    "lesson": "Characteristics of Living Organisms"
   },
   {
     "n": 22,
@@ -8808,7 +8867,13 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
         ]
       }
     },
-    "answer": "B"
+    "answer": "B",
+    "topics": [
+      "Characteristics of Living Organisms"
+    ],
+    "lessons": [
+      "Characteristics of Living Organisms"
+    ]
   },
   {
     "n": 2,
@@ -9571,30 +9636,36 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
     "layout": {
       "type": "image-hotspots",
       "image": {
-        "src": "https://i.postimg.cc/SxMzS9CL/Screenshot-2026-07-08-at-1-12-45-AM.png",
+        "src": "https://i.postimg.cc/L5BFMvc4/Screenshot-2026-07-12-at-5-54-54-PM.png",
         "alt": "",
         "invertOnDark": true
       },
       "hotspots": {
         "A": {
-          "xPct": 10.2,
-          "yPct": 6.4
+          "xPct": 15.3,
+          "yPct": 6.9
         },
         "B": {
-          "xPct": 9.4,
-          "yPct": 15.2
+          "xPct": 15.4,
+          "yPct": 15
         },
         "C": {
-          "xPct": 8.7,
-          "yPct": 29.7
+          "xPct": 15.9,
+          "yPct": 28.6
         },
         "D": {
-          "xPct": 10.1,
-          "yPct": 59.8
+          "xPct": 15.2,
+          "yPct": 57
         }
       }
     },
-    "answer": "B"
+    "answer": "B",
+    "topics": [
+      "Characteristics of Living Organisms"
+    ],
+    "lessons": [
+      "Characteristics of Living Organisms"
+    ]
   },
   {
     "n": 13,
@@ -9612,7 +9683,7 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
         "data": {
           "kind": "image",
           "image": {
-            "src": "https://i.postimg.cc/NFF5W2Q3/Screenshot-2026-07-08-at-1-13-51-AM.png",
+            "src": "https://i.postimg.cc/mZQsM2PZ/Screenshot-2026-07-12-at-5-55-20-PM.png",
             "alt": "",
             "invertOnDark": true
           },
@@ -9742,7 +9813,13 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
         "D": 4
       }
     },
-    "answer": "B"
+    "answer": "B",
+    "topics": [
+      "Characteristics of Living Organisms"
+    ],
+    "lessons": [
+      "Characteristics of Living Organisms"
+    ]
   },
   {
     "n": 14,
@@ -9839,7 +9916,13 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
         "D": 4
       }
     },
-    "answer": "A"
+    "answer": "A",
+    "topics": [
+      "Characteristics of Living Organisms"
+    ],
+    "lessons": [
+      "Characteristics of Living Organisms"
+    ]
   },
   {
     "n": 15,
@@ -11476,7 +11559,13 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
         ]
       }
     },
-    "answer": "D"
+    "answer": "D",
+    "topics": [
+      "Characteristics of Living Organisms"
+    ],
+    "lessons": [
+      "Characteristics of Living Organisms"
+    ]
   },
   {
     "n": 37,
@@ -14315,7 +14404,9 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
         ]
       }
     },
-    "answer": "A"
+    "answer": "A",
+    "topic": "Characteristics of Living Organisms",
+    "lesson": "Characteristics of Living Organisms"
   },
   {
     "n": 2,
@@ -19381,7 +19472,13 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
       },
       "orientation": "2x2"
     },
-    "answer": "A"
+    "answer": "A",
+    "topics": [
+      "States of Matter"
+    ],
+    "lessons": [
+      "States of Matter"
+    ]
   },
   {
     "n": 2,
@@ -19403,7 +19500,7 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
             "alt": "",
             "invertOnDark": true
           },
-          "size": "md"
+          "size": "lg"
         }
       },
       {
@@ -22464,7 +22561,15 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
           }
         ],
         "B": [
-          "Rf = ",
+          {
+            "text": "R",
+            "italic": true
+          },
+          {
+            "text": "f",
+            "sub": true
+          },
+          " = ",
           {
             "latex": "\\dfrac{\\text{ distance travelled by substance }}{\\text{ distance travelled by substance }}",
             "display": false
@@ -22474,14 +22579,30 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
           }
         ],
         "C": [
-          "Rf =  distance travelled by solvent ",
+          {
+            "text": "R",
+            "italic": true
+          },
+          {
+            "text": "f",
+            "sub": true
+          },
+          " =  distance travelled by solvent ",
           {
             "symbol": "dash"
           },
           " distance travelled by substance"
         ],
         "D": [
-          "Rf =  distance travelled by solvent ",
+          {
+            "text": "R",
+            "italic": true
+          },
+          {
+            "text": "f",
+            "sub": true
+          },
+          " =  distance travelled by solvent ",
           {
             "symbol": "cross"
           },
@@ -22489,7 +22610,3333 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
         ]
       }
     },
+    "answer": "B",
+    "topics": [
+      "States of Matter"
+    ],
+    "lessons": [
+      "States of Matter"
+    ]
+  }
+],
+  "chemistry-2025-june-V1": [
+  {
+    "n": 1,
+    "blocks": [
+      {
+        "id": "bmrf8jilr-14-w57vv",
+        "block": "intro",
+        "content": [
+          "A gas is placed in a sealed container with a fixed volume. ",
+          {
+            "br": true
+          },
+          {
+            "br": true
+          },
+          "The gas is heated. "
+        ]
+      },
+      {
+        "id": "bmrf8klmw-15-2pbyn",
+        "block": "question",
+        "content": [
+          "Which statements are correct? "
+        ]
+      }
+    ],
+    "layout": {
+      "type": "combined-choice",
+      "statements": [
+        [
+          "The gas molecules move around faster. "
+        ],
+        [
+          "The gas particles collide with the walls of the container more frequently. "
+        ],
+        [
+          "The pressure in the container decreases. "
+        ]
+      ],
+      "options": {
+        "A": [
+          1,
+          2
+        ],
+        "B": [
+          1
+        ],
+        "C": [
+          2,
+          3
+        ],
+        "D": [
+          2
+        ]
+      },
+      "orientation": "horizontal"
+    },
+    "answer": "A",
+    "topics": [
+      "States of Matter"
+    ],
+    "lessons": [
+      "States of Matter"
+    ]
+  },
+  {
+    "n": 2,
+    "blocks": [
+      {
+        "id": "bmrf8mcvt-16-thrc2",
+        "block": "intro",
+        "content": [
+          "A sample of ethanol is heated at a constant rate. "
+        ]
+      },
+      {
+        "id": "bmrf8mho1-17-cq4ou",
+        "block": "intro",
+        "content": [
+          "The heating curve for this sample is shown. "
+        ]
+      },
+      {
+        "id": "bmrf8np35-18-aw019",
+        "block": "introData",
+        "data": {
+          "kind": "image",
+          "image": {
+            "src": "https://i.postimg.cc/cHcRDqj5/Screenshot-2026-07-10-at-8-57-31-PM.png",
+            "alt": "",
+            "invertOnDark": true
+          },
+          "size": "md"
+        }
+      },
+      {
+        "id": "bmrf8igzn-1-mc36r",
+        "block": "question",
+        "content": [
+          "Which statement about the heating curve is correct? "
+        ]
+      }
+    ],
+    "layout": {
+      "type": "text-vertical",
+      "options": {
+        "A": [
+          "Ethanol changes its physical state between 3 and 4. "
+        ],
+        "B": [
+          "Ethanol condenses between 2 and 3. "
+        ],
+        "C": [
+          "Energy is absorbed between 3 and 4 but ",
+          {
+            "text": "not",
+            "bold": true
+          },
+          " absorbed between 4 and 5. "
+        ],
+        "D": [
+          "More energy is absorbed between 4 and 5 than between 2 and 3. "
+        ]
+      }
+    },
+    "answer": "D"
+  },
+  {
+    "n": 3,
+    "blocks": [
+      {
+        "id": "bmrf8igzn-2-49dol",
+        "block": "question",
+        "content": [
+          "Which atom has an equal number of protons, neutrons and electrons? "
+        ]
+      }
+    ],
+    "layout": {
+      "type": "text-horizontal",
+      "options": {
+        "A": [
+          {
+            "text": "40",
+            "sup": true
+          },
+          "Ar"
+        ],
+        "B": [
+          {
+            "text": "1",
+            "sizePx": 10.5,
+            "sup": true
+          },
+          "H"
+        ],
+        "C": [
+          {
+            "text": "23",
+            "sup": true
+          },
+          "Na"
+        ],
+        "D": [
+          {
+            "text": "14",
+            "sup": true
+          },
+          "N"
+        ]
+      }
+    },
+    "answer": "D"
+  },
+  {
+    "n": 4,
+    "blocks": [
+      {
+        "id": "bmrf8pzsb-19-0nwuk",
+        "block": "intro",
+        "content": [
+          "The only naturally occurring isotopes in a sample of europium are",
+          {
+            "text": " 151",
+            "sup": true
+          },
+          "Eu and ",
+          {
+            "text": "153",
+            "sup": true
+          },
+          "Eu. This sample of europium has a relative atomic mass, ",
+          {
+            "text": "A",
+            "italic": true
+          },
+          {
+            "text": "r",
+            "sub": true
+          },
+          ", of 152. "
+        ]
+      },
+      {
+        "id": "bmrf8igzn-3-2f7z6",
+        "block": "question",
+        "content": [
+          "What is the percentage of",
+          {
+            "text": " 151",
+            "sup": true
+          },
+          "Eu present in this sample to three significant figures? "
+        ]
+      }
+    ],
+    "layout": {
+      "type": "text-horizontal",
+      "options": {
+        "A": [
+          "0.987%"
+        ],
+        "B": [
+          "50.0%"
+        ],
+        "C": [
+          " 76.0%"
+        ],
+        "D": [
+          "98.7% "
+        ]
+      },
+      "shrinkToFit": true
+    },
     "answer": "B"
+  },
+  {
+    "n": 5,
+    "blocks": [
+      {
+        "id": "bmrf8igzn-4-6vofl",
+        "block": "question",
+        "content": [
+          "Which statement about potassium chloride is correct? "
+        ]
+      }
+    ],
+    "layout": {
+      "type": "text-vertical",
+      "options": {
+        "A": [
+          "It has a high melting point because it is a giant structure with strong covalent bonds."
+        ],
+        "B": [
+          "It conducts electricity when solid because of its oppositely charged ions. "
+        ],
+        "C": [
+          "It conducts electricity when molten because its ions can move."
+        ],
+        "D": [
+          "It is insoluble in water because of its strong bonding. "
+        ]
+      }
+    },
+    "answer": "C"
+  },
+  {
+    "n": 6,
+    "blocks": [
+      {
+        "id": "bmrf8igzn-5-hkcls",
+        "block": "question",
+        "content": [
+          "Which dot-and-cross diagram shows the outer shell electron arrangement in a molecule of nitrogen? "
+        ]
+      }
+    ],
+    "layout": {
+      "type": "images",
+      "options": {
+        "A": {
+          "src": "https://i.postimg.cc/xdbGrxpL/Screenshot-2026-07-10-at-9-33-36-PM.png",
+          "alt": "A",
+          "invertOnDark": true
+        },
+        "B": {
+          "src": "https://i.postimg.cc/wTgZ2Jf2/Screenshot-2026-07-10-at-10-20-14-PM.png",
+          "alt": "B",
+          "invertOnDark": true
+        },
+        "C": {
+          "src": "https://i.postimg.cc/Z5qgtmhF/Screenshot-2026-07-10-at-10-20-32-PM.png",
+          "alt": "C",
+          "invertOnDark": true
+        },
+        "D": {
+          "src": "https://i.postimg.cc/SsmC3yBQ/Screenshot-2026-07-10-at-10-25-57-PM.png",
+          "alt": "D",
+          "invertOnDark": true
+        }
+      }
+    },
+    "answer": "B"
+  },
+  {
+    "n": 7,
+    "blocks": [
+      {
+        "id": "bmrf8igzn-6-poaze",
+        "block": "question",
+        "content": [
+          "Which statement about silicon(",
+          {
+            "text": "IV",
+            "family": "ui-serif, Georgia, serif"
+          },
+          ") oxide is correct? "
+        ]
+      }
+    ],
+    "layout": {
+      "type": "text-vertical",
+      "options": {
+        "A": [
+          "It contains silicon ions and oxide ions arranged in a giant lattice. "
+        ],
+        "B": [
+          "It is used in electrical circuits because it can conduct electricity. "
+        ],
+        "C": [
+          "Its bonds each contain one shared pair of electrons. "
+        ],
+        "D": [
+          "Its atoms are arranged in the same way as the atoms in graphite."
+        ]
+      }
+    },
+    "answer": "C",
+    "topics": [
+      "States of Matter"
+    ],
+    "lessons": [
+      "States of Matter"
+    ]
+  },
+  {
+    "n": 8,
+    "blocks": [
+      {
+        "id": "bmrfbult7-0-soezr",
+        "block": "intro",
+        "content": [
+          "Three organic molecules are described. "
+        ]
+      },
+      {
+        "id": "bmrfbutp9-1-w0xxi",
+        "block": "introData",
+        "data": {
+          "kind": "list",
+          "ordered": false,
+          "style": "unordered",
+          "items": [
+            [
+              "The molecular formula of propanoic acid is CH",
+              {
+                "text": "3",
+                "sub": true
+              },
+              "CH",
+              {
+                "text": "2",
+                "sub": true
+              },
+              "COOH."
+            ],
+            [
+              "The molecular formula of lactic acid is CH",
+              {
+                "text": "3",
+                "sub": true
+              },
+              "CH(OH)COOH."
+            ],
+            [
+              "A glucose molecule consists of 6 carbon atoms, 6 oxygen atoms and 12 hydrogen atoms only. "
+            ]
+          ]
+        }
+      },
+      {
+        "id": "bmrf8igzn-7-vy3v0",
+        "block": "question",
+        "content": [
+          "Which molecules have the same empirical formula? "
+        ]
+      }
+    ],
+    "layout": {
+      "type": "text-vertical",
+      "options": {
+        "A": [
+          "propanoic acid, lactic acid and glucose "
+        ],
+        "B": [
+          "propanoic acid and lactic acid only "
+        ],
+        "C": [
+          "propanoic acid and glucose only"
+        ],
+        "D": [
+          "lactic acid and glucose only "
+        ]
+      }
+    },
+    "answer": "D",
+    "topics": [
+      "States of Matter"
+    ],
+    "lessons": [
+      "States of Matter"
+    ]
+  },
+  {
+    "n": 9,
+    "blocks": [
+      {
+        "id": "bmrfbwxm0-2-egihx",
+        "block": "intro",
+        "content": [
+          "Calcium carbonate reacts with dilute hydrochloric acid. ",
+          {
+            "br": true
+          },
+          {
+            "br": true
+          },
+          "The equation for the reaction is shown. "
+        ]
+      },
+      {
+        "id": "bmrfbx7pj-3-3od8m",
+        "block": "intro",
+        "content": [
+          "CaCO",
+          {
+            "text": "3",
+            "sub": true
+          },
+          " + 2HCl ",
+          {
+            "symbol": "arrow"
+          },
+          " CaCl",
+          {
+            "text": "2",
+            "sub": true
+          },
+          " + H",
+          {
+            "text": "2",
+            "sub": true
+          },
+          "O + CO",
+          {
+            "text": "2",
+            "sub": true
+          }
+        ],
+        "centered": true
+      },
+      {
+        "id": "bmrfbzaxf-4-l5yyo",
+        "block": "intro",
+        "content": [
+          "1.00g of calcium carbonate is added to 50.0cm",
+          {
+            "text": "3",
+            "sup": true
+          },
+          " of 0.0500 mol/dm",
+          {
+            "text": "3",
+            "sup": true
+          },
+          "  hydrochloric acid. "
+        ]
+      },
+      {
+        "id": "bmrf8igzn-8-jnz0x",
+        "block": "question",
+        "content": [
+          "Which volume of carbon dioxide is made in this reaction? "
+        ]
+      }
+    ],
+    "layout": {
+      "type": "text-horizontal",
+      "options": {
+        "A": [
+          "30cm",
+          {
+            "text": "3",
+            "sup": true
+          }
+        ],
+        "B": [
+          "60cm",
+          {
+            "text": "3",
+            "sup": true
+          }
+        ],
+        "C": [
+          "120cm",
+          {
+            "text": "3",
+            "sup": true
+          }
+        ],
+        "D": [
+          "240cm",
+          {
+            "text": "3",
+            "sup": true
+          }
+        ]
+      },
+      "shrinkToFit": true
+    },
+    "answer": "A"
+  },
+  {
+    "n": 10,
+    "blocks": [
+      {
+        "id": "bmrfc1ysl-5-dql9m",
+        "block": "intro",
+        "content": [
+          "The diagram shows the electroplating of a steel object. "
+        ]
+      },
+      {
+        "id": "bmrfc2sdc-6-xd9wd",
+        "block": "introData",
+        "data": {
+          "kind": "image",
+          "image": {
+            "src": "https://i.postimg.cc/Kzgj0CzG/Screenshot-2026-07-10-at-10-33-05-PM.png",
+            "alt": "",
+            "invertOnDark": true
+          },
+          "size": "md"
+        }
+      },
+      {
+        "id": "bmrfc3acd-7-xzt0j",
+        "block": "intro",
+        "content": [
+          "A student makes three statements. "
+        ]
+      }
+    ],
+    "layout": {
+      "type": "combined-choice",
+      "statements": [
+        [
+          "The steel object turns a reddish-brown colour."
+        ],
+        [
+          "The aqueous copper(II) sulfate changes to a paler blue colour."
+        ],
+        [
+          "The copper electrode becomes thinner."
+        ]
+      ],
+      "options": {
+        "A": [
+          1,
+          2,
+          3
+        ],
+        "B": [
+          1,
+          2
+        ],
+        "C": [
+          1,
+          3
+        ],
+        "D": [
+          2,
+          3
+        ]
+      },
+      "questionText": [
+        {
+          "br": true
+        },
+        "Which statements are correct?",
+        {
+          "br": true
+        },
+        {
+          "br": true
+        }
+      ]
+    },
+    "answer": "C"
+  },
+  {
+    "n": 11,
+    "blocks": [
+      {
+        "id": "bmrfc68e3-9-j8t81",
+        "block": "intro",
+        "content": [
+          "Concentrated aqueous sodium chloride is electrolysed using inert electrodes. "
+        ]
+      },
+      {
+        "id": "bmrf8igzn-a-a4d3x",
+        "block": "question",
+        "content": [
+          "Which equation shows the correct ionic half-equation for the reaction at the anode? "
+        ]
+      }
+    ],
+    "layout": {
+      "type": "text-vertical",
+      "options": {
+        "A": [
+          "Cl",
+          {
+            "text": "–",
+            "sup": true
+          },
+          " + e",
+          {
+            "text": "–",
+            "sup": true
+          },
+          "  ",
+          {
+            "symbol": "arrow"
+          },
+          " Cl"
+        ],
+        "B": [
+          "2Cl",
+          {
+            "text": "–",
+            "sup": true
+          },
+          " ",
+          {
+            "symbol": "arrow"
+          },
+          " Cl",
+          {
+            "text": "2",
+            "sub": true
+          },
+          " + 2e",
+          {
+            "text": "–",
+            "sup": true
+          }
+        ],
+        "C": [
+          "H",
+          {
+            "text": "+",
+            "sup": true
+          },
+          " ",
+          {
+            "symbol": "arrow"
+          },
+          " H + e",
+          {
+            "text": "–",
+            "sup": true
+          }
+        ],
+        "D": [
+          "2H",
+          {
+            "text": "+",
+            "sup": true
+          },
+          " + 2e",
+          {
+            "text": "–",
+            "sup": true
+          },
+          "  ",
+          {
+            "symbol": "arrow"
+          },
+          " H",
+          {
+            "text": "2",
+            "sub": true
+          }
+        ]
+      }
+    },
+    "answer": "B"
+  },
+  {
+    "n": 12,
+    "blocks": [
+      {
+        "id": "bmrf8igzn-b-9pzbg",
+        "block": "question",
+        "content": [
+          "Which equation represents the overall reaction in a hydrogen–oxygen fuel cell? "
+        ]
+      }
+    ],
+    "layout": {
+      "type": "text-vertical",
+      "options": {
+        "A": [
+          "2H",
+          {
+            "text": "2",
+            "sub": true
+          },
+          " + O",
+          {
+            "text": "2 ",
+            "sub": true
+          },
+          {
+            "symbol": "arrow"
+          },
+          " 2H",
+          {
+            "text": "2",
+            "sub": true
+          },
+          "O "
+        ],
+        "B": [
+          "2H",
+          {
+            "text": "2",
+            "sub": true
+          },
+          "O ",
+          {
+            "symbol": "arrow"
+          },
+          " 2H",
+          {
+            "text": "2",
+            "sub": true
+          },
+          " + O",
+          {
+            "text": "2",
+            "sub": true
+          }
+        ],
+        "C": [
+          "H",
+          {
+            "text": "2",
+            "sub": true
+          },
+          " + O",
+          {
+            "text": "2",
+            "sub": true
+          },
+          " ",
+          {
+            "symbol": "arrow"
+          },
+          " H",
+          {
+            "text": "2",
+            "sub": true
+          },
+          "O",
+          {
+            "text": "2",
+            "sub": true
+          }
+        ],
+        "D": [
+          "H",
+          {
+            "text": "2",
+            "sub": true
+          },
+          "O",
+          {
+            "text": "2",
+            "sub": true
+          },
+          " ",
+          {
+            "symbol": "arrow"
+          },
+          " H",
+          {
+            "text": "2",
+            "sub": true
+          },
+          " + O",
+          {
+            "text": "2",
+            "sub": true
+          }
+        ]
+      }
+    },
+    "answer": "A",
+    "topics": [
+      "States of Matter"
+    ],
+    "lessons": [
+      "States of Matter"
+    ]
+  },
+  {
+    "n": 13,
+    "blocks": [
+      {
+        "id": "bmrfcetek-a-3j4xw",
+        "block": "intro",
+        "content": [
+          "Water is added to anhydrous copper(",
+          {
+            "text": "II",
+            "family": "ui-serif, Georgia, serif"
+          },
+          ") sulfate in a test-tube. "
+        ]
+      },
+      {
+        "id": "bmrfcf824-b-753e9",
+        "block": "intro",
+        "content": [
+          "The mixture becomes hot. "
+        ]
+      },
+      {
+        "id": "bmrf8igzn-c-b4ym8",
+        "block": "question",
+        "content": [
+          "Which type of reaction and reaction pathway diagram apply to this reaction? "
+        ]
+      }
+    ],
+    "layout": {
+      "type": "table",
+      "grid": [
+        [
+          {
+            "content": [
+              "type of reaction"
+            ],
+            "header": true,
+            "align": "center"
+          },
+          {
+            "content": [
+              "reaction pathway diagram"
+            ],
+            "header": true,
+            "align": "center"
+          }
+        ],
+        [
+          {
+            "content": [
+              "endothermic"
+            ],
+            "align": "center"
+          },
+          {
+            "content": [],
+            "align": "center",
+            "image": {
+              "src": "https://i.postimg.cc/ZqPJ1zNF/Screenshot-2026-07-10-at-11-04-45-PM.png",
+              "invertOnDark": true
+            }
+          }
+        ],
+        [
+          {
+            "content": [
+              "endothermic"
+            ],
+            "align": "center"
+          },
+          {
+            "content": [],
+            "align": "center",
+            "image": {
+              "src": "https://i.postimg.cc/Kzvhwkx2/Screenshot-2026-07-10-at-11-06-01-PM.png",
+              "invertOnDark": true
+            }
+          }
+        ],
+        [
+          {
+            "content": [
+              "exothermic"
+            ],
+            "align": "center"
+          },
+          {
+            "content": [],
+            "align": "center",
+            "image": {
+              "src": "https://i.postimg.cc/qqWfN1ny/Screenshot-2026-07-10-at-11-06-31-PM.png",
+              "invertOnDark": true
+            }
+          }
+        ],
+        [
+          {
+            "content": [
+              "exothermic"
+            ],
+            "align": "center"
+          },
+          {
+            "content": [],
+            "align": "center",
+            "image": {
+              "src": "https://i.postimg.cc/k5q0R6Vf/Screenshot-2026-07-10-at-11-07-03-PM.png",
+              "invertOnDark": true
+            }
+          }
+        ]
+      ],
+      "optionsAxis": "rows",
+      "optionAt": {
+        "A": 1,
+        "B": 2,
+        "C": 3,
+        "D": 4
+      }
+    },
+    "answer": "C"
+  },
+  {
+    "n": 14,
+    "blocks": [
+      {
+        "id": "bmrfdvt8z-0-m7rp2",
+        "block": "intro",
+        "content": [
+          "The equation represents the reaction between ethanoic acid and ethanol. "
+        ]
+      },
+      {
+        "id": "bmrfdwhue-1-cek8c",
+        "block": "intro",
+        "content": [
+          "CH",
+          {
+            "text": "3",
+            "sub": true
+          },
+          "COOH + CH",
+          {
+            "text": "3",
+            "sub": true
+          },
+          "CH",
+          {
+            "text": "2",
+            "sub": true
+          },
+          "OH ",
+          {
+            "symbol": "revHalfArrow"
+          },
+          " CH",
+          {
+            "text": "3",
+            "sub": true
+          },
+          "COOCH",
+          {
+            "text": "2",
+            "sub": true
+          },
+          "CH",
+          {
+            "text": "3",
+            "sub": true
+          },
+          " + H",
+          {
+            "text": "2",
+            "sub": true
+          },
+          "O"
+        ],
+        "centered": true
+      },
+      {
+        "id": "bmrfdxfoy-2-dr8zr",
+        "block": "question",
+        "content": [
+          "Which type of reaction does this show? "
+        ]
+      }
+    ],
+    "layout": {
+      "type": "text-vertical",
+      "options": {
+        "A": [
+          "addition"
+        ],
+        "B": [
+          "neutralisation"
+        ],
+        "C": [
+          "reduction"
+        ],
+        "D": [
+          "reversible"
+        ]
+      }
+    },
+    "answer": "D",
+    "topics": [
+      "States of Matter"
+    ],
+    "lessons": [
+      "States of Matter"
+    ]
+  },
+  {
+    "n": 15,
+    "blocks": [
+      {
+        "id": "bmrfdybrg-3-t9z4f",
+        "block": "intro",
+        "content": [
+          "The graph shows the results of adding excess calcium carbonate to hydrochloric acid at 50°C and at 30°C. Only the temperature is changed. "
+        ]
+      },
+      {
+        "id": "bmrfe1r78-4-t63lm",
+        "block": "introData",
+        "data": {
+          "kind": "image",
+          "image": {
+            "src": "https://i.postimg.cc/3wZFWWp8/Screenshot-2026-07-10-at-11-27-58-PM.png",
+            "alt": "",
+            "invertOnDark": true
+          },
+          "size": "md"
+        }
+      },
+      {
+        "id": "bmrf8igzn-e-2we2r",
+        "block": "question",
+        "content": [
+          "Which row describes the reacting particles at 30ºC compared to those at 50ºC? "
+        ]
+      }
+    ],
+    "layout": {
+      "type": "table",
+      "grid": [
+        [
+          {
+            "content": [
+              "frequency of collisions between particles "
+            ],
+            "header": true,
+            "align": "center"
+          },
+          {
+            "content": [
+              "average kinetic energy of particles "
+            ],
+            "header": true,
+            "align": "center"
+          }
+        ],
+        [
+          {
+            "content": [
+              "higher"
+            ],
+            "align": "center"
+          },
+          {
+            "content": [
+              "higher"
+            ],
+            "align": "center"
+          }
+        ],
+        [
+          {
+            "content": [
+              "higher"
+            ],
+            "align": "center"
+          },
+          {
+            "content": [
+              "lower"
+            ],
+            "align": "center"
+          }
+        ],
+        [
+          {
+            "content": [
+              "lower"
+            ],
+            "align": "center"
+          },
+          {
+            "content": [
+              "higher"
+            ],
+            "align": "center"
+          }
+        ],
+        [
+          {
+            "content": [
+              "lower"
+            ],
+            "align": "center"
+          },
+          {
+            "content": [
+              "lower"
+            ],
+            "align": "center"
+          }
+        ]
+      ],
+      "optionsAxis": "rows",
+      "optionAt": {
+        "A": 1,
+        "B": 2,
+        "C": 3,
+        "D": 4
+      }
+    },
+    "answer": "D"
+  },
+  {
+    "n": 16,
+    "blocks": [
+      {
+        "id": "bmrfe3uta-5-xbjps",
+        "block": "intro",
+        "content": [
+          "Industrially, ammonia is made by the Haber process. The equation is shown. "
+        ]
+      },
+      {
+        "id": "bmrfe445x-6-gxz6w",
+        "block": "intro",
+        "content": [
+          {
+            "text": "N",
+            "sizePx": 18
+          },
+          {
+            "text": "2",
+            "sizePx": 18,
+            "sub": true
+          },
+          {
+            "text": "(g) + 3H",
+            "sizePx": 18
+          },
+          {
+            "text": "2",
+            "sizePx": 18,
+            "sub": true
+          },
+          {
+            "text": "(g) ",
+            "sizePx": 18
+          },
+          {
+            "symbol": "revHalfArrow"
+          },
+          {
+            "text": " 2NH",
+            "sizePx": 18
+          },
+          {
+            "text": "3",
+            "sizePx": 18,
+            "sub": true
+          },
+          {
+            "text": "(g) ",
+            "sizePx": 18
+          }
+        ],
+        "centered": true
+      },
+      {
+        "id": "bmrfe4tb0-7-ewlzr",
+        "block": "intro",
+        "content": [
+          {
+            "symbol": "delta"
+          },
+          {
+            "text": "H ",
+            "italic": true
+          },
+          "= –92 kJ/mol "
+        ]
+      },
+      {
+        "id": "bmrfe5hk3-8-0sco2",
+        "block": "intro",
+        "content": [
+          "The conditions used are 450°C and 200atm. "
+        ]
+      },
+      {
+        "id": "bmrf8igzn-f-mk50j",
+        "block": "question",
+        "content": [
+          "Which statements about the conditions are correct? "
+        ]
+      }
+    ],
+    "layout": {
+      "type": "combined-choice",
+      "statements": [
+        [
+          "Temperatures below 450 °C give a lower rate of reaction."
+        ],
+        [
+          "Temperatures below 450 °C give a lower yield of ammonia."
+        ],
+        [
+          "Pressures above 200 atm give a lower yield of ammonia."
+        ],
+        [
+          "Pressures above 200 atm are too expensive to maintain. "
+        ]
+      ],
+      "options": {
+        "A": [
+          1,
+          2
+        ],
+        "B": [
+          1,
+          4
+        ],
+        "C": [
+          2,
+          3
+        ],
+        "D": [
+          3,
+          4
+        ]
+      },
+      "orientation": "horizontal"
+    },
+    "answer": "B",
+    "topics": [
+      "States of Matter"
+    ],
+    "lessons": [
+      "States of Matter"
+    ]
+  },
+  {
+    "n": 17,
+    "blocks": [
+      {
+        "id": "bmrfe74g2-9-bi4cf",
+        "block": "intro",
+        "content": [
+          "Ethanol is warmed with acidified aqueous potassium manganate(",
+          {
+            "text": "VII",
+            "family": "ui-serif, Georgia, serif"
+          },
+          ")."
+        ]
+      },
+      {
+        "id": "bmrf8igzn-g-o2mms",
+        "block": "question",
+        "content": [
+          "Which row describes the type of reaction of the ethanol and the colour change observed in the reaction mixture? "
+        ]
+      }
+    ],
+    "layout": {
+      "type": "table",
+      "grid": [
+        [
+          {
+            "content": [
+              "type of reaction "
+            ],
+            "header": true,
+            "align": "center"
+          },
+          {
+            "content": [
+              "colour change "
+            ],
+            "header": true,
+            "align": "center"
+          }
+        ],
+        [
+          {
+            "content": [
+              "oxidation "
+            ],
+            "align": "center"
+          },
+          {
+            "content": [
+              "colourless to purple "
+            ],
+            "align": "center"
+          }
+        ],
+        [
+          {
+            "content": [
+              "oxidation "
+            ],
+            "align": "center"
+          },
+          {
+            "content": [
+              "purple to colourless "
+            ],
+            "align": "center"
+          }
+        ],
+        [
+          {
+            "content": [
+              "reduction"
+            ],
+            "align": "center"
+          },
+          {
+            "content": [
+              "colourless to purple"
+            ],
+            "align": "center"
+          }
+        ],
+        [
+          {
+            "content": [
+              "reduction"
+            ],
+            "align": "center"
+          },
+          {
+            "content": [
+              "purple to colourless "
+            ],
+            "align": "center"
+          }
+        ]
+      ],
+      "optionsAxis": "rows",
+      "optionAt": {
+        "A": 1,
+        "B": 2,
+        "C": 3,
+        "D": 4
+      }
+    },
+    "answer": "B",
+    "topics": [
+      "States of Matter"
+    ],
+    "lessons": [
+      "States of Matter"
+    ]
+  },
+  {
+    "n": 18,
+    "blocks": [
+      {
+        "id": "bmrfe8t0m-a-opxj6",
+        "block": "intro",
+        "content": [
+          "Two experiments involving acids R or S are done. "
+        ]
+      },
+      {
+        "id": "bmrfe8yvu-b-yebf7",
+        "block": "introData",
+        "data": {
+          "kind": "list",
+          "ordered": true,
+          "style": "ordered",
+          "items": [
+            [
+              "0.10mol of acid R completely dissolves in 500cm",
+              {
+                "text": "3",
+                "sup": true
+              },
+              " of water. 0.0048mol of acid R is dissociated in the solution. "
+            ],
+            [
+              "0.10mol of acid S completely dissolves in 500cm",
+              {
+                "text": "3",
+                "sup": true
+              },
+              " of water. 0.0179mol of acid S is dissociated in the solution. "
+            ]
+          ]
+        }
+      },
+      {
+        "id": "bmrfebqjx-c-yn4w8",
+        "block": "question",
+        "content": [
+          "Which statement about acids R and S is correct? "
+        ]
+      }
+    ],
+    "layout": {
+      "type": "text-vertical",
+      "options": {
+        "A": [
+          "Acid R is a strong acid, and acid S is a weak acid. "
+        ],
+        "B": [
+          "Acid R is a weak acid, and acid S is a strong acid. "
+        ],
+        "C": [
+          "Acid R and acid S are both strong acids. "
+        ],
+        "D": [
+          "Acid R and acid S are both weak acids. "
+        ]
+      }
+    },
+    "answer": "D",
+    "topics": [
+      "States of Matter"
+    ],
+    "lessons": [
+      "States of Matter"
+    ]
+  },
+  {
+    "n": 19,
+    "blocks": [
+      {
+        "id": "bmrfeclk0-d-96tvc",
+        "block": "intro",
+        "content": [
+          "Lead(",
+          {
+            "text": "II",
+            "family": "ui-serif, Georgia, serif"
+          },
+          ") sulfate is an insoluble salt. "
+        ]
+      },
+      {
+        "id": "bmrf8igzn-i-3uoag",
+        "block": "question",
+        "content": [
+          "Which process is ",
+          {
+            "text": "not",
+            "bold": true
+          },
+          " used to prepare a pure sample of this salt? "
+        ]
+      }
+    ],
+    "layout": {
+      "type": "text-vertical",
+      "options": {
+        "A": [
+          "crystallisation"
+        ],
+        "B": [
+          "drying"
+        ],
+        "C": [
+          "filtration"
+        ],
+        "D": [
+          "precipitation"
+        ]
+      }
+    },
+    "answer": "A"
+  },
+  {
+    "n": 20,
+    "blocks": [
+      {
+        "id": "bmrfeed51-f-vggh8",
+        "block": "intro",
+        "content": [
+          "The formulae of two hydrated salts are shown. "
+        ]
+      },
+      {
+        "id": "bmrf8igzn-j-vvs6h",
+        "block": "question",
+        "content": []
+      },
+      {
+        "id": "bmrfeeyr4-g-pbjjc",
+        "block": "introData",
+        "data": {
+          "kind": "list",
+          "ordered": false,
+          "style": "unordered",
+          "items": [
+            [
+              "CuSO",
+              {
+                "text": "4 ",
+                "sub": true
+              },
+              {
+                "symbol": "dot"
+              },
+              {
+                "text": " x",
+                "italic": true
+              },
+              "H2O "
+            ],
+            [
+              "CoCl",
+              {
+                "text": "2 ",
+                "sub": true
+              },
+              "• ",
+              {
+                "text": "y",
+                "italic": true
+              },
+              "H",
+              {
+                "text": "2",
+                "sub": true
+              },
+              "O"
+            ]
+          ]
+        }
+      },
+      {
+        "id": "bmrfehdd8-h-avhvd",
+        "block": "question",
+        "content": [
+          "What are the values of ",
+          {
+            "text": "x",
+            "italic": true
+          },
+          " and ",
+          {
+            "text": "y",
+            "italic": true
+          },
+          "? "
+        ]
+      }
+    ],
+    "layout": {
+      "type": "table",
+      "grid": [
+        [
+          {
+            "content": [
+              {
+                "text": "x",
+                "italic": true
+              }
+            ],
+            "header": true,
+            "align": "center"
+          },
+          {
+            "content": [
+              {
+                "text": "y",
+                "italic": true
+              }
+            ],
+            "header": true,
+            "align": "center"
+          }
+        ],
+        [
+          {
+            "content": [
+              "5"
+            ],
+            "align": "center"
+          },
+          {
+            "content": [
+              "5"
+            ],
+            "align": "center"
+          }
+        ],
+        [
+          {
+            "content": [
+              "5"
+            ],
+            "align": "center"
+          },
+          {
+            "content": [
+              "6"
+            ],
+            "align": "center"
+          }
+        ],
+        [
+          {
+            "content": [
+              "6"
+            ],
+            "align": "center"
+          },
+          {
+            "content": [
+              "5"
+            ],
+            "align": "center"
+          }
+        ],
+        [
+          {
+            "content": [
+              "6"
+            ],
+            "align": "center"
+          },
+          {
+            "content": [
+              "6"
+            ],
+            "align": "center"
+          }
+        ]
+      ],
+      "optionsAxis": "rows",
+      "optionAt": {
+        "A": 1,
+        "B": 2,
+        "C": 3,
+        "D": 4
+      }
+    },
+    "answer": "B"
+  },
+  {
+    "n": 21,
+    "blocks": [
+      {
+        "id": "bmrfeilg6-i-kvec4",
+        "block": "intro",
+        "content": [
+          "The properties of the elements change from left to right across the Periodic Table. "
+        ]
+      },
+      {
+        "id": "bmrfeixjr-j-x97ci",
+        "block": "question",
+        "content": [
+          "Which statement describes how the properties change across Period 3? "
+        ]
+      }
+    ],
+    "layout": {
+      "type": "text-vertical",
+      "options": {
+        "A": [
+          "Elements change from gases to solids. "
+        ],
+        "B": [
+          "Elements change from non-conductors to electrical conductors. "
+        ],
+        "C": [
+          "Elements change from metal to non-metal. "
+        ],
+        "D": [
+          "Elements have a decreasing number of electron shells. "
+        ]
+      }
+    },
+    "answer": "C"
+  },
+  {
+    "n": 22,
+    "blocks": [
+      {
+        "id": "bmrf8igzn-l-1msme",
+        "block": "question",
+        "content": [
+          "Which property decreases down Group VII of the Periodic Table, from chlorine to iodine? "
+        ]
+      }
+    ],
+    "layout": {
+      "type": "text-vertical",
+      "options": {
+        "A": [
+          "atomic number"
+        ],
+        "B": [
+          "density"
+        ],
+        "C": [
+          "reactivity"
+        ],
+        "D": [
+          "melting point "
+        ]
+      }
+    },
+    "answer": "C",
+    "topics": [
+      "States of Matter"
+    ],
+    "lessons": [
+      "States of Matter"
+    ]
+  },
+  {
+    "n": 23,
+    "blocks": [
+      {
+        "id": "bmrfeksem-k-sjr6t",
+        "block": "intro",
+        "content": [
+          "Some properties of elements are listed."
+        ]
+      }
+    ],
+    "layout": {
+      "type": "combined-choice",
+      "statements": [
+        [
+          "They have good electrical conductivity."
+        ],
+        [
+          "They have high melting points."
+        ],
+        [
+          "They are malleable."
+        ],
+        [
+          "They have ions with variable oxidation numbers. "
+        ]
+      ],
+      "options": {
+        "A": [
+          1,
+          3
+        ],
+        "B": [
+          1,
+          4
+        ],
+        "C": [
+          2,
+          3
+        ],
+        "D": [
+          2,
+          4
+        ]
+      },
+      "questionText": [
+        {
+          "br": true
+        },
+        "Which properties are correct for ",
+        {
+          "text": "both",
+          "bold": true
+        },
+        " iron and lithium? ",
+        {
+          "br": true
+        },
+        {
+          "br": true
+        }
+      ]
+    },
+    "answer": "A"
+  },
+  {
+    "n": 24,
+    "blocks": [
+      {
+        "id": "bmrfemhnd-l-7z1uq",
+        "block": "intro",
+        "content": [
+          "Two statements about noble gases are listed. "
+        ]
+      },
+      {
+        "id": "bmrfemrsg-m-hvdbu",
+        "block": "introData",
+        "data": {
+          "kind": "list",
+          "ordered": true,
+          "style": "ordered",
+          "items": [
+            [
+              "Noble gases are reactive, monatomic gases. "
+            ],
+            [
+              "Noble gases all have a full outer shell of electrons. "
+            ]
+          ]
+        }
+      },
+      {
+        "id": "bmrf8igzn-n-hwhxc",
+        "block": "question",
+        "content": [
+          "Which statements about noble gases are correct? "
+        ]
+      }
+    ],
+    "layout": {
+      "type": "text-vertical",
+      "options": {
+        "A": [
+          "Both statements are correct, and statement 2 explains statement 1. "
+        ],
+        "B": [
+          "Both statements are correct but statement 2 does ",
+          {
+            "text": "not",
+            "bold": true
+          },
+          " explain statement 1. "
+        ],
+        "C": [
+          "Statement 1 is correct but statement 2 is ",
+          {
+            "text": "not",
+            "bold": true
+          },
+          " correct."
+        ],
+        "D": [
+          "Statement 2 is correct but statement 1 is ",
+          {
+            "text": "not",
+            "bold": true
+          },
+          " correct. "
+        ]
+      }
+    },
+    "answer": "D",
+    "topics": [
+      "States of Matter"
+    ],
+    "lessons": [
+      "States of Matter"
+    ]
+  },
+  {
+    "n": 25,
+    "blocks": [
+      {
+        "id": "bmrf8igzn-o-52tpw",
+        "block": "question",
+        "content": [
+          "Which statement about the properties and uses of copper is correct? "
+        ]
+      }
+    ],
+    "layout": {
+      "type": "text-vertical",
+      "options": {
+        "A": [
+          "It is used in electrical wiring, and it is ductile. "
+        ],
+        "B": [
+          "It is mixed with tin to make the alloy brass. "
+        ],
+        "C": [
+          "It is used in overhead electrical cables because it has a low density"
+        ],
+        "D": [
+          "It is used in takeaway food containers because of its resistance to corrosion. "
+        ]
+      }
+    },
+    "answer": "A"
+  },
+  {
+    "n": 26,
+    "blocks": [
+      {
+        "id": "bmrfeop4w-n-l1kvp",
+        "block": "intro",
+        "content": [
+          "Three statements about solid Z are listed. "
+        ]
+      },
+      {
+        "id": "bmrfeovkj-o-9vuzx",
+        "block": "introData",
+        "data": {
+          "kind": "list",
+          "ordered": false,
+          "style": "unordered",
+          "items": [
+            [
+              "It reacts with dilute hydrochloric acid to produce hydrogen."
+            ],
+            [
+              "It reacts very slowly with cold water and quickly with steam."
+            ],
+            [
+              "It is a good thermal conductor. "
+            ]
+          ]
+        }
+      },
+      {
+        "id": "bmrfepd1f-p-81dsi",
+        "block": "question",
+        "content": [
+          "What is solid Z? "
+        ]
+      }
+    ],
+    "layout": {
+      "type": "text-vertical",
+      "options": {
+        "A": [
+          " gold"
+        ],
+        "B": [
+          "magnesium"
+        ],
+        "C": [
+          "potassium"
+        ],
+        "D": [
+          "silver "
+        ]
+      }
+    },
+    "answer": "B",
+    "topics": [
+      "States of Matter"
+    ],
+    "lessons": [
+      "States of Matter"
+    ]
+  },
+  {
+    "n": 27,
+    "blocks": [
+      {
+        "id": "bmrfeuy7y-q-bexeo",
+        "block": "intro",
+        "content": [
+          "Four metals J, K, L and M are added separately to aqueous solutions of their ions. ",
+          {
+            "br": true
+          },
+          {
+            "br": true
+          },
+          "The results are shown. "
+        ]
+      },
+      {
+        "id": "bmrff2b2m-r-zonw8",
+        "block": "introData",
+        "data": {
+          "kind": "table",
+          "grid": [
+            [
+              {
+                "content": [],
+                "header": true,
+                "align": "center"
+              },
+              {
+                "content": [
+                  "aqueous ions "
+                ],
+                "header": true,
+                "align": "center",
+                "rowSpan": 1,
+                "colSpan": 4
+              },
+              {
+                "content": [
+                  {
+                    "text": "B"
+                  }
+                ],
+                "header": true,
+                "align": "center",
+                "hidden": true
+              },
+              {
+                "content": [],
+                "align": "center",
+                "header": true,
+                "hidden": true
+              },
+              {
+                "content": [],
+                "align": "center",
+                "header": true,
+                "hidden": true
+              }
+            ],
+            [
+              {
+                "content": [
+                  "metal"
+                ],
+                "align": "center",
+                "header": true
+              },
+              {
+                "content": [
+                  "J",
+                  {
+                    "text": "2+",
+                    "sup": true
+                  }
+                ],
+                "align": "center",
+                "header": true
+              },
+              {
+                "content": [
+                  "K",
+                  {
+                    "text": "2+ ",
+                    "sup": true
+                  }
+                ],
+                "align": "center",
+                "header": true
+              },
+              {
+                "content": [
+                  "L",
+                  {
+                    "text": "2+ ",
+                    "sup": true
+                  }
+                ],
+                "align": "center",
+                "header": true
+              },
+              {
+                "content": [
+                  "M",
+                  {
+                    "text": "2+",
+                    "sup": true
+                  }
+                ],
+                "align": "center",
+                "header": true
+              }
+            ],
+            [
+              {
+                "content": [
+                  "J"
+                ],
+                "align": "center",
+                "header": true
+              },
+              {
+                "content": [
+                  {
+                    "symbol": "cross"
+                  }
+                ],
+                "align": "center"
+              },
+              {
+                "content": [
+                  {
+                    "symbol": "tick"
+                  }
+                ],
+                "align": "center"
+              },
+              {
+                "content": [
+                  "✓"
+                ],
+                "align": "center"
+              },
+              {
+                "content": [
+                  "✓"
+                ],
+                "align": "center"
+              }
+            ],
+            [
+              {
+                "content": [
+                  "K"
+                ],
+                "align": "center",
+                "header": true
+              },
+              {
+                "content": [
+                  "✗"
+                ],
+                "align": "center"
+              },
+              {
+                "content": [
+                  "✗"
+                ],
+                "align": "center"
+              },
+              {
+                "content": [
+                  "✗"
+                ],
+                "align": "center"
+              },
+              {
+                "content": [
+                  "✓"
+                ],
+                "align": "center"
+              }
+            ],
+            [
+              {
+                "content": [
+                  "L"
+                ],
+                "align": "center",
+                "header": true
+              },
+              {
+                "content": [
+                  "✗"
+                ],
+                "align": "center"
+              },
+              {
+                "content": [
+                  "✓"
+                ],
+                "align": "center"
+              },
+              {
+                "content": [
+                  "✗"
+                ],
+                "align": "center"
+              },
+              {
+                "content": [
+                  "✓"
+                ],
+                "align": "center"
+              }
+            ],
+            [
+              {
+                "content": [
+                  "M"
+                ],
+                "align": "center",
+                "header": true
+              },
+              {
+                "content": [
+                  "✗"
+                ],
+                "align": "center"
+              },
+              {
+                "content": [
+                  "✗"
+                ],
+                "align": "center"
+              },
+              {
+                "content": [
+                  "✗"
+                ],
+                "align": "center"
+              },
+              {
+                "content": [
+                  "✗"
+                ],
+                "align": "center"
+              }
+            ]
+          ],
+          "header": [],
+          "rows": [],
+          "caption": [
+            "✓ = reaction",
+            {
+              "br": true
+            },
+            "✗ = no reaction",
+            {
+              "br": true
+            }
+          ]
+        }
+      },
+      {
+        "id": "bmrff8cn1-s-uuhme",
+        "block": "question",
+        "content": [
+          "Which statement about the metals is correct? "
+        ]
+      }
+    ],
+    "layout": {
+      "type": "text-vertical",
+      "options": {
+        "A": [
+          "J has a greater tendency to form positive ions than K. "
+        ],
+        "B": [
+          "L has a greater tendency to form positive ions than J. "
+        ],
+        "C": [
+          "K has a greater tendency to form positive ions than L. "
+        ],
+        "D": [
+          "M has a greater tendency to form positive ions than K. "
+        ]
+      }
+    },
+    "answer": "A",
+    "topics": [
+      "States of Matter"
+    ],
+    "lessons": [
+      "States of Matter"
+    ]
+  },
+  {
+    "n": 28,
+    "blocks": [
+      {
+        "id": "bmrf8igzn-r-1p8tq",
+        "block": "question",
+        "content": [
+          "Which process is used in the extraction of iron from hematite?"
+        ]
+      }
+    ],
+    "layout": {
+      "type": "text-vertical",
+      "options": {
+        "A": [
+          "electrolysis"
+        ],
+        "B": [
+          "precipitation"
+        ],
+        "C": [
+          "reduction"
+        ],
+        "D": [
+          "fractional distillation "
+        ]
+      }
+    },
+    "answer": "C",
+    "topics": [
+      "States of Matter"
+    ],
+    "lessons": [
+      "States of Matter"
+    ]
+  },
+  {
+    "n": 29,
+    "blocks": [
+      {
+        "id": "bmrggfa96-0-ksnpp",
+        "block": "intro",
+        "content": [
+          "Galvanising prevents iron from rusting. "
+        ]
+      },
+      {
+        "id": "bmrf8igzn-s-zaxzu",
+        "block": "question",
+        "content": [
+          "Which statements about galvanising are correct? "
+        ]
+      }
+    ],
+    "layout": {
+      "type": "combined-choice",
+      "statements": [
+        [
+          "Galvanising involves coating the iron with silver. "
+        ],
+        [
+          "Galvanising prevents oxygen and water from coming into contact with the iron. "
+        ],
+        [
+          "Galvanising works because the metal coating loses electrons more readily than iron."
+        ]
+      ],
+      "options": {
+        "A": [
+          1,
+          2,
+          3
+        ],
+        "B": [
+          1,
+          3
+        ],
+        "C": [
+          2,
+          3
+        ],
+        "D": [
+          2
+        ]
+      }
+    },
+    "answer": "C",
+    "topics": [
+      "Metals"
+    ],
+    "lessons": [
+      "Galvanising"
+    ]
+  },
+  {
+    "n": 30,
+    "blocks": [
+      {
+        "id": "bmrgjq389-0-atohx",
+        "block": "intro",
+        "content": [
+          "Nitrogen, phosphorus and potassium are essential elements for improved plant growth. "
+        ]
+      },
+      {
+        "id": "bmrf8igzn-t-y4wai",
+        "block": "question",
+        "content": [
+          "Which mixture provides all ",
+          {
+            "text": "three",
+            "bold": true
+          },
+          " essential elements? "
+        ]
+      }
+    ],
+    "layout": {
+      "type": "table",
+      "grid": [
+        [
+          {
+            "content": [
+              "mixture"
+            ],
+            "header": true,
+            "align": "center"
+          },
+          {
+            "content": [
+              "formulae"
+            ],
+            "header": true,
+            "align": "center"
+          }
+        ],
+        [
+          {
+            "content": [
+              "ammonium phosphate ",
+              {
+                "br": true
+              },
+              "+",
+              {
+                "br": true
+              },
+              " potassium chloride "
+            ],
+            "align": "center"
+          },
+          {
+            "content": [
+              "(NH",
+              {
+                "text": "4",
+                "sub": true
+              },
+              ")",
+              {
+                "text": "3",
+                "sub": true
+              },
+              "PO",
+              {
+                "text": "4",
+                "sub": true
+              },
+              {
+                "br": true
+              },
+              "+",
+              {
+                "br": true
+              },
+              "KCl"
+            ],
+            "align": "center"
+          }
+        ],
+        [
+          {
+            "content": [
+              "ammonium phosphate",
+              {
+                "br": true
+              },
+              "+",
+              {
+                "br": true
+              },
+              "ammonium nitrate "
+            ],
+            "align": "center"
+          },
+          {
+            "content": [
+              "(NH",
+              {
+                "text": "4",
+                "sub": true
+              },
+              ")",
+              {
+                "text": "3",
+                "sub": true
+              },
+              "PO",
+              {
+                "text": "4",
+                "sub": true
+              },
+              {
+                "br": true
+              },
+              "+",
+              {
+                "br": true
+              },
+              "NH",
+              {
+                "text": "4",
+                "sub": true
+              },
+              "NO",
+              {
+                "text": "3",
+                "sub": true
+              }
+            ],
+            "align": "center"
+          }
+        ],
+        [
+          {
+            "content": [
+              "ammonium phosphate",
+              {
+                "br": true
+              },
+              "+",
+              {
+                "br": true
+              },
+              "ammonium chloride "
+            ],
+            "align": "center"
+          },
+          {
+            "content": [
+              "(NH",
+              {
+                "text": "4",
+                "sub": true
+              },
+              ")",
+              {
+                "text": "3",
+                "sub": true
+              },
+              "PO",
+              {
+                "text": "4",
+                "sub": true
+              },
+              {
+                "br": true
+              },
+              "+",
+              {
+                "br": true
+              },
+              "NH",
+              {
+                "text": "4",
+                "sub": true
+              },
+              "Cl"
+            ],
+            "align": "center"
+          }
+        ],
+        [
+          {
+            "content": [
+              "ammonium nitrate",
+              {
+                "br": true
+              },
+              "+",
+              {
+                "br": true
+              },
+              "potassium chloride "
+            ],
+            "align": "center"
+          },
+          {
+            "content": [
+              "NH",
+              {
+                "text": "4",
+                "sub": true
+              },
+              "NO",
+              {
+                "text": "3",
+                "sub": true
+              },
+              {
+                "br": true
+              },
+              "+ ",
+              {
+                "br": true
+              },
+              "KCl"
+            ],
+            "align": "center"
+          }
+        ]
+      ],
+      "optionsAxis": "rows",
+      "optionAt": {
+        "A": 1,
+        "B": 2,
+        "C": 3,
+        "D": 4
+      }
+    },
+    "answer": "A",
+    "topics": [
+      "Stoichiometry",
+      "Acids Bases & Salts"
+    ],
+    "lessons": [
+      "Formulae",
+      "Preparing Soluble Salts",
+      "Solubility Rules"
+    ]
+  },
+  {
+    "n": 31,
+    "blocks": [
+      {
+        "id": "bmrf8igzn-u-6zwvr",
+        "block": "question",
+        "content": [
+          "Which statements help explain why an increasing amount of carbon dioxide or methane in the atmosphere causes global warming? "
+        ]
+      }
+    ],
+    "layout": {
+      "type": "combined-choice",
+      "statements": [
+        [
+          "Carbon dioxide absorbs thermal energy from the Earth. "
+        ],
+        [
+          "Methane does ",
+          {
+            "text": "not",
+            "bold": true
+          },
+          " absorb thermal energy from the Sun. "
+        ],
+        [
+          "Carbon dioxide does ",
+          {
+            "text": "not",
+            "bold": true
+          },
+          " reflect thermal energy from the Sun to the Earth. "
+        ],
+        [
+          "Methane reflects thermal energy from the Earth back to the Earth. "
+        ]
+      ],
+      "options": {
+        "A": [
+          1,
+          3
+        ],
+        "B": [
+          1,
+          4
+        ],
+        "C": [
+          2,
+          3
+        ],
+        "D": [
+          2,
+          4
+        ]
+      }
+    },
+    "answer": "B",
+    "topics": [
+      "States of Matter"
+    ],
+    "lessons": [
+      "States of Matter"
+    ]
+  },
+  {
+    "n": 32,
+    "blocks": [
+      {
+        "id": "bmrgks43x-0-tzixf",
+        "block": "intro",
+        "content": [
+          "The exhaust gases from cars contain oxides of nitrogen. "
+        ]
+      },
+      {
+        "id": "bmrf8igzn-v-dkhgp",
+        "block": "question",
+        "content": [
+          "How are these oxides of nitrogen formed? "
+        ]
+      }
+    ],
+    "layout": {
+      "type": "text-vertical",
+      "options": {
+        "A": [
+          "Nitrogen and oxygen from the air react together at the high temperatures in the engine. "
+        ],
+        "B": [
+          "Nitrogen and oxygen from the petrol react together in the car exhaust. "
+        ],
+        "C": [
+          "Nitrogen from the petrol reacts with oxygen at the high temperatures in the engine. "
+        ],
+        "D": [
+          "Nitrogen reacts with oxygen from the air in the catalytic converter. "
+        ]
+      }
+    },
+    "answer": "A",
+    "topics": [
+      "States of Matter"
+    ],
+    "lessons": [
+      "States of Matter"
+    ]
+  },
+  {
+    "n": 33,
+    "blocks": [
+      {
+        "id": "bmrgkv0yh-1-38sgt",
+        "block": "intro",
+        "content": [
+          "The structural formula of methyl ethanoate is CH",
+          {
+            "text": "3",
+            "sub": true
+          },
+          "COOCH",
+          {
+            "text": "3",
+            "sub": true
+          },
+          ". "
+        ]
+      },
+      {
+        "id": "bmrf8igzn-w-uqvwf",
+        "block": "question",
+        "content": [
+          "Which compounds are structural isomers of methyl ethanoate? "
+        ]
+      }
+    ],
+    "layout": {
+      "type": "combined-choice",
+      "statements": [
+        [
+          "HCOOCH",
+          {
+            "text": "2",
+            "sub": true
+          },
+          "CH",
+          {
+            "text": "3",
+            "sub": true
+          }
+        ],
+        [
+          "CH",
+          {
+            "text": "3",
+            "sub": true
+          },
+          "CH",
+          {
+            "text": "2",
+            "sub": true
+          },
+          "COOH"
+        ],
+        [
+          "HOCH",
+          {
+            "text": "2",
+            "sub": true
+          },
+          "CH",
+          {
+            "text": "2",
+            "sub": true
+          },
+          "CH",
+          {
+            "text": "2",
+            "sub": true
+          },
+          "OH"
+        ]
+      ],
+      "options": {
+        "A": [
+          1,
+          2,
+          3
+        ],
+        "B": [
+          1,
+          2
+        ],
+        "C": [
+          2,
+          3
+        ],
+        "D": [
+          3
+        ]
+      },
+      "orientation": "horizontal",
+      "shrinkToFit": true
+    },
+    "answer": "B",
+    "topics": [
+      "States of Matter"
+    ],
+    "lessons": [
+      "States of Matter"
+    ]
+  },
+  {
+    "n": 34,
+    "blocks": [
+      {
+        "id": "bmrf8igzn-x-6a0i0",
+        "block": "question",
+        "content": [
+          "What is the ",
+          {
+            "text": "total",
+            "themeColor": true,
+            "bold": true
+          },
+          " number of covalent bonds in one molecule of propane? "
+        ]
+      }
+    ],
+    "layout": {
+      "type": "text-horizontal",
+      "options": {
+        "A": [
+          "8"
+        ],
+        "B": [
+          "9"
+        ],
+        "C": [
+          "10"
+        ],
+        "D": [
+          "11"
+        ]
+      }
+    },
+    "answer": "C",
+    "topics": [
+      "States of Matter"
+    ],
+    "lessons": [
+      "States of Matter"
+    ]
+  },
+  {
+    "n": 35,
+    "blocks": [
+      {
+        "id": "bmrgkxpsh-2-i1m5i",
+        "block": "intro",
+        "content": [
+          "Industrially, ethanol is produced by fermentation or by the reaction of ethene with steam. "
+        ]
+      },
+      {
+        "id": "bmrf8igzn-y-gjr6h",
+        "block": "question",
+        "content": [
+          "Which row is correct? "
+        ]
+      }
+    ],
+    "layout": {
+      "type": "table",
+      "grid": [
+        [
+          {
+            "content": [
+              "fermentation"
+            ],
+            "header": true,
+            "align": "center"
+          },
+          {
+            "content": [
+              "ethene + steam"
+            ],
+            "header": true,
+            "align": "center"
+          }
+        ],
+        [
+          {
+            "content": [
+              "uses a temperature of 100 °C "
+            ],
+            "align": "center"
+          },
+          {
+            "content": [
+              "uses a temperature of 350 °C"
+            ],
+            "align": "center"
+          }
+        ],
+        [
+          {
+            "content": [
+              "needs the presence of yeast"
+            ],
+            "align": "center"
+          },
+          {
+            "content": [
+              "does ",
+              {
+                "text": "not",
+                "bold": true
+              },
+              " need a catalyst "
+            ],
+            "align": "center"
+          }
+        ],
+        [
+          {
+            "content": [
+              "slow reaction "
+            ],
+            "align": "center"
+          },
+          {
+            "content": [
+              "fast reaction "
+            ],
+            "align": "center"
+          }
+        ],
+        [
+          {
+            "content": [
+              "high yield of ethanol"
+            ],
+            "align": "center"
+          },
+          {
+            "content": [
+              "low yield of ethanol"
+            ],
+            "align": "center"
+          }
+        ]
+      ],
+      "optionsAxis": "rows",
+      "optionAt": {
+        "A": 1,
+        "B": 2,
+        "C": 3,
+        "D": 4
+      }
+    },
+    "answer": "A",
+    "topics": [
+      "States of Matter"
+    ],
+    "lessons": [
+      "States of Matter"
+    ]
+  },
+  {
+    "n": 36,
+    "blocks": [
+      {
+        "id": "bmrgkzbzb-3-leonp",
+        "block": "intro",
+        "content": [
+          "Some properties of an organic compound, J, are listed."
+        ]
+      },
+      {
+        "id": "bmrgkznor-4-o16bz",
+        "block": "introData",
+        "data": {
+          "kind": "list",
+          "ordered": false,
+          "style": "unordered",
+          "items": [
+            [
+              "It is a liquid at room temperature. "
+            ],
+            [
+              "It is soluble in water."
+            ],
+            [
+              "A solution of J reacts with calcium carbonate to form carbon dioxide. "
+            ],
+            [
+              "A solution of J has a pH of 3. "
+            ]
+          ],
+          "markerColor": "#2958c7"
+        }
+      },
+      {
+        "id": "bmrf8igzn-z-87qo2",
+        "block": "question",
+        "content": [
+          "In which homologous series does J belong? "
+        ]
+      }
+    ],
+    "layout": {
+      "type": "text-vertical",
+      "options": {
+        "A": [
+          "alkane "
+        ],
+        "B": [
+          "alkene"
+        ],
+        "C": [
+          "alcohol"
+        ],
+        "D": [
+          "carboxylic acid"
+        ]
+      }
+    },
+    "answer": "D",
+    "topics": [
+      "States of Matter"
+    ],
+    "lessons": [
+      "States of Matter"
+    ]
+  },
+  {
+    "n": 37,
+    "blocks": [
+      {
+        "id": "bmrgl1nn3-5-snik4",
+        "block": "intro",
+        "content": [
+          "The structures of two monomers that are used to make a condensation polymer are shown. "
+        ]
+      },
+      {
+        "id": "bmrf8igzn-10-2lwma",
+        "block": "question",
+        "content": []
+      },
+      {
+        "id": "bmrgl2e18-6-z13jx",
+        "block": "introData",
+        "data": {
+          "kind": "image",
+          "image": {
+            "src": "https://i.postimg.cc/6QF1MSjx/Screenshot-2026-07-11-at-7-37-19-PM.png",
+            "alt": "",
+            "invertOnDark": true
+          },
+          "size": "md"
+        },
+        "span": "half"
+      },
+      {
+        "id": "bmrgl5f6g-9-f0540",
+        "block": "introData",
+        "data": {
+          "kind": "image",
+          "image": {
+            "src": "https://i.postimg.cc/TwWBGGL6/Screenshot-2026-07-11-at-7-36-03-PM.png",
+            "alt": "",
+            "invertOnDark": true
+          },
+          "size": "md"
+        },
+        "span": "half"
+      },
+      {
+        "id": "bmrgl8s1l-a-xksry",
+        "block": "question",
+        "content": [
+          "Which structure represents one repeat unit of the condensation polymer formed? "
+        ]
+      }
+    ],
+    "layout": {
+      "type": "images",
+      "options": {
+        "A": {
+          "src": "https://i.postimg.cc/pd5s5C2f/Screenshot-2026-07-11-at-7-38-16-PM.png",
+          "alt": "A",
+          "invertOnDark": true
+        },
+        "B": {
+          "src": "https://i.postimg.cc/2j72WVf0/Screenshot-2026-07-11-at-7-38-51-PM.png",
+          "alt": "B",
+          "invertOnDark": true
+        },
+        "C": {
+          "src": "https://i.postimg.cc/rFhjh3sh/Screenshot-2026-07-11-at-7-39-06-PM.png",
+          "alt": "C",
+          "invertOnDark": true
+        },
+        "D": {
+          "src": "https://i.postimg.cc/jjfhSjXL/Screenshot-2026-07-11-at-7-39-23-PM.png",
+          "alt": "D",
+          "invertOnDark": true
+        }
+      }
+    },
+    "answer": "B",
+    "topics": [
+      "States of Matter"
+    ],
+    "lessons": [
+      "States of Matter"
+    ]
+  },
+  {
+    "n": 38,
+    "blocks": [
+      {
+        "id": "bmrf8igzn-11-r3gg0",
+        "block": "question",
+        "content": [
+          "Which item of apparatus is used to measure 25.0cm",
+          {
+            "text": "3 ",
+            "sup": true
+          },
+          "of aqueous sodium hydroxide?"
+        ]
+      }
+    ],
+    "layout": {
+      "type": "images",
+      "options": {
+        "A": {
+          "src": "https://i.postimg.cc/PrFbbDV9/Screenshot-2026-07-11-at-7-40-14-PM.png",
+          "alt": "A",
+          "invertOnDark": true
+        },
+        "B": {
+          "src": "https://i.postimg.cc/13kp2QQq/Screenshot-2026-07-11-at-7-40-21-PM.png",
+          "alt": "B",
+          "invertOnDark": true
+        },
+        "C": {
+          "src": "https://i.postimg.cc/Zq6rhMbF/Screenshot-2026-07-11-at-7-40-28-PM.png",
+          "alt": "C",
+          "invertOnDark": true
+        },
+        "D": {
+          "src": "https://i.postimg.cc/4dZp4Qng/Screenshot-2026-07-11-at-7-40-35-PM.png",
+          "alt": "D",
+          "invertOnDark": true
+        }
+      },
+      "orientation": "horizontal"
+    },
+    "answer": "A",
+    "topics": [
+      "States of Matter"
+    ],
+    "lessons": [
+      "States of Matter"
+    ]
+  },
+  {
+    "n": 39,
+    "blocks": [
+      {
+        "id": "bmrf8igzn-12-qo487",
+        "block": "question",
+        "content": [
+          "Which method is used to obtain copper(",
+          {
+            "text": "II",
+            "family": "ui-serif, Georgia, serif"
+          },
+          ") sulfate crystals from an aqueous solution of copper(",
+          {
+            "text": "II",
+            "family": "ui-serif, Georgia, serif"
+          },
+          ") sulfate? "
+        ]
+      }
+    ],
+    "layout": {
+      "type": "text-vertical",
+      "options": {
+        "A": [
+          "chromatography "
+        ],
+        "B": [
+          "condensation"
+        ],
+        "C": [
+          "evaporation"
+        ],
+        "D": [
+          "filtration"
+        ]
+      }
+    },
+    "answer": "C",
+    "topics": [
+      "States of Matter"
+    ],
+    "lessons": [
+      "States of Matter"
+    ]
+  },
+  {
+    "n": 40,
+    "blocks": [
+      {
+        "id": "bmrglfma0-e-r4dez",
+        "block": "intro",
+        "content": [
+          "A mixture of four different colourless amino acids is analysed by paper chromatography. "
+        ]
+      },
+      {
+        "id": "bmrglfrjn-f-rif6f",
+        "block": "intro",
+        "content": [
+          "The final chromatogram is shown. "
+        ]
+      },
+      {
+        "id": "bmrglgcfj-g-k2sfw",
+        "block": "introData",
+        "data": {
+          "kind": "image",
+          "image": {
+            "src": "https://i.postimg.cc/8zSvmbBW/Screenshot-2026-07-11-at-7-43-36-PM.png",
+            "alt": "",
+            "invertOnDark": true
+          },
+          "size": "md"
+        }
+      },
+      {
+        "id": "bmrglfjmv-d-hn8mi",
+        "block": "question",
+        "content": [
+          "Why does the chromatogram only show three spots? "
+        ]
+      }
+    ],
+    "layout": {
+      "type": "text-vertical",
+      "options": {
+        "A": [
+          "A locating agent is ",
+          {
+            "text": "not",
+            "bold": true
+          },
+          " used. "
+        ],
+        "B": [
+          "One of the amino acids is insoluble in the solvent. "
+        ],
+        "C": [
+          "The solvent front is too near the top of the paper."
+        ],
+        "D": [
+          "Two of the amino acids have the same ",
+          {
+            "text": "R",
+            "italic": true
+          },
+          {
+            "text": "f",
+            "sub": true
+          },
+          " value. "
+        ]
+      }
+    },
+    "answer": "D"
   }
 ]
 };

@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-type ChatMessage = { role: "system" | "user" | "assistant"; content: string };
+type ChatMessage = { role: "system" | "user" | "assistant"; content: unknown };
 
 /**
  * Non-streaming completion. Used for the initial "explain this answer"
@@ -11,9 +11,9 @@ export const Route = createFileRoute("/api/ai/complete")({
   server: {
     handlers: {
       POST: async ({ request }) => {
-        const key = process.env.LOVABLE_API_KEY;
+        const key = process.env.GEMINI_API_KEY;
         if (!key) {
-          return new Response("Missing LOVABLE_API_KEY", { status: 500 });
+          return new Response("Missing GEMINI_API_KEY", { status: 500 });
         }
         let body: {
           messages?: ChatMessage[];
@@ -30,8 +30,10 @@ export const Route = createFileRoute("/api/ai/complete")({
           return new Response("messages required", { status: 400 });
         }
 
+        const model = (body.model ?? "gemini-3.5-flash").replace(/^google\//, "");
+
         const upstream = await fetch(
-          "https://ai.gateway.lovable.dev/v1/chat/completions",
+          "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions",
           {
             method: "POST",
             headers: {
@@ -39,11 +41,9 @@ export const Route = createFileRoute("/api/ai/complete")({
               Authorization: `Bearer ${key}`,
             },
             body: JSON.stringify({
-              model: body.model ?? "google/gemini-2.5-flash",
+              model,
               messages,
-              ...(body.json
-                ? { response_format: { type: "json_object" } }
-                : {}),
+              ...(body.json ? { response_format: { type: "json_object" } } : {}),
             }),
           },
         );
@@ -56,8 +56,7 @@ export const Route = createFileRoute("/api/ai/complete")({
         }
         try {
           const parsed = JSON.parse(raw);
-          const content: string =
-            parsed?.choices?.[0]?.message?.content ?? "";
+          const content: string = parsed?.choices?.[0]?.message?.content ?? "";
           return Response.json({ content });
         } catch {
           return new Response("Bad upstream JSON", { status: 502 });
