@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
-import { LuTrophy, LuArrowLeft, LuMedal } from "react-icons/lu";
+import { useEffect, useMemo, useState } from "react";
+import { LuTrophy, LuArrowLeft, LuMedal, LuChevronLeft, LuChevronRight } from "react-icons/lu";
 import { fetchLeaderboard, getLocalUser, type LeaderboardRow } from "@/lib/leaderboard/client";
 
 export const Route = createFileRoute("/leaderboard")({
@@ -87,30 +87,92 @@ function LeaderboardPage() {
       {!error && rows && rows.length >= MIN_PLAYERS && (
         <>
           <Podium rows={rows.slice(0, 3)} meId={meId} />
-          <ol className="mt-8 divide-y divide-border overflow-hidden rounded-xl border border-border bg-card">
-            {rows.slice(3).map((r, i) => (
-              <li
-                key={r.id}
-                className={`flex items-center gap-4 p-4 ${r.id === meId ? "bg-primary/5" : ""}`}
-              >
-                <span className="w-8 shrink-0 text-center text-sm font-semibold tabular-nums text-muted-foreground">
-                  {i + 4}
-                </span>
-                <img
-                  src={r.avatar_url}
-                  alt=""
-                  className="h-10 w-10 rounded-full border border-border bg-background object-cover"
-                />
-                <div className="min-w-0 flex-1">
-                  <div className="truncate text-sm font-medium">@{r.username}</div>
-                </div>
-                <div className="tabular-nums text-sm font-semibold">{r.pencils}</div>
-              </li>
-            ))}
-          </ol>
+          <PaginatedList rows={rows.slice(3)} meId={meId} />
         </>
       )}
     </div>
+  );
+}
+
+const PAGE_SIZE = 20;
+
+function PaginatedList({ rows, meId }: { rows: LeaderboardRow[]; meId: string | null }) {
+  const [page, setPage] = useState(0);
+  const totalPages = Math.max(1, Math.ceil(rows.length / PAGE_SIZE));
+  const clamped = Math.min(page, totalPages - 1);
+
+  const myIndex = useMemo(() => (meId ? rows.findIndex((r) => r.id === meId) : -1), [rows, meId]);
+  const myPage = myIndex >= 0 ? Math.floor(myIndex / PAGE_SIZE) : -1;
+
+  const start = clamped * PAGE_SIZE;
+  const pageRows = rows.slice(start, start + PAGE_SIZE);
+
+  if (rows.length === 0) return null;
+
+  return (
+    <>
+      <ol className="mt-8 divide-y divide-border overflow-hidden rounded-xl border border-border bg-card">
+        {pageRows.map((r, i) => {
+          const rank = start + i + 4; // +4 because podium takes 1-3
+          return (
+            <li
+              key={r.id}
+              className={`flex items-center gap-4 p-4 ${r.id === meId ? "bg-primary/5" : ""}`}
+            >
+              <span className="w-8 shrink-0 text-center text-sm font-semibold tabular-nums text-muted-foreground">
+                {rank}
+              </span>
+              <img
+                src={r.avatar_url}
+                alt=""
+                className="h-10 w-10 rounded-full border border-border bg-background object-cover"
+              />
+              <div className="min-w-0 flex-1">
+                <div className="truncate text-sm font-medium">@{r.username}</div>
+              </div>
+              <div className="tabular-nums text-sm font-semibold">{r.pencils}</div>
+            </li>
+          );
+        })}
+      </ol>
+
+      <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
+        <div className="text-xs text-muted-foreground">
+          Showing <span className="tabular-nums text-foreground">{start + 4}</span>–
+          <span className="tabular-nums text-foreground">{start + pageRows.length + 3}</span> of{" "}
+          <span className="tabular-nums text-foreground">{rows.length + 3}</span>
+        </div>
+        <div className="flex items-center gap-2">
+          {myPage >= 0 && myPage !== clamped && (
+            <button
+              onClick={() => setPage(myPage)}
+              className="cursor-pointer rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-medium text-muted-foreground hover:bg-accent hover:text-foreground"
+            >
+              Jump to me
+            </button>
+          )}
+          <button
+            onClick={() => setPage((p) => Math.max(0, p - 1))}
+            disabled={clamped === 0}
+            aria-label="Previous page"
+            className="grid h-8 w-8 cursor-pointer place-items-center rounded-lg border border-border bg-card text-muted-foreground hover:bg-accent hover:text-foreground disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            <LuChevronLeft size={14} />
+          </button>
+          <span className="text-xs tabular-nums text-muted-foreground">
+            Page {clamped + 1} / {totalPages}
+          </span>
+          <button
+            onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
+            disabled={clamped >= totalPages - 1}
+            aria-label="Next page"
+            className="grid h-8 w-8 cursor-pointer place-items-center rounded-lg border border-border bg-card text-muted-foreground hover:bg-accent hover:text-foreground disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            <LuChevronRight size={14} />
+          </button>
+        </div>
+      </div>
+    </>
   );
 }
 

@@ -10,20 +10,23 @@ import {
   LuChevronUp,
   LuLogOut,
   LuArrowRight,
+  LuPencil,
 } from "react-icons/lu";
 import { getStats, subscribeStats } from "@/lib/mcq/stats";
 import { Collapse } from "@/components/Collapse";
 import { ConfirmModal } from "@/components/ConfirmModal";
+
 import {
   checkUsernameAvailable,
+  fetchLeaderboard,
   getLocalUser,
-  isLocked,
   joinLeaderboard,
   leaveLeaderboard,
-  lockDevice,
   normalizeUsername,
   setLocalUser,
+  updateAvatarUrl,
   updatePencils,
+  type LeaderboardRow,
   type LocalUser,
 } from "@/lib/leaderboard/client";
 
@@ -141,13 +144,12 @@ export function LeaderboardSection() {
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [me, setMe] = useState<LocalUser | null>(null);
-  const [locked, setLocked] = useState(false);
   const [confirmLeave, setConfirmLeave] = useState(false);
+  const [rows, setRows] = useState<LeaderboardRow[] | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     setMe(getLocalUser());
-    setLocked(isLocked());
   }, []);
 
   // Keep server pencils in sync with local stats.
@@ -212,14 +214,30 @@ export function LeaderboardSection() {
     try {
       await leaveLeaderboard(me.id);
     } catch {
-      // swallow — proceed to lock locally regardless
+      // swallow — proceed to clear locally regardless
     }
     setLocalUser(null);
-    lockDevice();
     setMe(null);
-    setLocked(true);
+    setRows(null);
     setConfirmLeave(false);
   };
+
+  // Fetch mini leaderboard when user is joined.
+  useEffect(() => {
+    if (!me) return;
+    let alive = true;
+    const load = () => {
+      fetchLeaderboard()
+        .then((r) => alive && setRows(r))
+        .catch(() => {});
+    };
+    load();
+    const t = setInterval(load, 30000);
+    return () => {
+      alive = false;
+      clearInterval(t);
+    };
+  }, [me]);
 
   return (
     <section id="leaderboard" className="mt-16 animate-fade-up scroll-mt-24">
@@ -241,37 +259,60 @@ export function LeaderboardSection() {
       <Collapse open={!collapsed}>
         <div className="mt-6 rounded-2xl border border-border bg-card p-6 sm:p-8">
           {me ? (
-            <div className="flex flex-col items-center gap-4 text-center sm:flex-row sm:text-left">
-              <img
-                src={me.avatar_url}
-                alt=""
-                className="h-20 w-20 rounded-full border border-border bg-background object-cover"
-              />
-              <div className="flex-1">
-                <div className="text-lg font-semibold tracking-tight">@{me.username}</div>
-                <div className="text-sm text-muted-foreground">
-                  <span className="tabular-nums text-foreground">{pencils}</span> pencils
-                </div>
-              </div>
-              <div className="flex flex-wrap items-center justify-center gap-2">
-                <Link
-                  to="/leaderboard"
-                  className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:opacity-90"
-                >
-                  View leaderboard <LuArrowRight size={14} />
-                </Link>
+            <div className="space-y-6">
+              <div className="flex flex-col items-center gap-4 text-center sm:flex-row sm:text-left">
                 <button
                   type="button"
-                  onClick={() => setConfirmLeave(true)}
-                  className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-border bg-background px-4 py-2 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-foreground"
+                  onClick={() => {
+                    // seed customizer draft from current URL isn't trivial; just open with current cfg
+                    setCustomizerOpen(true);
+                  }}
+                  aria-label="Change avatar"
+                  className="group relative shrink-0 cursor-pointer"
                 >
-                  <LuLogOut size={14} /> Leave
+                  <img
+                    src={me.avatar_url}
+                    alt=""
+                    className="h-20 w-20 rounded-full border border-border bg-background object-cover transition-transform group-hover:scale-105"
+                  />
+                  <span className="absolute -bottom-1 -right-1 grid h-7 w-7 place-items-center rounded-full border border-border bg-card text-muted-foreground shadow-sm group-hover:text-foreground">
+                    <LuPencil size={12} />
+                  </span>
                 </button>
+                <div className="flex-1">
+                  <div className="text-lg font-semibold tracking-tight">@{me.username}</div>
+                  <div className="text-sm text-muted-foreground">
+                    <span className="tabular-nums text-foreground">{pencils}</span> pencils
+                    {rows &&
+                      (() => {
+                        const idx = rows.findIndex((r) => r.id === me.id);
+                        return idx >= 0 ? (
+                          <span className="ml-2">
+                            · Rank <span className="tabular-nums text-foreground">#{idx + 1}</span>{" "}
+                            of {rows.length}
+                          </span>
+                        ) : null;
+                      })()}
+                  </div>
+                </div>
+                <div className="flex flex-wrap items-center justify-center gap-2">
+                  <Link
+                    to="/leaderboard"
+                    className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:opacity-90"
+                  >
+                    View leaderboard <LuArrowRight size={14} />
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={() => setConfirmLeave(true)}
+                    className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-border bg-background px-4 py-2 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-foreground"
+                  >
+                    <LuLogOut size={14} /> Leave
+                  </button>
+                </div>
               </div>
-            </div>
-          ) : locked ? (
-            <div className="text-center text-sm text-muted-foreground">
-              You have left the leaderboard on this device.
+
+              <MiniLeaderboard rows={rows} meId={me.id} />
             </div>
           ) : (
             <div className="flex flex-col items-center gap-6 text-center">
@@ -332,7 +373,20 @@ export function LeaderboardSection() {
       {customizerOpen && (
         <AvatarCustomizer
           value={avatar}
-          onChange={setAvatar}
+          onChange={(next) => {
+            setAvatar(next);
+            if (me) {
+              const url = buildAvatarUrl(next);
+              const updated = { ...me, avatar_url: url };
+              setLocalUser(updated);
+              setMe(updated);
+              updateAvatarUrl(me.id, url).catch(() => {});
+              // refresh mini leaderboard optimistically
+              setRows((r) =>
+                r ? r.map((row) => (row.id === me.id ? { ...row, avatar_url: url } : row)) : r,
+              );
+            }
+          }}
           onClose={() => setCustomizerOpen(false)}
         />
       )}
@@ -340,7 +394,7 @@ export function LeaderboardSection() {
       <ConfirmModal
         open={confirmLeave}
         title="Leave the leaderboard?"
-        description="Your entry will be deleted and you won't be able to rejoin from this device."
+        description="Your entry will be deleted. You can rejoin anytime with a new name."
         confirmLabel="Leave"
         danger
         requireType="leave"
@@ -348,6 +402,74 @@ export function LeaderboardSection() {
         onConfirm={onLeave}
       />
     </section>
+  );
+}
+
+function MiniLeaderboard({ rows, meId }: { rows: LeaderboardRow[] | null; meId: string }) {
+  if (!rows) {
+    return (
+      <div className="rounded-xl border border-border bg-background p-4 text-center text-xs text-muted-foreground">
+        Loading top players…
+      </div>
+    );
+  }
+  if (rows.length === 0) {
+    return (
+      <div className="rounded-xl border border-border bg-background p-4 text-center text-xs text-muted-foreground">
+        No players yet.
+      </div>
+    );
+  }
+  const top = rows.slice(0, 5);
+  const meIdx = rows.findIndex((r) => r.id === meId);
+  const meIncluded = meIdx >= 0 && meIdx < top.length;
+
+  return (
+    <div className="overflow-hidden rounded-xl border border-border bg-background">
+      <div className="flex items-center justify-between border-b border-border px-4 py-2">
+        <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+          Top players
+        </div>
+        <Link to="/leaderboard" className="text-xs font-medium text-primary hover:underline">
+          See all
+        </Link>
+      </div>
+      <ol className="divide-y divide-border">
+        {top.map((r, i) => (
+          <MiniRow key={r.id} row={r} rank={i + 1} isMe={r.id === meId} />
+        ))}
+        {!meIncluded && meIdx >= 0 && (
+          <>
+            <li className="px-4 py-1 text-center text-xs text-muted-foreground">…</li>
+            <MiniRow row={rows[meIdx]} rank={meIdx + 1} isMe />
+          </>
+        )}
+      </ol>
+    </div>
+  );
+}
+
+function MiniRow({ row, rank, isMe }: { row: LeaderboardRow; rank: number; isMe: boolean }) {
+  return (
+    <li className={`flex items-center gap-3 px-4 py-2.5 ${isMe ? "bg-primary/5" : ""}`}>
+      <span className="w-6 shrink-0 text-center text-xs font-semibold tabular-nums text-muted-foreground">
+        {rank}
+      </span>
+      <img
+        src={row.avatar_url}
+        alt=""
+        className="h-8 w-8 rounded-full border border-border bg-background object-cover"
+      />
+      <div className="min-w-0 flex-1 truncate text-sm font-medium">
+        @{row.username}
+        {isMe && (
+          <span className="ml-2 rounded-full bg-primary/15 px-1.5 py-0.5 text-[10px] font-semibold text-primary">
+            You
+          </span>
+        )}
+      </div>
+      <div className="tabular-nums text-sm font-semibold">{row.pencils}</div>
+    </li>
   );
 }
 

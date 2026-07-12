@@ -84,6 +84,14 @@ export async function updatePencils(id: string, pencils: number) {
   if (error) throw error;
 }
 
+export async function updateAvatarUrl(id: string, avatar_url: string) {
+  const { error } = await leaderboardSupabase
+    .from("leaderboard")
+    .update({ avatar_url })
+    .eq("id", id);
+  if (error) throw error;
+}
+
 export async function leaveLeaderboard(id: string) {
   const { error } = await leaderboardSupabase.from("leaderboard").delete().eq("id", id);
   if (error) throw error;

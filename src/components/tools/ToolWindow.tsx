@@ -62,6 +62,7 @@ export function ToolWindow({
         minHeight={effectiveMinHeight}
         bounds="parent"
         dragHandleClassName="tool-drag-handle"
+        cancel=".tool-window-controls,.tool-window-controls *"
         enableResizing={enableResizing}
         style={{ pointerEvents: "auto" }}
       >
@@ -72,20 +73,28 @@ export function ToolWindow({
               <span className="text-primary">{icon}</span>
               <span className="truncate">{title}</span>
             </div>
-            <div className="flex items-center gap-1">
+            <div className="tool-window-controls flex items-center gap-1">
               <button
+                type="button"
+                onPointerDown={(e) => e.stopPropagation()}
+                onMouseDown={(e) => e.stopPropagation()}
+                onTouchStart={(e) => e.stopPropagation()}
                 onClick={onMinimize}
-                className="grid h-7 w-7 cursor-pointer place-items-center rounded-md text-muted-foreground hover:bg-accent hover:text-foreground"
+                className="grid h-9 w-9 cursor-pointer place-items-center rounded-md text-muted-foreground hover:bg-accent hover:text-foreground sm:h-7 sm:w-7"
                 aria-label="Minimize"
               >
-                <LuMinus size={14} />
+                <LuMinus size={16} />
               </button>
               <button
+                type="button"
+                onPointerDown={(e) => e.stopPropagation()}
+                onMouseDown={(e) => e.stopPropagation()}
+                onTouchStart={(e) => e.stopPropagation()}
                 onClick={onClose}
-                className="grid h-7 w-7 cursor-pointer place-items-center rounded-md text-muted-foreground hover:bg-destructive hover:text-destructive-foreground"
+                className="grid h-9 w-9 cursor-pointer place-items-center rounded-md text-muted-foreground hover:bg-destructive hover:text-destructive-foreground sm:h-7 sm:w-7"
                 aria-label="Close"
               >
-                <LuX size={14} />
+                <LuX size={16} />
               </button>
             </div>
           </div>

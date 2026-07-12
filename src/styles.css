@@ -542,3 +542,50 @@ html.igv-reduced-motion *::after {
   border-radius: 999px;
   border: 0;
 }
+/* --------- Mobile perf: cut animations & heavy effects on small screens --------- */
+@media (max-width: 767px) {
+  /* Kill decorative animations that were causing sluggish taps */
+  .mcq-pop,
+  .mcq-pop-strong,
+  .mcq-shake,
+  .mcq-glow {
+    animation: none !important;
+  }
+  /* Speed up entrance animations so cards don't feel delayed */
+  .animate-fade-in,
+  .animate-fade-up,
+  .animate-scale-in,
+  .animate-slide-down {
+    animation-duration: 0.18s !important;
+  }
+  /* Disable hover-scale that gets stuck as sticky :hover on touch */
+  .hover\:scale-105:hover,
+  .hover\:scale-\[1\.02\]:hover,
+  .hover\:scale-\[1\.03\]:hover,
+  .hover\:scale-\[1\.18\]:hover,
+  .hover-scale:hover {
+    transform: none !important;
+  }
+  /* Palette transition covers every element — skip on mobile */
+  html.palette-transition,
+  html.palette-transition *,
+  html.palette-transition *::before,
+  html.palette-transition *::after {
+    transition: none !important;
+  }
+  /* Backdrop blur is expensive on mobile GPUs */
+  .backdrop-blur-md,
+  .backdrop-blur-sm,
+  .backdrop-blur-xl,
+  .backdrop-blur {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+}
+/* Give tap targets in the MCQ options snappier response */
+@media (hover: none) and (pointer: coarse) {
+  button,
+  [role="button"] {
+    touch-action: manipulation;
+  }
+}
