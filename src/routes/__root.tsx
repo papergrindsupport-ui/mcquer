@@ -9,7 +9,7 @@ import {
 } from "@tanstack/react-router";
 import { CrispChat } from "@/components/CrispChat";
 import { Analytics } from "@vercel/analytics/react";
-import { lazy, Suspense, useEffect, type ReactNode } from "react";
+import { useEffect, type ReactNode } from "react";
 import { Toaster } from "react-hot-toast";
 
 import appCss from "../styles.css?url";
@@ -21,10 +21,6 @@ import { SettingsProvider } from "../lib/settings";
 import { VoltoProvider } from "../lib/volto/context";
 import { SearchProvider } from "../lib/search/context";
 import { MouseParticlesClient } from "@/components/ClientOnlyMP";
-
-const LeaderboardJoinPrompt = lazy(() =>
-  import("../components/Leaderboard").then((m) => ({ default: m.LeaderboardJoinPrompt })),
-);
 
 function NotFoundComponent() {
   return (
@@ -229,9 +225,7 @@ function RootComponent() {
                   <CrispChat />
                   <MouseParticlesClient />
                 </div>
-                <Suspense fallback={null}>
-                  <LeaderboardJoinPrompt />
-                </Suspense>
+
                 <ThemedToaster />
               </SearchProvider>
             </VoltoProvider>
