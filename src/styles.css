@@ -686,3 +686,23 @@ html body .cc-165wh .cc-lk42u .cc-13wro .cc-1gfkz .cc-2gk6o[data-id="chat_opened
 .cc-165wh .cc-lk42u .cc-13wro .cc-1gfkz .cc-2gk6o[data-id="chat_closed"] {
   background-color: var(--primary) !important;
 }
+html .cc-165wh.cc-165wh .cc-lk42u .cc-13wro .cc-1gfkz .cc-2gk6o[data-id="chat_opened"],
+html .cc-165wh.cc-165wh .cc-lk42u .cc-13wro .cc-1gfkz .cc-2gk6o[data-id="chat_closed"] {
+  background-color: var(--primary) !important;
+}
+html span.cc-2gk6o {
+  background-color: var(--primary) !important;
+}
+.cc-165wh[data-website-logo="false"][data-last-operator-face="false"][data-ongoing-operator-face="false"][data-full-view="false"].cc-165wh[data-website-logo="false"][data-last-operator-face="false"][data-ongoing-operator-face="false"][data-full-view="false"]
+  .cc-lk42u
+  .cc-13wro
+  .cc-1gfkz
+  .cc-2gk6o[data-id="chat_opened"]:hover,
+.cc-165wh[data-website-logo="false"][data-last-operator-face="false"][data-ongoing-operator-face="false"][data-full-view="false"].cc-165wh[data-website-logo="false"][data-last-operator-face="false"][data-ongoing-operator-face="false"][data-full-view="false"]
+  .cc-lk42u
+  .cc-13wro
+  .cc-1gfkz
+  .cc-2gk6o[data-id="chat_closed"]:hover {
+  background-color: var(--primary) !important;
+  opacity: 0.8;
+}
