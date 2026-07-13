@@ -149,7 +149,7 @@ function Landing() {
       {/* Hero */}
       <section className="pt-16 pb-12 sm:pt-24 sm:pb-20">
         <div className="mx-auto max-w-3xl text-center">
-          <div className="mb-5 inline-flex animate-fade-in items-center gap-2 rounded-full border border-border bg-surface px-3 py-1 text-xs text-muted-foreground">
+          <div className=" mb-5 inline-flex animate-fade-in items-center gap-2 rounded-full border border-border bg-surface px-3 py-1 text-xs text-muted-foreground ">
             <span className="h-1.5 w-1.5 rounded-full bg-primary" />
             IGCSE Paper 2 — Multiple Choice
           </div>

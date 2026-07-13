@@ -13,10 +13,10 @@ export const PALETTES: {
   l: number;
 }[] = [
   { id: "blue", name: "Blue", h: 220, s: 90, l: 58 },
-  { id: "emerald", name: "Emerald", h: 158, s: 64, l: 45 },
+  { id: "emerald", name: "Emerald", h: 136, s: 35, l: 55 },
   { id: "amber", name: "Amber", h: 38, s: 92, l: 55 },
   { id: "rose", name: "Rose", h: 350, s: 78, l: 58 },
-  { id: "violet", name: "Violet", h: 262, s: 72, l: 62 },
+  { id: "violet", name: "Violet", h: 269, s: 42, l: 55 },
 ];
 
 const DEFAULT_CUSTOM: HSL = { h: 200, s: 80, l: 55 };
