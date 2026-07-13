@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { usePersistedState } from "@/hooks/use-persisted-state";
-import { ShootingStars } from "@/components/ui/shooting-stars";
+import { lazy, Suspense } from "react";
 
 import {
   LuLeaf,
@@ -37,15 +37,28 @@ import {
   getSubject,
 } from "@/lib/papers-data";
 import { CustomSelect } from "@/components/CustomSelect";
-import { Dashboard } from "@/components/Dashboard";
-import { PlannerSection } from "@/components/Planner";
 import { ConfirmModal } from "@/components/ConfirmModal";
 import { Collapse } from "@/components/Collapse";
-import { TopicalsSelector } from "@/components/TopicalsSelector";
 import { encodeTopicSelection } from "@/lib/mcq/allQuestions";
-import { LeaderboardSection } from "@/components/Leaderboard";
-import { StarsBackground } from "@/components/ui/stars-background";
 
+const Dashboard = lazy(() =>
+  import("@/components/Dashboard").then((m) => ({ default: m.Dashboard })),
+);
+const PlannerSection = lazy(() =>
+  import("@/components/Planner").then((m) => ({ default: m.PlannerSection })),
+);
+const LeaderboardSection = lazy(() =>
+  import("@/components/Leaderboard").then((m) => ({ default: m.LeaderboardSection })),
+);
+const TopicalsSelector = lazy(() =>
+  import("@/components/TopicalsSelector").then((m) => ({ default: m.TopicalsSelector })),
+);
+const StarsBackground = lazy(() =>
+  import("@/components/ui/stars-background").then((m) => ({ default: m.StarsBackground })),
+);
+const ShootingStars = lazy(() =>
+  import("@/components/ui/shooting-stars").then((m) => ({ default: m.ShootingStars })),
+);
 export const Route = createFileRoute("/")({
   component: Landing,
 });
@@ -126,6 +139,17 @@ function Landing() {
   };
 
   const canStart = subject && year && session && variant;
+  // Defer non-critical decorative backgrounds until after the first paint
+  // so they don't compete with LCP/FCP.
+  const [decorReady, setDecorReady] = useState(false);
+  useEffect(() => {
+    const w = window as Window & { requestIdleCallback?: (cb: () => void) => number };
+    const schedule = w.requestIdleCallback ?? ((cb: () => void) => setTimeout(cb, 300));
+    const id = schedule(() => setDecorReady(true));
+    return () => {
+      if (typeof id === "number") clearTimeout(id);
+    };
+  }, []);
 
   const start = () => {
     if (!canStart) return;
@@ -143,9 +167,12 @@ function Landing() {
 
   return (
     <div className="mx-auto max-w-6xl px-4 sm:px-6">
-      <StarsBackground className="pointer-events-none" />
-      <ShootingStars className="pointer-events-none" />
-
+      {decorReady && (
+        <Suspense fallback={null}>
+          <StarsBackground className="pointer-events-none" />
+          <ShootingStars className="pointer-events-none" />
+        </Suspense>
+      )}
       {/* Hero */}
       <section className="pt-16 pb-12 sm:pt-24 sm:pb-20">
         <div className="mx-auto max-w-3xl text-center">
@@ -330,15 +357,19 @@ function Landing() {
         <section id="topicals-section" className="mt-8 animate-fade-up scroll-mt-24 pb-8">
           <SectionHeader index={subject ? "03" : "02"} title="Topicals" />
           <div className="mt-8">
-            <TopicalsSelector />
+            <Suspense fallback={null}>
+              <TopicalsSelector />
+            </Suspense>{" "}
           </div>
         </section>
       )}
 
       <RecentPapersSection />
-      <DashboardGate />
-      <PlannerGate />
-      <LeaderboardSection />
+      <Suspense fallback={null}>
+        <DashboardGate />
+        <PlannerGate />
+        <LeaderboardSection />
+      </Suspense>
       <div className="pb-24" />
     </div>
   );

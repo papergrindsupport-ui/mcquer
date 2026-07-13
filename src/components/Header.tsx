@@ -236,7 +236,34 @@ export function Footer() {
   return (
     <footer className="border-t border-border py-8 text-center text-xs text-muted-foreground">
       <div className="mx-auto max-w-6xl px-4">
-        MCQuer — digitalized auto-marked IGCSE Paper 2 past papers
+        {/* Mobile */}
+        <div className="flex flex-col items-center gap-1 sm:hidden">
+          <div>
+            <span className="font-medium text-foreground">MCQuer</span>
+            <span className="mx-2">•</span>
+            <span>by Salah</span>
+          </div>
+          <a
+            href="mailto:mcquer.support@gmail.com"
+            className="transition-colors hover:text-foreground"
+          >
+            mcquer.support@gmail.com
+          </a>
+        </div>
+
+        {/* Desktop */}
+        <div className="hidden sm:block">
+          <span className="font-medium text-foreground">MCQuer</span>
+          <span className="mx-2">•</span>
+          <span>by Salah</span>
+          <span className="mx-2">•</span>
+          <a
+            href="mailto:mcquer.support@gmail.com"
+            className="transition-colors hover:text-foreground"
+          >
+            mcquer.support@gmail.com
+          </a>
+        </div>
       </div>
     </footer>
   );

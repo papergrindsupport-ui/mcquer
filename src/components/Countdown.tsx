@@ -18,6 +18,19 @@ import { usePersistedState } from "@/hooks/use-persisted-state";
 import type { SubjectId } from "@/lib/papers-data";
 import type { HSL } from "@/lib/theme";
 
+// Lazy-load the extra Google Fonts only when a countdown is actually rendered
+// (they're not needed for initial page paint).
+let extraFontsLoaded = false;
+function ensureCountdownFonts() {
+  if (extraFontsLoaded || typeof document === "undefined") return;
+  extraFontsLoaded = true;
+  const link = document.createElement("link");
+  link.rel = "stylesheet";
+  link.href =
+    "https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Inter:wght@400;600&family=DM+Serif+Display&family=Playfair+Display:wght@400;700&family=JetBrains+Mono:wght@400;600&family=Bebas+Neue&display=swap";
+  document.head.appendChild(link);
+}
+
 /* -------------------- Session data -------------------- */
 
 export type ExamSessionId = "on26" | "fm27" | "mj27" | "on27";
@@ -116,11 +129,13 @@ const SUBJECT_NAMES: Record<SubjectId, string> = {
 /* -------------------- Root -------------------- */
 
 export function CountdownTab() {
+  useEffect(() => {
+    ensureCountdownFonts();
+  }, []);
   const [subject, setSubject] = usePersistedState<SubjectId>(
     "igv-countdown-subject",
     "biology",
-    (v): v is SubjectId =>
-      v === "biology" || v === "chemistry" || v === "physics",
+    (v): v is SubjectId => v === "biology" || v === "chemistry" || v === "physics",
   );
 
   return (
@@ -163,8 +178,7 @@ function SubjectCountdown({ subject }: { subject: SubjectId }) {
   const [settings, setSettings] = usePersistedState<CountdownSettings>(
     settingsKey,
     DEFAULT_SETTINGS(),
-    (v): v is CountdownSettings =>
-      !!v && typeof v === "object" && "sessionId" in (v as object),
+    (v): v is CountdownSettings => !!v && typeof v === "object" && "sessionId" in (v as object),
   );
   const [prompted, setPrompted] = usePersistedState<boolean>(
     promptKey,
@@ -579,14 +593,21 @@ function CountdownSettingsModal({
 
         <div className="max-h-[70vh] overflow-y-auto">
           {/* Session */}
-          <Section title="Exam session" isOpen={open === "session"} onToggle={() => setOpen(open === "session" ? null : "session")}>
+          <Section
+            title="Exam session"
+            isOpen={open === "session"}
+            onToggle={() => setOpen(open === "session" ? null : "session")}
+          >
             <div className="relative">
               <button
                 onClick={() => setSessOpen((v) => !v)}
                 className="flex w-full cursor-pointer items-center justify-between rounded-lg border border-border bg-background px-3 py-2 text-sm"
               >
                 <span>{current.label}</span>
-                <LuChevronDown size={14} className={`transition-transform ${sessOpen ? "rotate-180" : ""}`} />
+                <LuChevronDown
+                  size={14}
+                  className={`transition-transform ${sessOpen ? "rotate-180" : ""}`}
+                />
               </button>
               <Collapse open={sessOpen}>
                 <div className="mt-1 space-y-1 rounded-lg border border-border bg-background p-1">
@@ -600,7 +621,9 @@ function CountdownSettingsModal({
                           setSessOpen(false);
                         }}
                         className={`flex w-full cursor-pointer items-center justify-between rounded-md px-3 py-2 text-left text-sm transition-colors ${
-                          active ? "bg-primary/10 text-foreground" : "text-muted-foreground hover:bg-accent"
+                          active
+                            ? "bg-primary/10 text-foreground"
+                            : "text-muted-foreground hover:bg-accent"
                         }`}
                       >
                         <span>{s.label}</span>
@@ -614,7 +637,11 @@ function CountdownSettingsModal({
           </Section>
 
           {/* Format */}
-          <Section title="Format" isOpen={open === "format"} onToggle={() => setOpen(open === "format" ? null : "format")}>
+          <Section
+            title="Format"
+            isOpen={open === "format"}
+            onToggle={() => setOpen(open === "format" ? null : "format")}
+          >
             <div className="grid grid-cols-2 gap-2">
               {(["days", "hours", "minutes", "seconds"] as (keyof Format)[]).map((k) => {
                 const on = settings.format[k];
@@ -630,7 +657,9 @@ function CountdownSettingsModal({
                   >
                     <span
                       className={`grid h-4 w-4 place-items-center rounded border ${
-                        on ? "border-primary bg-primary text-primary-foreground" : "border-border bg-surface"
+                        on
+                          ? "border-primary bg-primary text-primary-foreground"
+                          : "border-border bg-surface"
                       }`}
                     >
                       {on && <LuCheck size={11} />}
@@ -657,14 +686,21 @@ function CountdownSettingsModal({
               >
                 {settings.showColons && <LuCheck size={11} />}
               </span>
-              <span onClick={() => update("showColons", !settings.showColons)} className="font-medium">
+              <span
+                onClick={() => update("showColons", !settings.showColons)}
+                className="font-medium"
+              >
                 Show <span className="opacity-60">":"</span> between units
               </span>
             </label>
           </Section>
 
           {/* Background */}
-          <Section title="Background color" isOpen={open === "bg"} onToggle={() => setOpen(open === "bg" ? null : "bg")}>
+          <Section
+            title="Background color"
+            isOpen={open === "bg"}
+            onToggle={() => setOpen(open === "bg" ? null : "bg")}
+          >
             <ColorSwatches
               value={settings.bg}
               presets={PRESET_BG}
@@ -675,7 +711,11 @@ function CountdownSettingsModal({
           </Section>
 
           {/* Font color */}
-          <Section title="Font color" isOpen={open === "fg"} onToggle={() => setOpen(open === "fg" ? null : "fg")}>
+          <Section
+            title="Font color"
+            isOpen={open === "fg"}
+            onToggle={() => setOpen(open === "fg" ? null : "fg")}
+          >
             <ColorSwatches
               value={settings.fg}
               presets={PRESET_FG}
@@ -686,7 +726,11 @@ function CountdownSettingsModal({
           </Section>
 
           {/* Font */}
-          <Section title="Typography" isOpen={open === "font"} onToggle={() => setOpen(open === "font" ? null : "font")}>
+          <Section
+            title="Typography"
+            isOpen={open === "font"}
+            onToggle={() => setOpen(open === "font" ? null : "font")}
+          >
             <div>
               <div className="mb-1.5 text-xs font-medium text-muted-foreground">Font size</div>
               <CustomSlider
@@ -714,10 +758,7 @@ function CountdownSettingsModal({
                           : "border-border bg-background text-muted-foreground hover:bg-accent"
                       }`}
                       style={{
-                        fontFamily:
-                          f === "System"
-                            ? "system-ui, sans-serif"
-                            : `"${f}", sans-serif`,
+                        fontFamily: f === "System" ? "system-ui, sans-serif" : `"${f}", sans-serif`,
                       }}
                     >
                       {f}
@@ -826,7 +867,9 @@ function ColorSwatches({
         <button
           onClick={onToggleWheel}
           className={`h-8 rounded-md border px-3 text-xs font-medium transition-colors ${
-            showWheel ? "border-primary bg-primary/10 text-foreground" : "border-border bg-background text-muted-foreground hover:bg-accent"
+            showWheel
+              ? "border-primary bg-primary/10 text-foreground"
+              : "border-border bg-background text-muted-foreground hover:bg-accent"
           }`}
         >
           Custom
@@ -848,16 +891,24 @@ function hexToHSL(hex: string): HSL | null {
   const r = ((int >> 16) & 255) / 255;
   const g = ((int >> 8) & 255) / 255;
   const b = (int & 255) / 255;
-  const max = Math.max(r, g, b), min = Math.min(r, g, b);
-  let h = 0, s = 0;
+  const max = Math.max(r, g, b),
+    min = Math.min(r, g, b);
+  let h = 0,
+    s = 0;
   const l = (max + min) / 2;
   if (max !== min) {
     const d = max - min;
     s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
     switch (max) {
-      case r: h = ((g - b) / d + (g < b ? 6 : 0)); break;
-      case g: h = ((b - r) / d + 2); break;
-      case b: h = ((r - g) / d + 4); break;
+      case r:
+        h = (g - b) / d + (g < b ? 6 : 0);
+        break;
+      case g:
+        h = (b - r) / d + 2;
+        break;
+      case b:
+        h = (r - g) / d + 4;
+        break;
     }
     h *= 60;
   }
@@ -865,12 +916,15 @@ function hexToHSL(hex: string): HSL | null {
 }
 
 function hslToHex({ h, s, l }: HSL): string {
-  const sN = s / 100, lN = l / 100;
+  const sN = s / 100,
+    lN = l / 100;
   const k = (n: number) => (n + h / 30) % 12;
   const a = sN * Math.min(lN, 1 - lN);
   const f = (n: number) => {
     const c = lN - a * Math.max(-1, Math.min(k(n) - 3, 9 - k(n), 1));
-    return Math.round(255 * c).toString(16).padStart(2, "0");
+    return Math.round(255 * c)
+      .toString(16)
+      .padStart(2, "0");
   };
   return `#${f(0)}${f(8)}${f(4)}`;
 }

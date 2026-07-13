@@ -706,3 +706,7 @@ html span.cc-2gk6o {
   background-color: var(--primary) !important;
   opacity: 0.8;
 }
+
+*:focus {
+  outline: none !important;
+}

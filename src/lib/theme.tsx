@@ -49,27 +49,37 @@ function applyPalette(id: PaletteId, custom: HSL) {
   applyHSL(p.h, p.s, p.l);
 }
 
+function readInitial(): { mode: Mode; palette: PaletteId; custom: HSL } {
+  if (typeof window === "undefined") {
+    return { mode: "dark", palette: "rose", custom: DEFAULT_CUSTOM };
+  }
+  const mode = (localStorage.getItem("igv-mode") as Mode | null) ?? "dark";
+  const palette = (localStorage.getItem("igv-palette") as PaletteId | null) ?? "rose";
+  let custom = DEFAULT_CUSTOM;
+  const raw = localStorage.getItem("igv-custom");
+  if (raw) {
+    try {
+      const parsed = JSON.parse(raw);
+      if (typeof parsed?.h === "number") custom = parsed;
+    } catch {}
+  }
+  return { mode, palette, custom };
+}
+
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [mode, setModeState] = useState<Mode>("dark");
   const [palette, setPaletteState] = useState<PaletteId>("rose");
   const [customColor, setCustomColorState] = useState<HSL>(DEFAULT_CUSTOM);
 
   useEffect(() => {
-    const storedMode = (localStorage.getItem("igv-mode") as Mode | null) ?? "dark";
-    const storedPalette = (localStorage.getItem("igv-palette") as PaletteId | null) ?? "rose";
-    const storedCustomRaw = localStorage.getItem("igv-custom");
-    let storedCustom = DEFAULT_CUSTOM;
-    if (storedCustomRaw) {
-      try {
-        const parsed = JSON.parse(storedCustomRaw);
-        if (typeof parsed?.h === "number") storedCustom = parsed;
-      } catch {}
-    }
-    setModeState(storedMode);
-    setPaletteState(storedPalette);
-    setCustomColorState(storedCustom);
-    document.documentElement.classList.toggle("dark", storedMode === "dark");
-    applyPalette(storedPalette, storedCustom);
+    const { mode: m, palette: p, custom: c } = readInitial();
+    setModeState(m);
+    setPaletteState(p);
+    setCustomColorState(c);
+    // The inline head script has already applied these to <html> before paint;
+    // re-apply here defensively in case storage changed since script ran.
+    document.documentElement.classList.toggle("dark", m === "dark");
+    applyPalette(p, c);
   }, []);
 
   const applyMode = (m: Mode) => {

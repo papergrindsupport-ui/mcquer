@@ -109,7 +109,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Sora:wght@100..800&family=Fredoka:wght@300..700&family=Inter:wght@300..800&family=DM+Serif+Display&family=Playfair+Display:wght@400..900&family=JetBrains+Mono:wght@300..800&family=Bebas+Neue&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&display=swap",
       },
     ],
   }),
@@ -118,14 +118,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   notFoundComponent: NotFoundComponent,
   errorComponent: ErrorComponent,
 });
-
+const themeInitScript = `(function(){try{var m=localStorage.getItem('igv-mode')||'dark';var p=localStorage.getItem('igv-palette')||'rose';var cRaw=localStorage.getItem('igv-custom');var PAL={blue:[220,90,58],emerald:[136,35,55],amber:[38,92,55],rose:[350,78,58],violet:[269,42,55]};var h,s,l;if(p==='custom'&&cRaw){try{var c=JSON.parse(cRaw);h=c.h;s=c.s;l=c.l;}catch(e){}}if(h==null){var v=PAL[p]||PAL.rose;h=v[0];s=v[1];l=v[2];}var r=document.documentElement;r.style.setProperty('--primary-h',String(h));r.style.setProperty('--primary-s',s+'%');r.style.setProperty('--primary-l',l+'%');r.classList.toggle('dark',m==='dark');}catch(e){}})();`;
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" className="dark" suppressHydrationWarning>
       <head>
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+
         <HeadContent />
       </head>
-      <body>
+      <body suppressHydrationWarning>
         {children}
         <Scripts />
         <Analytics /> {/* Injects the Vercel Analytics tracking script */}
