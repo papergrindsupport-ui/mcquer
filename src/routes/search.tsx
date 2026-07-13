@@ -84,7 +84,7 @@ export const Route = createFileRoute("/search")({
       // Twitter / X
       {
         name: "twitter:card",
-        content: "https://images2.imgbox.com/e4/9f/6OHkHIwL_o.png",
+        content: "summary_large_image",
       },
       {
         name: "twitter:title",
@@ -97,7 +97,7 @@ export const Route = createFileRoute("/search")({
       },
       {
         name: "twitter:image",
-        content: "https://images2.imgbox.com/e4/9f/6OHkHIwL_o.png",
+        content: "summary_large_image",
       },
       { name: "robots", content: "noindex" },
     ],

@@ -57,7 +57,7 @@ export const Route = createFileRoute("/builder")({
       // Twitter / X
       {
         name: "twitter:card",
-        content: "https://images2.imgbox.com/e4/9f/6OHkHIwL_o.png",
+        content: "Summary_large_image",
       },
       {
         name: "twitter:title",
