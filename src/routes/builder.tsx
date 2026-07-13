@@ -39,7 +39,7 @@ export const Route = createFileRoute("/builder")({
       },
       {
         property: "og:image",
-        content: "/ogimage.png",
+        content: "https://images2.imgbox.com/e4/9f/6OHkHIwL_o.png",
       },
       {
         property: "og:image:width",
@@ -57,7 +57,7 @@ export const Route = createFileRoute("/builder")({
       // Twitter / X
       {
         name: "twitter:card",
-        content: "/ogimage.png",
+        content: "https://images2.imgbox.com/e4/9f/6OHkHIwL_o.png",
       },
       {
         name: "twitter:title",
@@ -70,7 +70,7 @@ export const Route = createFileRoute("/builder")({
       },
       {
         name: "twitter:image",
-        content: "/ogimage.png",
+        content: "https://images2.imgbox.com/e4/9f/6OHkHIwL_o.png",
       },
     ],
   }),

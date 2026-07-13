@@ -122,7 +122,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       {
         property: "og:image",
-        content: "/ogimage.png",
+        content: "https://images2.imgbox.com/e4/9f/6OHkHIwL_o.png",
       },
       {
         property: "og:image:width",
@@ -140,7 +140,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       // Twitter / X
       {
         name: "twitter:card",
-        content: "/ogimage.png",
+        content: "https://images2.imgbox.com/e4/9f/6OHkHIwL_o.png",
       },
       {
         name: "twitter:title",
@@ -153,7 +153,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       {
         name: "twitter:image",
-        content: "/ogimage.png",
+        content: "https://images2.imgbox.com/e4/9f/6OHkHIwL_o.png",
       },
     ],
     links: [
