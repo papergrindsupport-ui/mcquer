@@ -22,6 +22,7 @@ import { VoltoProvider } from "../lib/volto/context";
 import { SearchProvider } from "../lib/search/context";
 import { MouseParticlesClient } from "@/components/ClientOnlyMP";
 import { LeaderboardJoinPrompt } from "@/components/LeaderboardJoinPrompt";
+import { checkAppVersion } from "@/lib/version";
 
 function NotFoundComponent() {
   return (
@@ -209,6 +210,9 @@ function ThemedToaster() {
 }
 
 function RootComponent() {
+  useEffect(() => {
+    checkAppVersion();
+  }, []);
   const { queryClient } = Route.useRouteContext();
   return (
     <QueryClientProvider client={queryClient}>
