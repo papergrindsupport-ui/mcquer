@@ -359,7 +359,13 @@ export function serializeQuestion(q: Question): {
 }
 
 export function questionTopicHint(q: Question): string {
-  // A short topic descriptor for "questions about {topic}"
-  const qt = richToText(q.question).trim();
+  // A short topic descriptor for "questions about {topic}". Prefer explicit
+  // topic tags; otherwise fall back to the question text from either the new
+  // block model or the legacy `q.question` rich-node field.
+  const tagged = (q.topics && q.topics[0]) || q.topic;
+  if (tagged && tagged.trim()) return tagged.trim();
+  const fromBlocks = blocksToText(q).question.trim();
+  const qt = fromBlocks || richToText(q.question).trim();
+  if (!qt) return `question ${q.n}`;
   return qt.length > 90 ? qt.slice(0, 87) + "…" : qt;
 }

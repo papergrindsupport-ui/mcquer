@@ -21,23 +21,30 @@ export const Route = createFileRoute("/api/ai/chat")({
           return new Response("messages required", { status: 400 });
         }
 
-        const model = (body.model ?? "gemini-3.5-flash").replace(/^google\//, "");
+        const envModel = process.env.GEMINI_MODEL;
+        const model = (body.model ?? envModel ?? "gemini-3.5-flash").replace(/^google\//, "");
 
-        const upstream = await fetch(
-          "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions",
-          {
+        // Gemini frequently returns 503 (model overloaded) or 429 under load.
+        // Retry a couple times with backoff before surfacing the error.
+        const doFetch = () =>
+          fetch("https://generativelanguage.googleapis.com/v1beta/openai/chat/completions", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ${key}`,
             },
-            body: JSON.stringify({
-              model,
-              messages,
-              stream: true,
-            }),
-          },
-        );
+            body: JSON.stringify({ model, messages, stream: true }),
+          });
+
+        let upstream = await doFetch();
+        for (
+          let attempt = 0;
+          attempt < 2 && (upstream.status === 503 || upstream.status === 429);
+          attempt++
+        ) {
+          await new Promise((r) => setTimeout(r, 600 * (attempt + 1)));
+          upstream = await doFetch();
+        }
 
         if (!upstream.ok || !upstream.body) {
           const text = await upstream.text().catch(() => "");

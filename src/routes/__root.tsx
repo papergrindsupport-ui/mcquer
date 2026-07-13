@@ -21,6 +21,7 @@ import { SettingsProvider } from "../lib/settings";
 import { VoltoProvider } from "../lib/volto/context";
 import { SearchProvider } from "../lib/search/context";
 import { MouseParticlesClient } from "@/components/ClientOnlyMP";
+import { LeaderboardJoinPrompt } from "@/components/LeaderboardJoinPrompt";
 
 function NotFoundComponent() {
   return (
@@ -224,6 +225,7 @@ function RootComponent() {
                   <Footer />
                   <CrispChat />
                   <MouseParticlesClient />
+                  <LeaderboardJoinPrompt />
                 </div>
 
                 <ThemedToaster />

@@ -243,16 +243,15 @@ export function VoltoPanel({
       setInput("");
       setSending(true);
 
-      // Build history: system + prior messages + new user
-      const history = [
-        { role: "system" as const, content: VOLTO_SYSTEM },
-        {
-          role: "assistant" as const,
-          content:
-            context.kind === "explain"
-              ? `Prior explanation context — Paper ${context.paperLabel}, Question ${context.question.n}. Topic: ${topic}.`
-              : `Prior context — student analytics review.`,
-        },
+      // Build history: system + full original context + initial explanation
+      // + prior chat + new user turn. This gives the model the entire question
+      // (intro, data, options, correct answer, student's pick) on every turn,
+      // not just a short topic string.
+      const seed: ChatMessage[] =
+        context.kind === "explain" ? buildExplainMessages(context) : buildFeedbackMessages(context);
+      const history: ChatMessage[] = [
+        ...seed,
+        ...(initialText ? [{ role: "assistant" as const, content: initialText }] : []),
         ...messages.map((m) => ({
           role: m.role,
           content: m.content,
@@ -283,7 +282,7 @@ export function VoltoPanel({
         setSending(false);
       }
     },
-    [messages, sending, context, topic],
+    [messages, sending, context, initialText],
   );
 
   const runTestMe = useCallback(async () => {
