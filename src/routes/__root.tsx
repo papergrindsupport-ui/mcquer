@@ -87,20 +87,74 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "MCQuer — Auto-marked IGCSE Paper 2 Past Papers" },
+
+      {
+        title: "MCQuer — IGCSE Paper 2 Past Papers with Instant Marking & Explanations",
+      },
+
       {
         name: "description",
         content:
-          "Digitalized, auto-marked IGCSE Paper 2 past papers for Biology, Chemistry, and Physics. Practice, submit, and get instant results.",
+          "Practice IGCSE Biology, Chemistry, and Physics Paper 2 past papers with instant auto-marking, detailed explanations, topic classification, performance tracking, and powerful question search.",
       },
-      { property: "og:title", content: "MCQuer — Auto-marked IGCSE Paper 2 Past Papers" },
+
+      // Open Graph
+      {
+        property: "og:title",
+        content: "MCQuer — IGCSE Paper 2 Past Papers with Instant Marking",
+      },
       {
         property: "og:description",
         content:
-          "Practice IGCSE Paper 2 past papers with instant auto-marking across Biology, Chemistry, and Physics.",
+          "Master IGCSE Paper 2 with interactive past papers, instant marking, explanations, topic-based practice, and advanced search across thousands of questions.",
       },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
+      {
+        property: "og:type",
+        content: "website",
+      },
+      {
+        property: "og:site_name",
+        content: "MCQuer",
+      },
+      {
+        property: "og:url",
+        content: "https://mcquer.vercel.app",
+      },
+      {
+        property: "og:image",
+        content: "/ogimage.png",
+      },
+      {
+        property: "og:image:width",
+        content: "1200",
+      },
+      {
+        property: "og:image:height",
+        content: "630",
+      },
+      {
+        property: "og:image:alt",
+        content: "MCQuer — IGCSE Paper 2 Reimagined",
+      },
+
+      // Twitter / X
+      {
+        name: "twitter:card",
+        content: "/ogimage.png",
+      },
+      {
+        name: "twitter:title",
+        content: "MCQuer — IGCSE Paper 2 Past Papers with Instant Marking",
+      },
+      {
+        name: "twitter:description",
+        content:
+          "Practice IGCSE Biology, Chemistry, and Physics Paper 2 with instant marking, explanations, and topic-based practice.",
+      },
+      {
+        name: "twitter:image",
+        content: "/ogimage.png",
+      },
     ],
     links: [
       { rel: "stylesheet", href: appCss },

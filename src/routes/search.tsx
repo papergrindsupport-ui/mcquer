@@ -38,17 +38,66 @@ export const Route = createFileRoute("/search")({
   validateSearch: zodValidator(searchSchema),
   head: () => ({
     meta: [
-      { title: "Search — MCQuer" },
+      { title: "Search Questions — MCQuer" },
+
       {
         name: "description",
         content:
-          "Search across every IGCSE Paper 2 question with typo tolerance, filters, and OCR image search.",
+          "Search every IGCSE Paper 2 question with typo-tolerant search, OCR image search, subject and topic filters, and instant results.",
       },
-      { property: "og:title", content: "Search — MCQuer" },
+
+      {
+        property: "og:title",
+        content: "Search Questions — MCQuer",
+      },
+
       {
         property: "og:description",
         content:
-          "Search across every IGCSE Paper 2 question with typo tolerance, filters, and OCR image search.",
+          "Find any IGCSE Paper 2 question in seconds using powerful text search, OCR image search, filters, and typo tolerance.",
+      },
+      {
+        property: "og:site_name",
+        content: "MCQuer",
+      },
+      {
+        property: "og:url",
+        content: "https://mcquer.vercel.app",
+      },
+      {
+        property: "og:image",
+        content: "/ogimage.png",
+      },
+      {
+        property: "og:image:width",
+        content: "1200",
+      },
+      {
+        property: "og:image:height",
+        content: "630",
+      },
+      {
+        property: "og:image:alt",
+        content: "MCQuer — IGCSE Paper 2 Reimagined",
+      },
+
+      // Twitter / X
+      {
+        name: "twitter:card",
+        content: "/ogimage.png",
+      },
+      {
+        name: "twitter:title",
+        content: "MCQuer — IGCSE Paper 2 Past Papers with Instant Marking",
+      },
+      {
+        name: "twitter:description",
+        content:
+          "Practice IGCSE Biology, Chemistry, and Physics Paper 2 with instant marking, explanations, and topic-based practice.",
+      },
+      {
+        name: "twitter:image",
+        content: "/ogimage.png",
       },
       { name: "robots", content: "noindex" },
     ],

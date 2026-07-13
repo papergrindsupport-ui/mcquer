@@ -27,18 +27,25 @@ export const Route = createFileRoute("/search")({
   validateSearch: zodValidator(searchSchema),
   head: () => ({
     meta: [
-      { title: "Search — MCQuer" },
+      { title: "Search Questions — MCQuer" },
+
       {
         name: "description",
         content:
-          "Search across every IGCSE Paper 2 question with typo tolerance, filters, and OCR image search.",
+          "Search every IGCSE Paper 2 question with typo-tolerant search, OCR image search, subject and topic filters, and instant results.",
       },
-      { property: "og:title", content: "Search — MCQuer" },
+
+      {
+        property: "og:title",
+        content: "Search Questions — MCQuer",
+      },
+
       {
         property: "og:description",
         content:
-          "Search across every IGCSE Paper 2 question with typo tolerance, filters, and OCR image search.",
+          "Find any IGCSE Paper 2 question in seconds using powerful text search, OCR image search, filters, and typo tolerance.",
       },
+
       { name: "robots", content: "noindex" },
     ],
   }),

@@ -6,10 +6,67 @@ import { fetchLeaderboard, getLocalUser, type LeaderboardRow } from "@/lib/leade
 export const Route = createFileRoute("/leaderboard")({
   head: () => ({
     meta: [
-      { title: "Leaderboard" },
-      { name: "description", content: "Top learners ranked by pencils earned." },
-      { property: "og:title", content: "Leaderboard" },
-      { property: "og:description", content: "Top learners ranked by pencils earned." },
+      { title: "Leaderboard — MCQuer" },
+
+      {
+        name: "description",
+        content:
+          "See the top MCQuer students ranked by pencils earned. Compete, climb the leaderboard, and track your progress.",
+      },
+
+      {
+        property: "og:title",
+        content: "Leaderboard — MCQuer",
+      },
+
+      {
+        property: "og:description",
+        content:
+          "Who's leading the rankings? View the top MCQuer students and compete for the highest score.",
+      },
+      {
+        property: "og:site_name",
+        content: "MCQuer",
+      },
+      {
+        property: "og:url",
+        content: "https://mcquer.vercel.app",
+      },
+      {
+        property: "og:image",
+        content: "/ogimage.png",
+      },
+      {
+        property: "og:image:width",
+        content: "1200",
+      },
+      {
+        property: "og:image:height",
+        content: "630",
+      },
+      {
+        property: "og:image:alt",
+        content: "MCQuer — IGCSE Paper 2 Reimagined",
+      },
+
+      // Twitter / X
+      {
+        name: "twitter:card",
+        content: "/ogimage.png",
+      },
+      {
+        name: "twitter:title",
+        content: "MCQuer — IGCSE Paper 2 Past Papers with Instant Marking",
+      },
+      {
+        name: "twitter:description",
+        content:
+          "Practice IGCSE Biology, Chemistry, and Physics Paper 2 with instant marking, explanations, and topic-based practice.",
+      },
+      {
+        name: "twitter:image",
+        content: "/ogimage.png",
+      },
     ],
   }),
   component: LeaderboardPage,

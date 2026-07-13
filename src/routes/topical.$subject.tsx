@@ -42,8 +42,67 @@ export const Route = createFileRoute("/topical/$subject")({
   },
   head: () => ({
     meta: [
-      { title: "Topical practice — Volto" },
-      { name: "description", content: "Practise questions grouped by topic and lesson." },
+      { title: "Topical Practice — MCQuer" },
+
+      {
+        name: "description",
+        content:
+          "Practice IGCSE Paper 2 questions grouped by subject, topic, and lesson. Strengthen weak areas with focused, exam-style practice.",
+      },
+
+      {
+        property: "og:title",
+        content: "Topical Practice — MCQuer",
+      },
+
+      {
+        property: "og:description",
+        content:
+          "Master every topic with classified IGCSE Paper 2 questions organized by subject, topic, and lesson.",
+      },
+      {
+        property: "og:site_name",
+        content: "MCQuer",
+      },
+      {
+        property: "og:url",
+        content: "https://mcquer.vercel.app",
+      },
+      {
+        property: "og:image",
+        content: "/ogimage.png",
+      },
+      {
+        property: "og:image:width",
+        content: "1200",
+      },
+      {
+        property: "og:image:height",
+        content: "630",
+      },
+      {
+        property: "og:image:alt",
+        content: "MCQuer — IGCSE Paper 2 Reimagined",
+      },
+
+      // Twitter / X
+      {
+        name: "twitter:card",
+        content: "/ogimage.png",
+      },
+      {
+        name: "twitter:title",
+        content: "MCQuer — IGCSE Paper 2 Past Papers with Instant Marking",
+      },
+      {
+        name: "twitter:description",
+        content:
+          "Practice IGCSE Biology, Chemistry, and Physics Paper 2 with instant marking, explanations, and topic-based practice.",
+      },
+      {
+        name: "twitter:image",
+        content: "/ogimage.png",
+      },
     ],
   }),
   component: TopicalPaper,

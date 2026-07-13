@@ -23,13 +23,55 @@ import { QuestionEditor } from "@/components/builder/QuestionEditorV2";
 import { BuilderGate } from "@/components/builder/BuilderGate";
 import { SUBJECTS, SESSIONS } from "@/lib/papers-data";
 
-
 export const Route = createFileRoute("/builder")({
   head: () => ({
     meta: [
-      { title: "Paper Builder — Volto" },
+      { title: "Builder — PROTECTED" },
       { name: "description", content: "Author, preview and export full MCQ papers." },
       { name: "robots", content: "noindex" },
+      {
+        property: "og:site_name",
+        content: "MCQuer",
+      },
+      {
+        property: "og:url",
+        content: "https://mcquer.vercel.app",
+      },
+      {
+        property: "og:image",
+        content: "/ogimage.png",
+      },
+      {
+        property: "og:image:width",
+        content: "1200",
+      },
+      {
+        property: "og:image:height",
+        content: "630",
+      },
+      {
+        property: "og:image:alt",
+        content: "MCQuer — IGCSE Paper 2 Reimagined",
+      },
+
+      // Twitter / X
+      {
+        name: "twitter:card",
+        content: "/ogimage.png",
+      },
+      {
+        name: "twitter:title",
+        content: "MCQuer — IGCSE Paper 2 Past Papers with Instant Marking",
+      },
+      {
+        name: "twitter:description",
+        content:
+          "Practice IGCSE Biology, Chemistry, and Physics Paper 2 with instant marking, explanations, and topic-based practice.",
+      },
+      {
+        name: "twitter:image",
+        content: "/ogimage.png",
+      },
     ],
   }),
   component: BuilderPageGated,
@@ -45,7 +87,10 @@ function BuilderPageGated() {
 
 function BuilderPage() {
   const [ready, setReady] = useState(false);
-  useEffect(() => { hydrateFromStorage(); setReady(true); }, []);
+  useEffect(() => {
+    hydrateFromStorage();
+    setReady(true);
+  }, []);
   const papers = usePapers();
 
   const [activeId, setActiveId] = useState<string | null>(null);
@@ -96,7 +141,9 @@ function BuilderPage() {
         </div>
       </header>
 
-      <div className="mb-4"><HowToAddGuide /></div>
+      <div className="mb-4">
+        <HowToAddGuide />
+      </div>
 
       <div className="space-y-2">
         {Object.values(papers).length === 0 && (
@@ -107,16 +154,31 @@ function BuilderPage() {
         {Object.values(papers).map((p) => {
           const subject = SUBJECTS.find((s) => s.id === p.subject);
           const session = SESSIONS.find((s) => s.id === p.session);
-          const filled = p.questions.filter((q) => (q.blocks?.length ?? 0) > 0 && (q.blocks?.some((b) => b.block !== "question" || ("content" in b && b.content.length > 0)) || (q.question?.length ?? 0) > 0)).length;
+          const filled = p.questions.filter(
+            (q) =>
+              (q.blocks?.length ?? 0) > 0 &&
+              (q.blocks?.some(
+                (b) => b.block !== "question" || ("content" in b && b.content.length > 0),
+              ) ||
+                (q.question?.length ?? 0) > 0),
+          ).length;
           return (
-            <div key={p.id} className="flex items-center gap-3 rounded-lg border border-border bg-card p-3">
+            <div
+              key={p.id}
+              className="flex items-center gap-3 rounded-lg border border-border bg-card p-3"
+            >
               <button
                 type="button"
                 onClick={() => setActiveId(p.id)}
                 className="flex-1 cursor-pointer text-left"
               >
-                <div className="font-semibold">{subject?.name ?? p.subject} — {p.year} · {session?.label ?? p.session} · {p.variant}</div>
-                <div className="text-xs text-muted-foreground font-mono">{p.id} · {filled}/40 questions edited</div>
+                <div className="font-semibold">
+                  {subject?.name ?? p.subject} — {p.year} · {session?.label ?? p.session} ·{" "}
+                  {p.variant}
+                </div>
+                <div className="text-xs text-muted-foreground font-mono">
+                  {p.id} · {filled}/40 questions edited
+                </div>
               </button>
               <button
                 type="button"
@@ -200,7 +262,6 @@ function EditorView({
     return () => window.removeEventListener("keydown", onKey);
   }, [paperId]);
 
-
   if (!paper) return null;
 
   const active = paper.questions[activeIdx];
@@ -208,7 +269,11 @@ function EditorView({
   return (
     <div className="mx-auto max-w-[1600px] p-3 sm:p-4">
       <header className="mb-3 flex flex-wrap items-center gap-3 rounded-2xl border border-border bg-card p-3">
-        <button type="button" onClick={onBack} className="inline-flex cursor-pointer items-center gap-1 rounded-md border border-border px-2 py-1.5 text-xs hover:bg-accent">
+        <button
+          type="button"
+          onClick={onBack}
+          className="inline-flex cursor-pointer items-center gap-1 rounded-md border border-border px-2 py-1.5 text-xs hover:bg-accent"
+        >
           <LuArrowLeft size={13} /> Papers
         </button>
         <div className="min-w-0">
@@ -244,7 +309,6 @@ function EditorView({
         </div>
       </header>
 
-
       <div className="grid gap-3 lg:grid-cols-[80px_minmax(0,1fr)]">
         <aside className="rounded-lg border border-border bg-card p-2">
           <div className="grid grid-cols-4 gap-1 lg:grid-cols-2">
@@ -254,7 +318,9 @@ function EditorView({
                 type="button"
                 onClick={() => setActiveIdx(i)}
                 className={`cursor-pointer rounded-md border px-1.5 py-1 text-xs ${
-                  i === activeIdx ? "border-primary bg-primary/10 font-semibold text-primary" : "border-border hover:bg-accent"
+                  i === activeIdx
+                    ? "border-primary bg-primary/10 font-semibold text-primary"
+                    : "border-border hover:bg-accent"
                 }`}
               >
                 {q.n}
