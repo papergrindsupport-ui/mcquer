@@ -7,6 +7,8 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
+import { CrispChat } from "@/components/CrispChat";
+import { Analytics } from "@vercel/analytics/react";
 import { useEffect, type ReactNode } from "react";
 import { Toaster } from "react-hot-toast";
 
@@ -18,6 +20,7 @@ import { TimersProvider } from "../components/timers/TimersProvider";
 import { SettingsProvider } from "../lib/settings";
 import { VoltoProvider } from "../lib/volto/context";
 import { SearchProvider } from "../lib/search/context";
+import { MouseParticlesClient } from "@/components/ClientOnlyMP";
 
 function NotFoundComponent() {
   return (
@@ -125,6 +128,7 @@ function RootShell({ children }: { children: ReactNode }) {
       <body>
         {children}
         <Scripts />
+        <Analytics /> {/* Injects the Vercel Analytics tracking script */}
       </body>
     </html>
   );
@@ -162,6 +166,8 @@ function RootComponent() {
                     <Outlet />
                   </main>
                   <Footer />
+                  <CrispChat />
+                  <MouseParticlesClient />
                 </div>
                 <ThemedToaster />
               </SearchProvider>

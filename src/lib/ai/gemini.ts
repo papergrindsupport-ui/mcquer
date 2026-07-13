@@ -22,7 +22,7 @@ function toText(content: unknown): string {
 }
 
 export function getGeminiConfig() {
-  const key = process.env.GEMINI_API_KEY ?? process.env.LOVABLE_API_KEY;
+  const key = process.env.GEMINI_API_KEY;
   const model = process.env.GEMINI_MODEL ?? "gemini-3.5-flash";
   return { key, model };
 }

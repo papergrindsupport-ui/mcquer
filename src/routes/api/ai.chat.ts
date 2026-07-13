@@ -8,7 +8,7 @@ export const Route = createFileRoute("/api/ai/chat")({
       POST: async ({ request }) => {
         const key = process.env.GEMINI_API_KEY;
         if (!key) {
-          return new Response("Missing GEMINI_API_KEY", { status: 500 });
+          return new Response("is volto sleeping? 👀 try reloading..", { status: 500 });
         }
         let body: { messages?: ChatMessage[]; model?: string };
         try {
