@@ -106,7 +106,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         property: "og:description",
         content:
-          "Master IGCSE Paper 2 with interactive past papers, instant marking, explanations, topic-based practice, and advanced search across thousands of questions.",
+          "Master IGCSE Paper 2 with interactive past papers, instant marking, topic-based practice, and powerful question search.",
       },
       {
         property: "og:type",
