@@ -88,6 +88,9 @@ const BG_PRESETS = [
   "f3f4f6",
 ];
 
+const LEADERBOARD_MIN_PENCILS = 40;
+const LEADERBOARD_PROMPT_SEEN = "igv-leaderboard-ready-prompt-v1";
+
 function randomSeed() {
   return Math.random().toString(36).slice(2, 10);
 }
@@ -125,10 +128,8 @@ function usePencils() {
   return p;
 }
 
-export function LeaderboardSection() {
-  const pencils = usePencils();
-  const [collapsed, setCollapsed] = useState(false);
-  const [avatar, setAvatar] = useState<AvatarCfg>(() => ({
+function makeInitialAvatar(): AvatarCfg {
+  return {
     style: randomStyle(),
     seed: randomSeed(),
     backgroundColor: BG_PRESETS[1 + Math.floor(Math.random() * (BG_PRESETS.length - 2))],
@@ -138,15 +139,26 @@ export function LeaderboardSection() {
     rotate: 0,
     translateX: 0,
     translateY: 0,
-  }));
+  };
+}
+
+function validateLeaderboardName(raw: string): string | null {
+  const n = normalizeUsername(raw);
+  if (!n) return "Enter a name.";
+  if (n.length < 2) return "At least 2 characters.";
+  if (n.length > 24) return "24 characters or fewer.";
+  if (!/^[a-z0-9._-]+$/i.test(n)) return "Letters, numbers, . _ - only.";
+  return null;
+}
+
+export function LeaderboardSection() {
+  const pencils = usePencils();
+  const [collapsed, setCollapsed] = useState(false);
+  const [avatar, setAvatar] = useState<AvatarCfg>(() => makeInitialAvatar());
   const [customizerOpen, setCustomizerOpen] = useState(false);
-  const [name, setName] = useState("");
-  const [error, setError] = useState<string | null>(null);
-  const [submitting, setSubmitting] = useState(false);
   const [me, setMe] = useState<LocalUser | null>(null);
   const [confirmLeave, setConfirmLeave] = useState(false);
   const [rows, setRows] = useState<LeaderboardRow[] | null>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     setMe(getLocalUser());
@@ -158,56 +170,7 @@ export function LeaderboardSection() {
     updatePencils(me.id, pencils).catch(() => {});
   }, [pencils, me]);
 
-  if (pencils < 40) return null;
-
-  const avatarUrl = buildAvatarUrl(avatar);
-
-  const validate = (raw: string): string | null => {
-    const n = normalizeUsername(raw);
-    if (!n) return "Enter a name.";
-    if (n.length < 2) return "At least 2 characters.";
-    if (n.length > 24) return "24 characters or fewer.";
-    if (!/^[a-z0-9._-]+$/i.test(n)) return "Letters, numbers, . _ - only.";
-    return null;
-  };
-
-  const onJoin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const err = validate(name);
-    if (err) {
-      setError(err);
-      inputRef.current?.focus();
-      return;
-    }
-    const username = normalizeUsername(name);
-    setSubmitting(true);
-    setError(null);
-    try {
-      const available = await checkUsernameAvailable(username);
-      if (!available) {
-        setError("That name is taken.");
-        setSubmitting(false);
-        return;
-      }
-      const row = await joinLeaderboard({
-        username,
-        avatar_url: avatarUrl,
-        pencils,
-      });
-      const local: LocalUser = {
-        id: row.id,
-        username: row.username,
-        avatar_url: row.avatar_url,
-      };
-      setLocalUser(local);
-      setMe(local);
-    } catch (err) {
-      const msg = err instanceof Error ? err.message : "Could not join.";
-      setError(/duplicate|unique/i.test(msg) ? "That name is taken." : msg);
-    } finally {
-      setSubmitting(false);
-    }
-  };
+  if (pencils < LEADERBOARD_MIN_PENCILS) return null;
 
   const onLeave = async () => {
     if (!me) return;
@@ -315,60 +278,12 @@ export function LeaderboardSection() {
               <MiniLeaderboard rows={rows} meId={me.id} />
             </div>
           ) : (
-            <div className="flex flex-col items-center gap-6 text-center">
-              <button
-                type="button"
-                onClick={() => setCustomizerOpen(true)}
-                aria-label="Customize avatar"
-                className="group cursor-pointer"
-              >
-                <span className="grid h-24 w-24 place-items-center overflow-hidden rounded-full border border-border bg-background transition-transform group-hover:scale-105 sm:h-28 sm:w-28">
-                  <img
-                    src={avatarUrl}
-                    alt=""
-                    className="h-full w-full object-cover"
-                    key={avatarUrl}
-                  />
-                </span>
-                <span className="mt-2 block text-xs text-muted-foreground">Click to customize</span>
-              </button>
-
-              <form onSubmit={onJoin} className="w-full max-w-md">
-                <div
-                  className={`relative rounded-xl border bg-background transition-colors ${
-                    error ? "border-destructive" : "border-border focus-within:border-primary"
-                  }`}
-                >
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
-                    <LuAtSign size={16} />
-                  </span>
-                  <input
-                    ref={inputRef}
-                    value={name}
-                    onChange={(e) => {
-                      setName(e.target.value.replace(/^@+/, ""));
-                      if (error) setError(null);
-                    }}
-                    aria-label="Username"
-                    autoComplete="off"
-                    spellCheck={false}
-                    maxLength={24}
-                    className="w-full bg-transparent px-10 py-3 text-center text-base outline-none"
-                  />
-                  <button
-                    type="submit"
-                    disabled={submitting}
-                    className="absolute right-1.5 top-1/2 -translate-y-1/2 cursor-pointer rounded-lg bg-primary px-3.5 py-1.5 text-sm font-semibold text-primary-foreground hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
-                  >
-                    {submitting ? "Joining..." : "Join"}
-                  </button>
-                </div>
-                {error && <p className="mt-2 text-xs text-destructive">{error}</p>}
-              </form>
-            </div>
+            <LeaderboardJoinCard pencils={pencils} onJoined={setMe} />
           )}
         </div>
       </Collapse>
+
+
 
       {customizerOpen && (
         <AvatarCustomizer
@@ -381,7 +296,6 @@ export function LeaderboardSection() {
               setLocalUser(updated);
               setMe(updated);
               updateAvatarUrl(me.id, url).catch(() => {});
-              // refresh mini leaderboard optimistically
               setRows((r) =>
                 r ? r.map((row) => (row.id === me.id ? { ...row, avatar_url: url } : row)) : r,
               );
@@ -402,6 +316,196 @@ export function LeaderboardSection() {
         onConfirm={onLeave}
       />
     </section>
+  );
+}
+
+
+type LeaderboardJoinCardProps = {
+  pencils: number;
+  onJoined: (user: LocalUser) => void;
+  success?: boolean;
+  onSuccess?: () => void;
+};
+
+function LeaderboardJoinCard({ pencils, onJoined, success, onSuccess }: LeaderboardJoinCardProps) {
+  const [avatar, setAvatar] = useState<AvatarCfg>(() => makeInitialAvatar());
+  const [customizerOpen, setCustomizerOpen] = useState(false);
+  const [name, setName] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const avatarUrl = buildAvatarUrl(avatar);
+
+  const onJoin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const err = validateLeaderboardName(name);
+    if (err) {
+      setError(err);
+      inputRef.current?.focus();
+      return;
+    }
+    const username = normalizeUsername(name);
+    setSubmitting(true);
+    setError(null);
+    try {
+      const available = await checkUsernameAvailable(username);
+      if (!available) {
+        setError("That name is taken.");
+        setSubmitting(false);
+        return;
+      }
+      const row = await joinLeaderboard({
+        username,
+        avatar_url: avatarUrl,
+        pencils,
+      });
+      const local: LocalUser = {
+        id: row.id,
+        username: row.username,
+        avatar_url: row.avatar_url,
+      };
+      setLocalUser(local);
+      onJoined(local);
+      onSuccess?.();
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "Could not join.";
+      setError(/duplicate|unique/i.test(msg) ? "That name is taken." : msg);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="flex flex-col items-center gap-6 text-center">
+      <button
+        type="button"
+        onClick={() => setCustomizerOpen(true)}
+        aria-label="Customize avatar"
+        className="group cursor-pointer"
+      >
+        <span className="grid h-24 w-24 place-items-center overflow-hidden rounded-full border border-border bg-background transition-transform group-hover:scale-105 sm:h-28 sm:w-28">
+          <img src={avatarUrl} alt="" className="h-full w-full object-cover" key={avatarUrl} />
+        </span>
+        <span className="mt-2 block text-xs text-muted-foreground">Click to customize</span>
+      </button>
+
+      {success ? (
+        <div className="w-full max-w-md rounded-xl border border-primary/30 bg-primary/10 p-4 text-sm text-foreground">
+          <div className="font-semibold">Joined leaderboard.</div>
+          <div className="mt-1 text-muted-foreground">Check it later from homepage!</div>
+        </div>
+      ) : (
+        <form onSubmit={onJoin} className="w-full max-w-md">
+          <div
+            className={`relative rounded-xl border bg-background transition-colors ${
+              error ? "border-destructive" : "border-border focus-within:border-primary"
+            }`}
+          >
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+              <LuAtSign size={16} />
+            </span>
+            <input
+              ref={inputRef}
+              value={name}
+              onChange={(e) => {
+                setName(e.target.value.replace(/^@+/, ""));
+                if (error) setError(null);
+              }}
+              aria-label="Username"
+              autoComplete="off"
+              spellCheck={false}
+              maxLength={24}
+              className="w-full bg-transparent px-10 py-3 text-center text-base outline-none"
+            />
+            <button
+              type="submit"
+              disabled={submitting}
+              className="absolute right-1.5 top-1/2 -translate-y-1/2 cursor-pointer rounded-lg bg-primary px-3.5 py-1.5 text-sm font-semibold text-primary-foreground hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              {submitting ? "Joining..." : "Join"}
+            </button>
+          </div>
+          {error && <p className="mt-2 text-xs text-destructive">{error}</p>}
+        </form>
+      )}
+
+      {customizerOpen && (
+        <AvatarCustomizer value={avatar} onChange={setAvatar} onClose={() => setCustomizerOpen(false)} />
+      )}
+    </div>
+  );
+}
+
+export function LeaderboardJoinPrompt() {
+  const pencils = usePencils();
+  const [open, setOpen] = useState(false);
+  const [joined, setJoined] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (pencils < LEADERBOARD_MIN_PENCILS) return;
+    if (getLocalUser()) return;
+    if (localStorage.getItem(LEADERBOARD_PROMPT_SEEN) === "1") return;
+    setOpen(true);
+  }, [pencils]);
+
+  const close = () => {
+    try {
+      localStorage.setItem(LEADERBOARD_PROMPT_SEEN, "1");
+    } catch {}
+    setOpen(false);
+  };
+
+  if (!open) return null;
+
+  return (
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="leaderboard-ready-title"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm animate-fade-in"
+      onClick={close}
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="relative w-full max-w-lg rounded-2xl border border-border bg-card p-6 text-center shadow-2xl animate-scale-in sm:p-8"
+      >
+        <button
+          type="button"
+          onClick={close}
+          aria-label="Close"
+          className="absolute right-3 top-3 grid h-8 w-8 cursor-pointer place-items-center rounded-lg text-muted-foreground hover:bg-accent hover:text-foreground"
+        >
+          <LuX size={16} />
+        </button>
+        <div className="mx-auto grid h-12 w-12 place-items-center rounded-full bg-primary/15 text-primary">
+          <LuTrophy size={24} />
+        </div>
+        <h2 id="leaderboard-ready-title" className="mt-4 text-2xl font-semibold tracking-tight">
+          you're ready to join leaderboard!
+        </h2>
+        <p className="mx-auto mt-2 max-w-sm text-sm text-muted-foreground">
+          Pick a name and avatar, then keep solving while your pencils climb.
+        </p>
+        <div className="mt-6">
+          <LeaderboardJoinCard
+            pencils={pencils}
+            success={joined}
+            onJoined={() => setJoined(true)}
+            onSuccess={() => window.setTimeout(close, 1400)}
+          />
+        </div>
+        {joined && (
+          <button
+            type="button"
+            onClick={close}
+            className="mt-4 cursor-pointer rounded-lg border border-border bg-background px-4 py-2 text-sm font-medium hover:bg-accent"
+          >
+            Continue solving...
+          </button>
+        )}
+      </div>
+    </div>
   );
 }
 
