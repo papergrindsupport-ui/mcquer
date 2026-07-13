@@ -1,6 +1,8 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { usePersistedState } from "@/hooks/use-persisted-state";
+import { ShootingStars } from "@/components/ui/shooting-stars";
+
 import {
   LuLeaf,
   LuFlaskConical,
@@ -42,6 +44,7 @@ import { Collapse } from "@/components/Collapse";
 import { TopicalsSelector } from "@/components/TopicalsSelector";
 import { encodeTopicSelection } from "@/lib/mcq/allQuestions";
 import { LeaderboardSection } from "@/components/Leaderboard";
+import { StarsBackground } from "@/components/ui/stars-background";
 
 export const Route = createFileRoute("/")({
   component: Landing,
@@ -140,6 +143,9 @@ function Landing() {
 
   return (
     <div className="mx-auto max-w-6xl px-4 sm:px-6">
+      {/* <StarsBackground className="pointer-events-none" /> */}
+      <ShootingStars className="pointer-events-none" />
+
       {/* Hero */}
       <section className="pt-16 pb-12 sm:pt-24 sm:pb-20">
         <div className="mx-auto max-w-3xl text-center">
@@ -148,30 +154,22 @@ function Landing() {
             IGCSE Paper 2 — Multiple Choice
           </div>
           <h1 className="animate-fade-up text-4xl font-semibold tracking-tight sm:text-6xl">
-            Practice past papers.
+            IGCSE P2
             <br />
-            <span className="text-primary">Marked instantly.</span>
+            <span className="text-primary">Remastered.</span>
           </h1>
           <p
             className="mx-auto mt-5 max-w-xl animate-fade-up text-base text-muted-foreground sm:text-lg"
             style={{ animationDelay: "80ms" }}
           >
-            Digitalized, auto-marked IGCSE Paper 2 past papers for Biology, Chemistry, and Physics.
+            Digitalized, classified, auto-marked IGCSE Paper 2 past papers.
           </p>
-          <div
+          {/* <div
             className="mt-8 flex animate-fade-up items-center justify-center gap-6 text-xs text-muted-foreground"
             style={{ animationDelay: "160ms" }}
           >
-            <span className="inline-flex items-center gap-1.5">
-              <LuCircleCheck className="text-primary" /> Auto-marked
-            </span>
-            <span className="inline-flex items-center gap-1.5">
-              <LuTimer className="text-primary" /> Timed
-            </span>
-            <span className="inline-flex items-center gap-1.5">
-              <LuChartBar className="text-primary" /> Instant results
-            </span>
-          </div>
+           
+          </div> */}
         </div>
       </section>
 

@@ -681,3 +681,8 @@ html body .crisp-client .cc-1p74e .cc-2stv2 .cc-1repb .cc-1mfbo {
 html body .crisp-client .cc-ktodg .cc-ybfy9 .cc-1grfa--visitor .cc-8dtac .cc-2v32a .cc-yr8px {
   background-color: var(--primary) !important;
 }
+
+html body .cc-165wh .cc-lk42u .cc-13wro .cc-1gfkz .cc-2gk6o[data-id="chat_opened"],
+.cc-165wh .cc-lk42u .cc-13wro .cc-1gfkz .cc-2gk6o[data-id="chat_closed"] {
+  background-color: var(--primary) !important;
+}
