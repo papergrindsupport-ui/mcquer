@@ -8,6 +8,7 @@ import {
 } from "react-icons/lu";
 import { CircuitRenderer } from "./Circuit";
 import { CircuitOptions } from "./CircuitOptions";
+import { TablesOptions } from "./TablesOptions";
 
 import { Flowchart } from "./Flowchart";
 
@@ -902,6 +903,7 @@ export function LayoutRenderer({
           {...common}
         />
       );
+
     case "image-refs":
       return (
         <ImageRefsOptions
@@ -912,6 +914,16 @@ export function LayoutRenderer({
           orientation={layout.orientation}
           keys={keys}
           questionSlot={questionSlot}
+          {...common}
+        />
+      );
+    case "tables":
+      return (
+        <TablesOptions
+          options={layout.options}
+          orientation={layout.orientation}
+          keyItems={layout.keyItems}
+          keys={keys}
           {...common}
         />
       );

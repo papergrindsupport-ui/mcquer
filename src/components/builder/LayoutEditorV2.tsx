@@ -57,6 +57,8 @@ const LAYOUT_TYPES: { value: OptionsLayout["type"]; label: string }[] = [
   { value: "text-2x2", label: "Text · 2×2" },
   { value: "combined-choice", label: "Combined choice ('1 only', '1 and 2'…)" },
   { value: "table", label: "Table (unified builder)" },
+  { value: "tables", label: "Tables (one table per option)" },
+
   { value: "images", label: "Images" },
   { value: "image-hotspots", label: "Image with hotspots" },
   { value: "image-refs", label: "Image references (Q22 with images)" },
@@ -90,6 +92,10 @@ function makeLayout(type: OptionsLayout["type"]): OptionsLayout {
       };
     case "table":
       return makeDefaultTableLayout();
+    case "tables": {
+      const mk = () => makeDefaultTableLayout().grid;
+      return { type: "tables", options: { A: mk(), B: mk(), C: mk(), D: mk() } };
+    }
     case "table-rows":
       return {
         type,
@@ -469,6 +475,58 @@ export function LayoutEditor({
         <MergedTableLayoutEditor value={value} onChange={onChange} />
       )}
       {value.type === "table" && <TableBuilder value={value} onChange={onChange} />}
+      {value.type === "tables" && <TablesLayoutEditor value={value} onChange={onChange} />}
+    </div>
+  );
+}
+function TablesLayoutEditor({
+  value,
+  onChange,
+}: {
+  value: Extract<OptionsLayout, { type: "tables" }>;
+  onChange: (v: OptionsLayout) => void;
+}) {
+  return (
+    <div className="space-y-3">
+      <div className="flex items-center gap-2 text-xs">
+        <span className="font-semibold uppercase tracking-wide text-muted-foreground">Layout</span>
+        <CustomRadio<Orientation>
+          value={value.orientation ?? ("auto" as Orientation)}
+          options={[
+            { value: "auto" as Orientation, label: "Auto (2×2)" },
+            { value: "horizontal" as Orientation, label: "Horizontal" },
+            { value: "vertical" as Orientation, label: "Vertical" },
+          ]}
+          onChange={(o) => onChange({ ...value, orientation: o })}
+        />
+      </div>
+      {OPTION_IDS.map((id) => (
+        <div key={id} className="rounded-lg border border-border bg-background p-2">
+          <div className="mb-2 flex items-center gap-2">
+            <span className="grid h-7 w-7 place-items-center rounded-full border-2 border-primary bg-primary/10 text-sm font-bold text-primary">
+              {id}
+            </span>
+            <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              Option {id} table
+            </span>
+          </div>
+          <TableBuilder
+            hideOptionControls
+            value={{
+              type: "table",
+              grid: value.options[id],
+              optionsAxis: "rows",
+              optionAt: { A: 0, B: 0, C: 0, D: 0 },
+            }}
+            onChange={(next) =>
+              onChange({
+                ...value,
+                options: { ...value.options, [id]: next.grid },
+              })
+            }
+          />
+        </div>
+      ))}
     </div>
   );
 }

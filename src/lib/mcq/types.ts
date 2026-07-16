@@ -447,6 +447,16 @@ export type OptionsLayout =
       /** Height of the hotspot box in px (used in both builder & paper). */
       heightPx?: number;
     }
+  | {
+      /** Four independent tables, one per option. Each option's table uses
+       *  the same cell model as the unified `table` layout, minus any
+       *  option-axis machinery — the option circle is rendered above its
+       *  own mini-table. */
+      type: "tables";
+      options: Record<OptionId, TableLayoutCell[][]>;
+      orientation?: Orientation;
+      keyItems?: Partial<Record<OptionId, KeyItem[]>>;
+    }
   | MergedTableLayout
   | TableLayout;
 

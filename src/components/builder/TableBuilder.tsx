@@ -115,9 +115,10 @@ function shiftOptionAt(
 type Props = {
   value: TableLayout;
   onChange: (v: TableLayout) => void;
+  hideOptionControls?: boolean;
 };
 
-export function TableBuilder({ value, onChange }: Props) {
+export function TableBuilder({ value, onChange, hideOptionControls }: Props) {
   const { grid, optionsAxis, optionAt } = value;
   const nRows = grid.length;
   const nCols = grid[0]?.length ?? 0;
@@ -231,31 +232,33 @@ export function TableBuilder({ value, onChange }: Props) {
     <div className="space-y-3">
       {/* Top controls */}
       <div className="flex flex-wrap items-center gap-3 rounded-lg border border-border bg-background p-2">
-        <div className="flex items-center gap-1 text-xs font-semibold text-muted-foreground">
-          <span className="mr-1 uppercase tracking-wide">Option circle on</span>
-          <button
-            type="button"
-            onClick={() => setAxis("rows")}
-            className={`rounded-md px-2.5 py-1 text-xs font-semibold transition ${
-              optionsAxis === "rows"
-                ? "bg-primary text-primary-foreground"
-                : "bg-muted text-muted-foreground hover:bg-muted/70"
-            }`}
-          >
-            Rows
-          </button>
-          <button
-            type="button"
-            onClick={() => setAxis("cols")}
-            className={`rounded-md px-2.5 py-1 text-xs font-semibold transition ${
-              optionsAxis === "cols"
-                ? "bg-primary text-primary-foreground"
-                : "bg-muted text-muted-foreground hover:bg-muted/70"
-            }`}
-          >
-            Columns
-          </button>
-        </div>
+        {!hideOptionControls && (
+          <div className="flex items-center gap-1 text-xs font-semibold text-muted-foreground">
+            <span className="mr-1 uppercase tracking-wide">Option circle on</span>
+            <button
+              type="button"
+              onClick={() => setAxis("rows")}
+              className={`rounded-md px-2.5 py-1 text-xs font-semibold transition ${
+                optionsAxis === "rows"
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-muted text-muted-foreground hover:bg-muted/70"
+              }`}
+            >
+              Rows
+            </button>
+            <button
+              type="button"
+              onClick={() => setAxis("cols")}
+              className={`rounded-md px-2.5 py-1 text-xs font-semibold transition ${
+                optionsAxis === "cols"
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-muted text-muted-foreground hover:bg-muted/70"
+              }`}
+            >
+              Columns
+            </button>
+          </div>
+        )}
         <div className="ml-auto flex items-center gap-2">
           <CopyPasteTableButtons value={value} onChange={onChange} />
           <span className="mx-1 h-5 w-px bg-border" />
@@ -277,25 +280,27 @@ export function TableBuilder({ value, onChange }: Props) {
       </div>
 
       {/* Option → row/col assignment */}
-      <div className="flex flex-wrap items-center gap-2 rounded-lg border border-border bg-muted/20 p-2">
-        <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-          Option {optionsAxis === "rows" ? "rows" : "columns"}
-        </span>
-        {OPTION_IDS.map((id) => (
-          <div key={id} className="flex items-center gap-1">
-            <span className="grid h-6 w-6 place-items-center rounded-full border-2 border-border bg-background text-xs font-bold">
-              {id}
-            </span>
-            <CustomSelect
-              label=""
-              placeholder=""
-              value={String(optionAt[id] ?? 0)}
-              options={availableIdx}
-              onChange={(v) => setOptionAt(id, Number(v))}
-            />
-          </div>
-        ))}
-      </div>
+      {!hideOptionControls && (
+        <div className="flex flex-wrap items-center gap-2 rounded-lg border border-border bg-muted/20 p-2">
+          <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+            Option {optionsAxis === "rows" ? "rows" : "columns"}
+          </span>
+          {OPTION_IDS.map((id) => (
+            <div key={id} className="flex items-center gap-1">
+              <span className="grid h-6 w-6 place-items-center rounded-full border-2 border-border bg-background text-xs font-bold">
+                {id}
+              </span>
+              <CustomSelect
+                label=""
+                placeholder=""
+                value={String(optionAt[id] ?? 0)}
+                options={availableIdx}
+                onChange={(v) => setOptionAt(id, Number(v))}
+              />
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* Cell toolbar (only when a cell is selected) */}
       {selected && selectedCell && !selectedCell.hidden && (
@@ -307,6 +312,7 @@ export function TableBuilder({ value, onChange }: Props) {
           onClose={() => setSelected(null)}
           canMergeRight={selected.c + (selectedCell.colSpan ?? 1) < nCols}
           canMergeDown={selected.r + (selectedCell.rowSpan ?? 1) < nRows}
+          hideOptionControls={hideOptionControls}
           cellOptionFor={(() => {
             for (const id of OPTION_IDS) {
               const oc = value.optionCells?.[id];
@@ -497,6 +503,7 @@ function CellToolbar({
   canMergeRight,
   canMergeDown,
   cellOptionFor,
+  hideOptionControls,
   onAssignOption,
 }: {
   cell: TableLayoutCell;
@@ -508,6 +515,7 @@ function CellToolbar({
   canMergeDown: boolean;
   cellOptionFor: OptionId | null;
   onAssignOption: (id: OptionId | null) => void;
+  hideOptionControls?: boolean;
 }) {
   const setAlign = (a: CellAlign) => onChange({ align: cell.align === a ? undefined : a });
   const AlignBtn = ({
@@ -538,125 +546,127 @@ function CellToolbar({
         <AlignBtn a="right" Icon={LuAlignRight} />
       </div>
 
-      <div className="mx-1 h-6 w-px bg-border" />
+      {!hideOptionControls && (
+        <>
+          <div className="mx-1 h-6 w-px bg-border" />
+          <label className="flex items-center gap-1 text-xs">
+            <span className="text-muted-foreground">BG</span>
+            <div className="flex items-center gap-1">
+              {BG_PRESETS.map((p) => (
+                <button
+                  key={p.value || "none"}
+                  type="button"
+                  title={p.label}
+                  onClick={() => onChange({ bg: p.value || undefined })}
+                  className={`h-6 w-6 rounded border ${
+                    (cell.bg ?? "") === p.value
+                      ? "border-primary ring-2 ring-primary/40"
+                      : "border-border"
+                  }`}
+                  style={{ background: p.value || "transparent" }}
+                >
+                  {!p.value && <LuX size={10} className="mx-auto text-muted-foreground" />}
+                </button>
+              ))}
+              <ThemeColorInput
+                value={cell.bg}
+                onChange={(v) => onChange({ bg: v })}
+                fallback="#ffffff"
+                size="md"
+                title="Custom colour (or theme)"
+              />
+            </div>
+          </label>
 
-      <label className="flex items-center gap-1 text-xs">
-        <span className="text-muted-foreground">BG</span>
-        <div className="flex items-center gap-1">
-          {BG_PRESETS.map((p) => (
+          <div className="mx-1 h-6 w-px bg-border" />
+
+          <button
+            type="button"
+            onClick={() => onChange({ header: !cell.header })}
+            title="Toggle header cell"
+            className={`inline-flex h-7 items-center gap-1 rounded px-2 text-xs font-semibold transition ${
+              cell.header ? "bg-primary text-primary-foreground" : "bg-muted hover:bg-muted/70"
+            }`}
+          >
+            <LuHash size={12} /> Header
+          </button>
+
+          <div className="mx-1 h-6 w-px bg-border" />
+
+          <div className="flex items-center gap-1 text-xs">
+            <span className="text-muted-foreground">Merge</span>
             <button
-              key={p.value || "none"}
               type="button"
-              title={p.label}
-              onClick={() => onChange({ bg: p.value || undefined })}
-              className={`h-6 w-6 rounded border ${
-                (cell.bg ?? "") === p.value
-                  ? "border-primary ring-2 ring-primary/40"
-                  : "border-border"
-              }`}
-              style={{ background: p.value || "transparent" }}
+              disabled={!canMergeRight}
+              onClick={() => onMerge({ colSpanΔ: +1 })}
+              className="grid h-7 w-7 place-items-center rounded bg-muted hover:bg-primary hover:text-primary-foreground disabled:opacity-40"
+              title="Extend right"
             >
-              {!p.value && <LuX size={10} className="mx-auto text-muted-foreground" />}
+              <LuArrowRight size={12} />
             </button>
-          ))}
-          <ThemeColorInput
-            value={cell.bg}
-            onChange={(v) => onChange({ bg: v })}
-            fallback="#ffffff"
-            size="md"
-            title="Custom colour (or theme)"
-          />
-        </div>
-      </label>
-
-      <div className="mx-1 h-6 w-px bg-border" />
-
-      <button
-        type="button"
-        onClick={() => onChange({ header: !cell.header })}
-        title="Toggle header cell"
-        className={`inline-flex h-7 items-center gap-1 rounded px-2 text-xs font-semibold transition ${
-          cell.header ? "bg-primary text-primary-foreground" : "bg-muted hover:bg-muted/70"
-        }`}
-      >
-        <LuHash size={12} /> Header
-      </button>
-
-      <div className="mx-1 h-6 w-px bg-border" />
-
-      <div className="flex items-center gap-1 text-xs">
-        <span className="text-muted-foreground">Merge</span>
-        <button
-          type="button"
-          disabled={!canMergeRight}
-          onClick={() => onMerge({ colSpanΔ: +1 })}
-          className="grid h-7 w-7 place-items-center rounded bg-muted hover:bg-primary hover:text-primary-foreground disabled:opacity-40"
-          title="Extend right"
-        >
-          <LuArrowRight size={12} />
-        </button>
-        <button
-          type="button"
-          disabled={(cell.colSpan ?? 1) <= 1}
-          onClick={() => onMerge({ colSpanΔ: -1 })}
-          className="grid h-7 w-7 place-items-center rounded bg-muted hover:bg-primary hover:text-primary-foreground disabled:opacity-40"
-          title="Shrink right"
-        >
-          <LuArrowLeft size={12} />
-        </button>
-        <button
-          type="button"
-          disabled={!canMergeDown}
-          onClick={() => onMerge({ rowSpanΔ: +1 })}
-          className="grid h-7 w-7 place-items-center rounded bg-muted hover:bg-primary hover:text-primary-foreground disabled:opacity-40"
-          title="Extend down"
-        >
-          <LuArrowDown size={12} />
-        </button>
-        <button
-          type="button"
-          disabled={(cell.rowSpan ?? 1) <= 1}
-          onClick={() => onMerge({ rowSpanΔ: -1 })}
-          className="grid h-7 w-7 place-items-center rounded bg-muted hover:bg-primary hover:text-primary-foreground disabled:opacity-40"
-          title="Shrink down"
-        >
-          <LuArrowUp size={12} />
-        </button>
-        <button
-          type="button"
-          onClick={onSplit}
-          className="inline-flex h-7 items-center gap-1 rounded bg-muted px-2 text-xs hover:bg-muted/70"
-          title="Reset span"
-        >
-          <LuSplit size={12} /> Split
-        </button>
-      </div>
-
-      <div className="mx-1 h-6 w-px bg-border" />
-
-      <div className="flex items-center gap-1 text-xs">
-        <span className="text-muted-foreground">Option in this cell</span>
-        {(["", "A", "B", "C", "D"] as const).map((v) => {
-          const isCur = (cellOptionFor ?? "") === v;
-          return (
             <button
-              key={v || "none"}
               type="button"
-              onClick={() => onAssignOption(v === "" ? null : (v as OptionId))}
-              className={`grid h-7 min-w-7 place-items-center rounded px-1.5 text-xs font-bold transition ${
-                isCur
-                  ? "bg-primary text-primary-foreground"
-                  : "bg-muted text-muted-foreground hover:bg-muted/70"
-              }`}
-              title={
-                v === "" ? "None (use gutter row/col)" : `Place option ${v} circle in this cell`
-              }
+              disabled={(cell.colSpan ?? 1) <= 1}
+              onClick={() => onMerge({ colSpanΔ: -1 })}
+              className="grid h-7 w-7 place-items-center rounded bg-muted hover:bg-primary hover:text-primary-foreground disabled:opacity-40"
+              title="Shrink right"
             >
-              {v === "" ? "—" : v}
+              <LuArrowLeft size={12} />
             </button>
-          );
-        })}
-      </div>
+            <button
+              type="button"
+              disabled={!canMergeDown}
+              onClick={() => onMerge({ rowSpanΔ: +1 })}
+              className="grid h-7 w-7 place-items-center rounded bg-muted hover:bg-primary hover:text-primary-foreground disabled:opacity-40"
+              title="Extend down"
+            >
+              <LuArrowDown size={12} />
+            </button>
+            <button
+              type="button"
+              disabled={(cell.rowSpan ?? 1) <= 1}
+              onClick={() => onMerge({ rowSpanΔ: -1 })}
+              className="grid h-7 w-7 place-items-center rounded bg-muted hover:bg-primary hover:text-primary-foreground disabled:opacity-40"
+              title="Shrink down"
+            >
+              <LuArrowUp size={12} />
+            </button>
+            <button
+              type="button"
+              onClick={onSplit}
+              className="inline-flex h-7 items-center gap-1 rounded bg-muted px-2 text-xs hover:bg-muted/70"
+              title="Reset span"
+            >
+              <LuSplit size={12} /> Split
+            </button>
+          </div>
+
+          <div className="mx-1 h-6 w-px bg-border" />
+          <div className="flex items-center gap-1 text-xs">
+            <span className="text-muted-foreground">Option in this cell</span>
+            {(["", "A", "B", "C", "D"] as const).map((v) => {
+              const isCur = (cellOptionFor ?? "") === v;
+              return (
+                <button
+                  key={v || "none"}
+                  type="button"
+                  onClick={() => onAssignOption(v === "" ? null : (v as OptionId))}
+                  className={`grid h-7 min-w-7 place-items-center rounded px-1.5 text-xs font-bold transition ${
+                    isCur
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-muted text-muted-foreground hover:bg-muted/70"
+                  }`}
+                  title={
+                    v === "" ? "None (use gutter row/col)" : `Place option ${v} circle in this cell`
+                  }
+                >
+                  {v === "" ? "—" : v}
+                </button>
+              );
+            })}
+          </div>
+        </>
+      )}
 
       <div className="ml-auto">
         <button
