@@ -366,7 +366,12 @@ export function Graph({ spec, className, height }: Props) {
     <ResponsiveContainer width="100%" height={H}>
       <ComposedChart
         data={chartData}
-        margin={{ top: 12, right: 18, left: spec.yLabel ? 44 : 0, bottom: spec.xLabel ? 18 : 4 }}
+        margin={{
+          top: 12,
+          right: 18,
+          left: spec.yLabel ? Math.max(44, (spec.yLabelOffset ?? 32) + 12) : 0,
+          bottom: spec.xLabel ? 18 : 4,
+        }}
       >
         {spec.gridlines !== false && <CartesianGrid stroke="var(--border)" strokeDasharray="3 3" />}
         <XAxis
@@ -374,6 +379,14 @@ export function Graph({ spec, className, height }: Props) {
           dataKey="x"
           domain={[spec.xMin, spec.xMax]}
           ticks={spec.xTicks}
+          tickFormatter={
+            spec.xTickLabels && spec.xTicks
+              ? (v: number) => {
+                  const i = spec.xTicks!.indexOf(v);
+                  return i >= 0 && spec.xTickLabels![i] != null ? spec.xTickLabels![i] : String(v);
+                }
+              : undefined
+          }
           stroke="var(--muted-foreground)"
           tick={{ fill: "var(--muted-foreground)", fontSize: 11 }}
           label={
@@ -381,7 +394,7 @@ export function Graph({ spec, className, height }: Props) {
               ? {
                   value: spec.xLabel,
                   position: "insideBottom",
-                  offset: -10,
+                  offset: spec.xLabelOffset ?? -10,
                   fill: "var(--foreground)",
                   fontSize: 12,
                 }
@@ -392,9 +405,21 @@ export function Graph({ spec, className, height }: Props) {
           type="number"
           domain={[spec.yMin, spec.yMax]}
           ticks={spec.yTicks}
+          tickFormatter={
+            spec.yTickLabels && spec.yTicks
+              ? (v: number) => {
+                  const i = spec.yTicks!.indexOf(v);
+                  return i >= 0 && spec.yTickLabels![i] != null ? spec.yTickLabels![i] : String(v);
+                }
+              : undefined
+          }
           stroke="var(--muted-foreground)"
           tick={{ fill: "var(--muted-foreground)", fontSize: 11 }}
-          label={spec.yLabel ? ((<WrappedYAxisLabel text={spec.yLabel} />) as any) : undefined}
+          label={
+            spec.yLabel
+              ? ((<WrappedYAxisLabel text={spec.yLabel} offset={spec.yLabelOffset ?? 32} />) as any)
+              : undefined
+          }
         />
         {showHover && (
           <Tooltip
@@ -433,13 +458,14 @@ export function Graph({ spec, className, height }: Props) {
   );
 }
 function WrappedYAxisLabel(props: any) {
-  const { viewBox, text } = props as {
+  const { viewBox, text, offset } = props as {
     viewBox?: { x: number; y: number; width: number; height: number };
     text: string;
+    offset?: number;
   };
   if (!viewBox) return null;
   const { x, y, height } = viewBox;
-  const cx = x - 32;
+  const cx = x - (offset ?? 32);
   const cy = y + height / 2;
   // Estimate char capacity along the rotated axis (chart height).
   const maxChars = Math.max(10, Math.floor(height / 8));

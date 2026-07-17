@@ -23,26 +23,55 @@ import { SearchProvider } from "../lib/search/context";
 import { MouseParticlesClient } from "@/components/ClientOnlyMP";
 import { LeaderboardJoinPrompt } from "@/components/LeaderboardJoinPrompt";
 import { checkAppVersion } from "@/lib/version";
+import { Home, RotateCw } from "lucide-react";
 
 function NotFoundComponent() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="max-w-md text-center animate-fade-up">
-        <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          The page you're looking for doesn't exist.
+    <main className="flex min-h-screen items-center justify-center bg-background px-6">
+      <div className="w-full max-w-xl text-center">
+        <p className="mb-2 text-sm font-medium text-muted-foreground">Page not found</p>
+
+        <h1 className="text-8xl font-black tracking-tight">404</h1>
+
+        <p className="mt-6 text-lg font-semibold">Choose the correct answer</p>
+
+        <div className="mt-6 space-y-3 text-left">
+          <div className="rounded-xl border border-border p-4">A. This page was moved.</div>
+
+          <div className="rounded-xl border border-border p-4">B. The URL is incorrect.</div>
+
+          <div className="rounded-xl border border-border bg-muted p-4 font-medium">
+            C. This page doesn't exist.
+          </div>
+
+          <div className="rounded-xl border border-border p-4">
+            D. <span className="text-muted-foreground line-through">All</span> One of the above.
+          </div>
+        </div>
+
+        <p className="mt-8 text-sm text-muted-foreground">
+          Correct answer: <span className="font-medium">D</span>
         </p>
-        <div className="mt-6">
+
+        <div className="mt-8 flex justify-center gap-3">
           <Link
             to="/"
-            className="inline-flex items-center justify-center rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-transform hover:scale-[1.02]"
+            className="bg-primary hover:bg-primary/80 transition-all inline-flex items-center gap-2 rounded-lg border border-border px-4 py-2 text-sm font-medium "
           >
-            Back home
+            <Home className="h-4 w-4" />
+            Go Home
           </Link>
+
+          <button
+            onClick={() => window.history.back()}
+            className="inline-flex items-center gap-2 rounded-lg border border-border px-4 py-2 text-sm font-medium hover:bg-muted"
+          >
+            <RotateCw className="h-4 w-4" />
+            Go Back
+          </button>
         </div>
       </div>
-    </div>
+    </main>
   );
 }
 
@@ -54,29 +83,50 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   }, [error]);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="max-w-md text-center">
-        <h1 className="text-xl font-semibold tracking-tight text-foreground">
-          This page didn't load
-        </h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Something went wrong. Try refreshing or head back home.
+    <div className="flex min-h-screen items-center justify-center bg-background px-6">
+      <div className="w-full max-w-xl text-center">
+        <p className="mb-2 text-sm font-medium text-muted-foreground">Something went wrong.. DW!</p>
+
+        <h1 className="text-3xl font-bold tracking-tight">Choose the correct answer</h1>
+
+        <div className="mt-8 space-y-3 text-left">
+          <div className="rounded-xl border border-border p-4">
+            A. Your internet connection is offline.
+          </div>
+
+          <div className="rounded-xl border border-border p-4">
+            B. The question is still loading.
+          </div>
+
+          <div className="rounded-xl border border-border p-4">
+            C. Something unexpected happened (from our side).
+          </div>
+
+          <div className="rounded-xl border border-border bg-muted p-4 font-medium">
+            D. Retry and lets pretend nothing has happened 👀
+          </div>
+        </div>
+
+        <p className="mt-6 text-sm text-muted-foreground">
+          Correct answer: <span className="font-medium">D</span>
         </p>
-        <div className="mt-6 flex flex-wrap justify-center gap-2">
+
+        <div className="mt-8 flex justify-center gap-3">
           <button
             onClick={() => {
               router.invalidate();
               reset();
             }}
-            className="inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground"
+            className="rounded-lg border border-border px-4 py-2 text-sm font-medium hover:bg-muted"
           >
-            Try again
+            Retry
           </button>
+
           <a
             href="/"
-            className="inline-flex items-center justify-center rounded-lg border border-border bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
+            className="rounded-lg border border-border px-4 py-2 text-sm font-medium hover:bg-muted"
           >
-            Go home
+            Go Home
           </a>
         </div>
       </div>

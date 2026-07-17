@@ -56,6 +56,12 @@ export type GraphSpec = {
   yMax: number;
   xTicks?: number[];
   yTicks?: number[];
+  xTickLabels?: string[];
+  yTickLabels?: string[];
+  /** Gap in px between the y-axis label and the axis line (default 32). */
+  yLabelOffset?: number;
+  /** Vertical offset in px of the x-axis label from the axis (default -10). */
+  xLabelOffset?: number;
   series: GraphSeries[];
   gridlines?: boolean;
   showLegend?: boolean;

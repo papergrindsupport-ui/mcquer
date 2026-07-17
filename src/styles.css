@@ -710,3 +710,7 @@ html span.cc-2gk6o {
 *:focus {
   outline: none !important;
 }
+
+button {
+  cursor: pointer !important;
+}
