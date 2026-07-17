@@ -37,9 +37,12 @@ function pickQuote(pct: number): string {
   const arr = QUOTES[bucket];
   return arr[Math.floor(Math.random() * arr.length)];
 }
+export type QuestionStatus = "correct" | "incorrect" | "empty";
 
 export type ResultsCardProps = {
   score: number;
+  statuses?: QuestionStatus[];
+
   total: number;
   gradeInfo: GradeInfo | null;
   gradeSystem: GradeSystem;
@@ -75,6 +78,8 @@ function CountUp({ target, duration = 900 }: { target: number; duration?: number
 export function ResultsCard({
   score,
   total,
+  statuses,
+
   gradeInfo,
   gradeSystem,
   onChangeGradeSystem,
@@ -193,18 +198,32 @@ export function ResultsCard({
           </span>
         </div>
         <div className="flex gap-[3px]">
-          {Array.from({ length: total }).map((_, i) => (
-            <span
-              key={i}
-              className={`h-2.5 flex-1 rounded-sm ${
-                i < score ? accent.text.replace("text-", "bg-") : "bg-muted"
-              }`}
-              style={{
-                animation: `mcq-pop 0.35s cubic-bezier(.34,1.56,.64,1) both`,
-                animationDelay: `${400 + i * 30}ms`,
-              }}
-            />
-          ))}
+          {Array.from({ length: total }).map((_, i) => {
+            const status: QuestionStatus = statuses?.[i] ?? (i < score ? "correct" : "empty");
+            const cls =
+              status === "correct"
+                ? "bg-emerald-500"
+                : status === "incorrect"
+                  ? "bg-red-500"
+                  : "bg-muted";
+            const title =
+              status === "correct"
+                ? `Q${i + 1}: correct`
+                : status === "incorrect"
+                  ? `Q${i + 1}: incorrect`
+                  : `Q${i + 1}: not answered`;
+            return (
+              <span
+                key={i}
+                title={title}
+                className={`h-2.5 flex-1 rounded-sm ${cls}`}
+                style={{
+                  animation: `mcq-pop 0.35s cubic-bezier(.34,1.56,.64,1) both`,
+                  animationDelay: `${400 + i * 30}ms`,
+                }}
+              />
+            );
+          })}
         </div>
       </div>
 

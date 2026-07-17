@@ -319,6 +319,9 @@ export function QuestionList({
           <ResultsCard
             score={score}
             total={questions.length}
+            statuses={selections.map(({ q, sel }) =>
+              sel === null ? "empty" : sel === q.answer ? "correct" : "incorrect",
+            )}
             gradeInfo={gradeInfo}
             gradeSystem={gradeSystem}
             onChangeGradeSystem={setGradeSystem}
