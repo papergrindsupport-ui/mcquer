@@ -290,7 +290,7 @@ export function QuestionList({
     const grades = availableSystems.map((sys) => {
       const b = gradeInfo?.boundaries[sys];
       return {
-        system: sys === "ag" ? "A–G" : "9–1",
+        system: sys === "ag" ? "A*–G" : "9–1",
         grade: b ? computeGrade(score, b) : null,
       };
     });

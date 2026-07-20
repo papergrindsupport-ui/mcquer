@@ -19,6 +19,14 @@ const REGISTRY: Record<string, GradeInfo> = {
       "91": "https://www.cambridgeinternational.org/programmes-and-qualifications/cambridge-igcse-9-1-chemistry-0971/",
     },
   },
+  "biology-2025-feb-V2": {
+    boundaries: {
+      ag: { A: 15, B: 13, C: 10, D: 8, E: 5, F: 3, G: 0 },
+    },
+    links: {
+      ag: "https://www.cambridgeinternational.org/programmes-and-qualifications/cambridge-igcse-chemistry-0620/",
+    },
+  },
 };
 
 export function getGradeInfo(

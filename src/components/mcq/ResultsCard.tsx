@@ -262,7 +262,7 @@ export function ResultsCard({
             rel="noopener noreferrer"
             className="inline-flex cursor-pointer items-center gap-1.5 rounded-md border border-border bg-background px-4 py-2 text-sm font-medium hover:bg-accent"
           >
-            <LuLink size={14} /> A–G GTs
+            <LuLink size={14} /> A*–G GTs
           </a>
         )}
         {links["91"] && (

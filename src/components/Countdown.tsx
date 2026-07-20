@@ -33,25 +33,76 @@ function ensureCountdownFonts() {
 
 /* -------------------- Session data -------------------- */
 
-export type ExamSessionId = "on26" | "fm27" | "mj27" | "on27";
+export type ExamSessionId = "on26" | "fm27" | "mj27";
 
-export const EXAM_SESSIONS: {
-  id: ExamSessionId;
-  label: string;
-  // ISO string — dummy dates for now
-  date: string;
-}[] = [
-  { id: "on26", label: "Oct/Nov 2026", date: "2026-10-19T09:00:00" },
-  { id: "fm27", label: "Feb/March 2027", date: "2027-02-22T09:00:00" },
-  { id: "mj27", label: "May/June 2027", date: "2027-05-17T09:00:00" },
-  { id: "on27", label: "Oct/Nov 2027", date: "2027-10-18T09:00:00" },
-];
+export const EXAM_SESSIONS: Record<
+  SubjectId,
+  {
+    id: ExamSessionId;
+    label: string;
+    date: string;
+  }[]
+> = {
+  biology: [
+    {
+      id: "on26",
+      label: "Oct/Nov 2026",
+      date: "2026-11-10T09:00:00",
+    },
+    {
+      id: "fm27",
+      label: "Feb/March 2027",
+      date: "2027-03-04T09:00:00",
+    },
+    {
+      id: "mj27",
+      label: "May/June 2027",
+      date: "2027-06-01T09:00:00",
+    },
+  ],
+
+  chemistry: [
+    {
+      id: "on26",
+      label: "Oct/Nov 2026",
+      date: "2026-11-12T09:00:00",
+    },
+    {
+      id: "fm27",
+      label: "Feb/March 2027",
+      date: "2027-03-03T09:00:00",
+    },
+    {
+      id: "mj27",
+      label: "May/June 2027",
+      date: "2027-06-02T09:00:00",
+    },
+  ],
+
+  physics: [
+    {
+      id: "on26",
+      label: "Oct/Nov 2026",
+      date: "2026-11-05T12:00:00",
+    },
+    {
+      id: "fm27",
+      label: "Feb/March 2027",
+      date: "2027-02-26T09:00:00",
+    },
+    {
+      id: "mj27",
+      label: "May/June 2027",
+      date: "2027-06-03T09:00:00",
+    },
+  ],
+};
 
 /* -------------------- Types -------------------- */
 
 type FontFamily =
-  | "Fredoka"
   | "Sora"
+  | "Fredoka"
   | "Inter"
   | "DM Serif Display"
   | "Playfair Display"
@@ -60,8 +111,8 @@ type FontFamily =
   | "System";
 
 const FONT_FAMILIES: FontFamily[] = [
-  "Fredoka",
   "Sora",
+  "Fredoka",
   "Inter",
   "DM Serif Display",
   "Playfair Display",
@@ -107,8 +158,8 @@ type CountdownSettings = {
 const DEFAULT_SETTINGS = (): CountdownSettings => ({
   sessionId: "on26",
   format: { days: true, hours: true, minutes: true, seconds: true },
-  bg: "#4c1d95",
-  fg: "#fbbf24",
+  bg: "#082f49",
+  fg: "#7dd3fc",
   fontSize: 120,
   fontFamily: "Fredoka",
   showColons: false,
@@ -202,8 +253,9 @@ function SubjectCountdown({ subject }: { subject: SubjectId }) {
     return () => window.removeEventListener("keydown", onKey);
   }, [fullscreen]);
 
-  const session = EXAM_SESSIONS.find((s) => s.id === settings.sessionId) ?? EXAM_SESSIONS[0];
+  const subjectSessions = EXAM_SESSIONS[subject];
 
+  const session = subjectSessions.find((s) => s.id === settings.sessionId) ?? subjectSessions[0];
   const timerBox = (
     <TimerBox
       subject={subject}
@@ -221,6 +273,7 @@ function SubjectCountdown({ subject }: { subject: SubjectId }) {
 
       {settingsOpen && (
         <CountdownSettingsModal
+          subject={subject}
           settings={settings}
           onChange={setSettings}
           onClose={() => setSettingsOpen(false)}
@@ -232,6 +285,7 @@ function SubjectCountdown({ subject }: { subject: SubjectId }) {
         createPortal(
           <FirstVisitModal
             subject={subject}
+            sessions={EXAM_SESSIONS[subject]}
             onPick={(id) => {
               setSettings({ ...settings, sessionId: id });
               setPrompted(true);
@@ -496,10 +550,16 @@ function DigitRoll({ char, fontSize }: { char: string; fontSize: number }) {
 
 function FirstVisitModal({
   subject,
+  sessions,
   onPick,
   onClose,
 }: {
   subject: SubjectId;
+  sessions: {
+    id: ExamSessionId;
+    label: string;
+    date: string;
+  }[];
   onPick: (id: ExamSessionId) => void;
   onClose: () => void;
 }) {
@@ -514,14 +574,14 @@ function FirstVisitModal({
       >
         <div className="border-b border-border px-5 py-4">
           <div className="text-sm font-semibold">
-            Which {SUBJECT_NAMES[subject]} exam are you sitting?
+            Which {SUBJECT_NAMES[subject]} exam are you sitting (P2)?
           </div>
           <div className="mt-1 text-xs text-muted-foreground">
             Pick your session so the countdown targets the right date.
           </div>
         </div>
         <div className="space-y-2 p-4">
-          {EXAM_SESSIONS.map((s) => (
+          {sessions.map((s) => (
             <button
               key={s.id}
               onClick={() => onPick(s.id)}
@@ -545,7 +605,9 @@ function CountdownSettingsModal({
   settings,
   onChange,
   onClose,
+  subject,
 }: {
+  subject: SubjectId;
   settings: CountdownSettings;
   onChange: (s: CountdownSettings) => void;
   onClose: () => void;
@@ -567,8 +629,9 @@ function CountdownSettingsModal({
   const toggleFmt = (k: keyof Format) =>
     update("format", { ...settings.format, [k]: !settings.format[k] });
 
-  const current = EXAM_SESSIONS.find((s) => s.id === settings.sessionId) ?? EXAM_SESSIONS[0];
+  const subjectSessions = EXAM_SESSIONS[subject];
 
+  const current = subjectSessions.find((s) => s.id === settings.sessionId) ?? subjectSessions[0];
   const modal = (
     <div
       className="fixed inset-0 z-[120] grid place-items-center bg-black/70 p-4 backdrop-blur-sm animate-fade-in"
@@ -611,7 +674,7 @@ function CountdownSettingsModal({
               </button>
               <Collapse open={sessOpen}>
                 <div className="mt-1 space-y-1 rounded-lg border border-border bg-background p-1">
-                  {EXAM_SESSIONS.map((s) => {
+                  {subjectSessions.map((s) => {
                     const active = s.id === settings.sessionId;
                     return (
                       <button

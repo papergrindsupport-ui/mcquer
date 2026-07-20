@@ -125,7 +125,7 @@ export function Header() {
             className="theme-toggle relative grid h-10 w-10 cursor-pointer place-items-center overflow-hidden rounded-lg text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
           >
             <span key={mode} className="inline-flex animate-theme-icon">
-              {mode === "dark" ? <LuSun size={18} /> : <LuMoon size={18} />}
+            {mode === "dark" ? <LuSun size={18} /> : <LuMoon size={18} />}
             </span>
           </button>
         </div>

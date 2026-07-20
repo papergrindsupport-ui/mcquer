@@ -34,7 +34,7 @@ const DEFAULTS: Settings = {
   autoSubmitOnTimerEnd: false,
   hideBookmarkButton: false,
   showNavStrip: false,
-  normalizeIntroText: false,
+  normalizeIntroText: true,
   navStripPosition: "right",
 };
 
