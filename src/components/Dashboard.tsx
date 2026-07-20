@@ -26,7 +26,6 @@ import { Collapse } from "@/components/Collapse";
 import { downloadDashboardPdf } from "@/lib/pdf-export";
 import { useVolto } from "@/lib/volto/context";
 
-
 import {
   PieChart,
   Pie,
@@ -57,16 +56,16 @@ import {
   type PaperEvent,
 } from "@/lib/mcq/stats";
 import { getAllProgress, subscribeProgress, type ProgressEntry } from "@/lib/mcq/progress";
-import {
-  SUBJECTS,
-  SESSIONS,
-  type SubjectId,
-  type SessionId,
-  getSubject,
-} from "@/lib/papers-data";
+import { SUBJECTS, SESSIONS, type SubjectId, type SessionId, getSubject } from "@/lib/papers-data";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Slider } from "@/components/ui/slider";
-import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
 
 const GREEN = "#10b981";
 const RED = "#ef4444";
@@ -164,7 +163,12 @@ export function Dashboard() {
     };
   }, [filtered, filteredProgress]);
 
-  const useOverallStats = subjectFilter === "all" && period === "all" && yearFilter === "all" && sessionFilter === "all" && variantFilter === "all";
+  const useOverallStats =
+    subjectFilter === "all" &&
+    period === "all" &&
+    yearFilter === "all" &&
+    sessionFilter === "all" &&
+    variantFilter === "all";
   const displayStats = useOverallStats ? stats : { ...stats, ...filteredStats };
 
   const exportData = () => {
@@ -201,9 +205,7 @@ export function Dashboard() {
         };
       });
     const qPct =
-      goals.questions > 0
-        ? Math.min(100, Math.round((stats.qCorrect / goals.questions) * 100))
-        : 0;
+      goals.questions > 0 ? Math.min(100, Math.round((stats.qCorrect / goals.questions) * 100)) : 0;
     const pPct =
       goals.papers > 0
         ? Math.min(100, Math.round((stats.papersCompleted / goals.papers) * 100))
@@ -269,11 +271,52 @@ export function Dashboard() {
             {filtersOpen && (
               <div className="scrollbar-thin min-w-0 flex-1 overflow-x-auto">
                 <div className="flex w-max items-center gap-2 pb-1">
-                  <FilterPill label="Subject" value={subjectFilter} onChange={(v) => setSubjectFilter(v as any)} options={[{ value: "all", label: "All subjects" }, ...SUBJECTS.map((s) => ({ value: s.id, label: s.name }))]} />
-                  <FilterPill label="Period" value={period} onChange={(v) => setPeriod(v as PeriodFilter)} options={[{ value: "all", label: "All time" }, { value: "day", label: "Today" }, { value: "week", label: "This week" }, { value: "month", label: "This month" }]} />
-                  <FilterPill label="Year" value={yearFilter} onChange={setYearFilter} options={yearOpts} />
-                  <FilterPill label="Session" value={sessionFilter} onChange={(v) => setSessionFilter(v as any)} options={[{ value: "all", label: "All sessions" }, ...SESSIONS.map((s) => ({ value: s.id, label: s.short }))]} />
-                  <FilterPill label="Variant" value={variantFilter} onChange={setVariantFilter} options={[{ value: "all", label: "All variants" }, { value: "V1", label: "V1" }, { value: "V2", label: "V2" }, { value: "V3", label: "V3" }]} />
+                  <FilterPill
+                    label="Subject"
+                    value={subjectFilter}
+                    onChange={(v) => setSubjectFilter(v as any)}
+                    options={[
+                      { value: "all", label: "All subjects" },
+                      ...SUBJECTS.map((s) => ({ value: s.id, label: s.name })),
+                    ]}
+                  />
+                  <FilterPill
+                    label="Period"
+                    value={period}
+                    onChange={(v) => setPeriod(v as PeriodFilter)}
+                    options={[
+                      { value: "all", label: "All time" },
+                      { value: "day", label: "Today" },
+                      { value: "week", label: "This week" },
+                      { value: "month", label: "This month" },
+                    ]}
+                  />
+                  <FilterPill
+                    label="Year"
+                    value={yearFilter}
+                    onChange={setYearFilter}
+                    options={yearOpts}
+                  />
+                  <FilterPill
+                    label="Session"
+                    value={sessionFilter}
+                    onChange={(v) => setSessionFilter(v as any)}
+                    options={[
+                      { value: "all", label: "All sessions" },
+                      ...SESSIONS.map((s) => ({ value: s.id, label: s.short })),
+                    ]}
+                  />
+                  <FilterPill
+                    label="Variant"
+                    value={variantFilter}
+                    onChange={setVariantFilter}
+                    options={[
+                      { value: "all", label: "All variants" },
+                      { value: "V1", label: "V1" },
+                      { value: "V2", label: "V2" },
+                      { value: "V3", label: "V3" },
+                    ]}
+                  />
                 </div>
               </div>
             )}
@@ -308,24 +351,71 @@ export function Dashboard() {
           <Tabs defaultValue="overview" className="mt-6">
             <div className="scrollbar-thin -mx-4 overflow-x-auto px-4">
               <TabsList className="inline-flex h-auto w-max justify-start gap-1 bg-transparent p-0">
-                <DTab value="overview" icon={<LuChartPie size={14} />}>Overview</DTab>
-                <DTab value="papers" icon={<LuChartBar size={14} />}>Papers</DTab>
-                <DTab value="questions" icon={<LuSparkles size={14} />}>Questions</DTab>
-                <DTab value="confidence" icon={<LuBrain size={14} />}>Confidence</DTab>
-                <DTab value="trends" icon={<LuTrendingUp size={14} />}>Trends</DTab>
-                <DTab value="goals" icon={<LuTarget size={14} />}>Goals</DTab>
-                <DTab value="predictions" icon={<LuFlame size={14} />}>Predictions</DTab>
+                <DTab value="overview" icon={<LuChartPie size={14} />}>
+                  Overview
+                </DTab>
+                <DTab value="papers" icon={<LuChartBar size={14} />}>
+                  Papers
+                </DTab>
+                <DTab value="questions" icon={<LuSparkles size={14} />}>
+                  Questions
+                </DTab>
+                <DTab value="confidence" icon={<LuBrain size={14} />}>
+                  Confidence
+                </DTab>
+                <DTab value="trends" icon={<LuTrendingUp size={14} />}>
+                  Trends
+                </DTab>
+                <DTab value="goals" icon={<LuTarget size={14} />}>
+                  Goals
+                </DTab>
+                <DTab value="predictions" icon={<LuFlame size={14} />}>
+                  Predictions
+                </DTab>
               </TabsList>
             </div>
 
             <TabsContent value="overview" className="mt-4">
               <Carousel>
-                <StatCard label="Pencils earned" value={stats.pencils} icon={<LuPencil />} accent={PRIMARY} sub="Keep going!" />
-                <StatCard label="Papers attempted" value={displayStats.papersAttempted} icon={<LuChartBar />} accent={PRIMARY} />
-                <StatCard label="Papers completed" value={displayStats.papersCompleted} icon={<LuTrophy />} accent={GREEN} />
-                <StatCard label="Papers passed" value={displayStats.papersPassed} icon={<LuTrophy />} accent={GREEN} />
-                <StatCard label="Papers failed" value={displayStats.papersFailed} icon={<LuFlame />} accent={RED} />
-                <RadialCard label="Pass rate" value={displayStats.papersSubmitted > 0 ? Math.round((displayStats.papersPassed / displayStats.papersSubmitted) * 100) : 0} />
+                <StatCard
+                  label="Pencils earned"
+                  value={stats.pencils}
+                  icon={<LuPencil />}
+                  accent={PRIMARY}
+                  sub="Keep going!"
+                />
+                <StatCard
+                  label="Papers attempted"
+                  value={displayStats.papersAttempted}
+                  icon={<LuChartBar />}
+                  accent={PRIMARY}
+                />
+                <StatCard
+                  label="Papers completed"
+                  value={displayStats.papersCompleted}
+                  icon={<LuTrophy />}
+                  accent={GREEN}
+                />
+                <StatCard
+                  label="Papers passed"
+                  value={displayStats.papersPassed}
+                  icon={<LuTrophy />}
+                  accent={GREEN}
+                />
+                <StatCard
+                  label="Papers failed"
+                  value={displayStats.papersFailed}
+                  icon={<LuFlame />}
+                  accent={RED}
+                />
+                <RadialCard
+                  label="Pass rate"
+                  value={
+                    displayStats.papersSubmitted > 0
+                      ? Math.round((displayStats.papersPassed / displayStats.papersSubmitted) * 100)
+                      : 0
+                  }
+                />
                 <AccuracyDonut correct={displayStats.qCorrect} wrong={displayStats.qWrong} />
               </Carousel>
               <Feedback stats={displayStats} />
@@ -361,7 +451,14 @@ export function Dashboard() {
             </TabsContent>
 
             <TabsContent value="goals" className="mt-4">
-              <GoalsPanel goals={goals} onChange={(g) => { setGoalsState(g); setGoals(g); }} stats={displayStats} />
+              <GoalsPanel
+                goals={goals}
+                onChange={(g) => {
+                  setGoalsState(g);
+                  setGoals(g);
+                }}
+                stats={displayStats}
+              />
             </TabsContent>
 
             <TabsContent value="predictions" className="mt-4">
@@ -387,7 +484,6 @@ export function Dashboard() {
     </section>
   );
 }
-
 
 /* ---------- AI feedback ---------- */
 
@@ -450,10 +546,17 @@ function AiFeedbackButton({
   );
 }
 
-
 /* ---------- Sub-components ---------- */
 
-function DTab({ value, icon, children }: { value: string; icon: React.ReactNode; children: React.ReactNode }) {
+function DTab({
+  value,
+  icon,
+  children,
+}: {
+  value: string;
+  icon: React.ReactNode;
+  children: React.ReactNode;
+}) {
   return (
     <TabsTrigger
       value={value}
@@ -488,7 +591,6 @@ function FilterPill({
     </div>
   );
 }
-
 
 function Carousel({ children }: { children: React.ReactNode }) {
   const scrollerRef = useRef<HTMLDivElement>(null);
@@ -577,7 +679,6 @@ function StatCard({
       className="relative h-full overflow-hidden rounded-2xl border border-border bg-card p-5"
       style={{ boxShadow: `inset 0 0 0 1px ${accent}22` }}
     >
-
       <div className="flex items-center gap-2 text-xs uppercase tracking-widest text-muted-foreground">
         {icon}
         {label}
@@ -597,12 +698,24 @@ function RadialCard({ label, value }: { label: string; value: number }) {
       <div className="text-xs uppercase tracking-widest text-muted-foreground">{label}</div>
       <div className="relative h-48">
         <ResponsiveContainer>
-          <RadialBarChart innerRadius="70%" outerRadius="100%" data={data} startAngle={90} endAngle={-270}>
-            <RadialBar dataKey="value" cornerRadius={20} background={{ fill: "hsl(var(--muted))" }} />
+          <RadialBarChart
+            innerRadius="70%"
+            outerRadius="100%"
+            data={data}
+            startAngle={90}
+            endAngle={-270}
+          >
+            <RadialBar
+              dataKey="value"
+              cornerRadius={20}
+              background={{ fill: "hsl(var(--muted))" }}
+            />
           </RadialBarChart>
         </ResponsiveContainer>
         <div className="pointer-events-none absolute inset-0 grid place-items-center">
-          <div className="text-3xl font-black" style={{ color: data[0].fill }}>{value}%</div>
+          <div className="text-3xl font-black" style={{ color: data[0].fill }}>
+            {value}%
+          </div>
         </div>
       </div>
     </div>
@@ -611,12 +724,13 @@ function RadialCard({ label, value }: { label: string; value: number }) {
 
 function AccuracyDonut({ correct, wrong }: { correct: number; wrong: number }) {
   const total = correct + wrong;
-  const data = total === 0
-    ? [{ name: "No data", value: 1, fill: "hsl(var(--muted))" }]
-    : [
-        { name: "Correct", value: correct, fill: GREEN },
-        { name: "Wrong", value: wrong, fill: RED },
-      ];
+  const data =
+    total === 0
+      ? [{ name: "No data", value: 1, fill: "hsl(var(--muted))" }]
+      : [
+          { name: "Correct", value: correct, fill: GREEN },
+          { name: "Wrong", value: wrong, fill: RED },
+        ];
   const pct = total > 0 ? Math.round((correct / total) * 100) : 0;
   return (
     <div className="h-full rounded-2xl border border-border bg-card p-4">
@@ -625,13 +739,17 @@ function AccuracyDonut({ correct, wrong }: { correct: number; wrong: number }) {
         <ResponsiveContainer>
           <PieChart>
             <Pie data={data} innerRadius={55} outerRadius={80} paddingAngle={2} dataKey="value">
-              {data.map((d, i) => <Cell key={i} fill={d.fill} />)}
+              {data.map((d, i) => (
+                <Cell key={i} fill={d.fill} />
+              ))}
             </Pie>
             <RTooltip />
           </PieChart>
         </ResponsiveContainer>
         <div className="pointer-events-none absolute inset-0 grid place-items-center">
-          <div className="text-2xl font-black" style={{ color: pct >= 50 ? GREEN : RED }}>{pct}%</div>
+          <div className="text-2xl font-black" style={{ color: pct >= 50 ? GREEN : RED }}>
+            {pct}%
+          </div>
         </div>
       </div>
     </div>
@@ -645,7 +763,9 @@ function CorrectVsWrongBar({ correct, wrong }: { correct: number; wrong: number 
   ];
   return (
     <div className="h-full rounded-2xl border border-border bg-card p-4">
-      <div className="text-xs uppercase tracking-widest text-muted-foreground">Correct vs Wrong</div>
+      <div className="text-xs uppercase tracking-widest text-muted-foreground">
+        Correct vs Wrong
+      </div>
       <div className="h-48">
         <ResponsiveContainer>
           <BarChart data={data}>
@@ -653,7 +773,9 @@ function CorrectVsWrongBar({ correct, wrong }: { correct: number; wrong: number 
             <YAxis tick={{ fontSize: 11 }} allowDecimals={false} />
             <RTooltip />
             <Bar dataKey="value" radius={[8, 8, 0, 0]}>
-              {data.map((d, i) => <Cell key={i} fill={d.fill} />)}
+              {data.map((d, i) => (
+                <Cell key={i} fill={d.fill} />
+              ))}
             </Bar>
           </BarChart>
         </ResponsiveContainer>
@@ -662,7 +784,13 @@ function CorrectVsWrongBar({ correct, wrong }: { correct: number; wrong: number 
   );
 }
 
-function PapersBySubject({ progress, events }: { progress: ProgressEntry[]; events: PaperEvent[] }) {
+function PapersBySubject({
+  progress,
+  events,
+}: {
+  progress: ProgressEntry[];
+  events: PaperEvent[];
+}) {
   const data = SUBJECTS.map((s) => ({
     name: s.shortcut,
     attempted: progress.filter((p) => p.subject === s.id).length,
@@ -698,14 +826,25 @@ function RecentResults({ events }: { events: PaperEvent[] }) {
           const s = getSubject(e.subject);
           const color = pct >= 70 ? GREEN : pct >= 50 ? YELLOW : RED;
           return (
-            <div key={i} className="flex items-center justify-between rounded-xl border border-border bg-surface p-3">
+            <div
+              key={i}
+              className="flex items-center justify-between rounded-xl border border-border bg-surface p-3"
+            >
               <div className="min-w-0">
-                <div className="truncate text-sm font-medium">{s.name} · {e.year} {e.session} {e.variant}</div>
-                <div className="text-xs text-muted-foreground">{new Date(e.t).toLocaleDateString()}</div>
+                <div className="truncate text-sm font-medium">
+                  {s.name} · {e.year} {e.session} {e.variant}
+                </div>
+                <div className="text-xs text-muted-foreground">
+                  {new Date(e.t).toLocaleDateString()}
+                </div>
               </div>
               <div className="text-right">
-                <div className="text-lg font-black tabular-nums" style={{ color }}>{pct}%</div>
-                <div className="text-xs text-muted-foreground">{e.score}/{e.total}</div>
+                <div className="text-lg font-black tabular-nums" style={{ color }}>
+                  {pct}%
+                </div>
+                <div className="text-xs text-muted-foreground">
+                  {e.score}/{e.total}
+                </div>
               </div>
             </div>
           );
@@ -730,12 +869,22 @@ function ConfidencePanel({ conf, stats }: { conf: Record<string, number>; stats:
     <div>
       <Carousel>
         <div className="h-full rounded-2xl border border-border bg-card p-4">
-          <div className="text-xs uppercase tracking-widest text-muted-foreground">Confidence breakdown</div>
+          <div className="text-xs uppercase tracking-widest text-muted-foreground">
+            Confidence breakdown
+          </div>
           <div className="h-48">
             <ResponsiveContainer>
               <PieChart>
-                <Pie data={data.filter(d => d.value > 0)} innerRadius={45} outerRadius={80} dataKey="value" paddingAngle={2}>
-                  {data.map((d, i) => <Cell key={i} fill={d.fill} />)}
+                <Pie
+                  data={data.filter((d) => d.value > 0)}
+                  innerRadius={45}
+                  outerRadius={80}
+                  dataKey="value"
+                  paddingAngle={2}
+                >
+                  {data.map((d, i) => (
+                    <Cell key={i} fill={d.fill} />
+                  ))}
                 </Pie>
                 <RTooltip />
                 <Legend wrapperStyle={{ fontSize: 11 }} />
@@ -750,11 +899,17 @@ function ConfidencePanel({ conf, stats }: { conf: Record<string, number>; stats:
       </Carousel>
       <div className="mt-4 rounded-xl border border-border bg-card p-4 text-sm">
         {pct >= 70 ? (
-          <p className="text-emerald-500">🌟 You're picking answers confidently. Trust your instincts!</p>
+          <p className="text-emerald-500">
+            🌟 You're picking answers confidently. Trust your instincts!
+          </p>
         ) : pct >= 50 ? (
-          <p className="text-amber-500">💪 Building confidence — keep reviewing the questions you second-guess.</p>
+          <p className="text-amber-500">
+            💪 Building confidence — keep reviewing the questions you second-guess.
+          </p>
         ) : (
-          <p className="text-red-500">🎯 Focus on fundamentals — reduce answer-flipping by reading questions twice.</p>
+          <p className="text-red-500">
+            🎯 Focus on fundamentals — reduce answer-flipping by reading questions twice.
+          </p>
         )}
       </div>
     </div>
@@ -775,16 +930,26 @@ function TrendsPanel({ events }: { events: PaperEvent[] }) {
     <div>
       <div className="rounded-2xl border border-border bg-card p-4">
         <div className="mb-3 flex items-center justify-between">
-          <div className="text-xs uppercase tracking-widest text-muted-foreground">Score over time</div>
+          <div className="text-xs uppercase tracking-widest text-muted-foreground">
+            Score over time
+          </div>
           {data.length >= 2 && (
-            <span className={improving ? "text-xs font-medium text-emerald-500" : "text-xs font-medium text-red-500"}>
+            <span
+              className={
+                improving
+                  ? "text-xs font-medium text-emerald-500"
+                  : "text-xs font-medium text-red-500"
+              }
+            >
               {improving ? "📈 Improving" : "📉 Declining"}
             </span>
           )}
         </div>
         <div className="h-64">
           {data.length === 0 ? (
-            <div className="grid h-full place-items-center text-sm text-muted-foreground">Submit papers to see trends</div>
+            <div className="grid h-full place-items-center text-sm text-muted-foreground">
+              Submit papers to see trends
+            </div>
           ) : (
             <ResponsiveContainer>
               <LineChart data={data}>
@@ -792,7 +957,13 @@ function TrendsPanel({ events }: { events: PaperEvent[] }) {
                 <XAxis dataKey="date" tick={{ fontSize: 10 }} />
                 <YAxis tick={{ fontSize: 10 }} domain={[0, 100]} />
                 <RTooltip />
-                <Line type="monotone" dataKey="pct" stroke={PRIMARY} strokeWidth={3} dot={{ r: 4 }} />
+                <Line
+                  type="monotone"
+                  dataKey="pct"
+                  stroke={PRIMARY}
+                  strokeWidth={3}
+                  dot={{ r: 4 }}
+                />
               </LineChart>
             </ResponsiveContainer>
           )}
@@ -802,9 +973,19 @@ function TrendsPanel({ events }: { events: PaperEvent[] }) {
   );
 }
 
-function GoalsPanel({ goals, onChange, stats }: { goals: Goals; onChange: (g: Goals) => void; stats: any }) {
-  const qPct = goals.questions > 0 ? Math.min(100, Math.round((stats.qCorrect / goals.questions) * 100)) : 0;
-  const pPct = goals.papers > 0 ? Math.min(100, Math.round((stats.papersCompleted / goals.papers) * 100)) : 0;
+function GoalsPanel({
+  goals,
+  onChange,
+  stats,
+}: {
+  goals: Goals;
+  onChange: (g: Goals) => void;
+  stats: any;
+}) {
+  const qPct =
+    goals.questions > 0 ? Math.min(100, Math.round((stats.qCorrect / goals.questions) * 100)) : 0;
+  const pPct =
+    goals.papers > 0 ? Math.min(100, Math.round((stats.papersCompleted / goals.papers) * 100)) : 0;
   return (
     <div className="grid gap-4 sm:grid-cols-2">
       <GoalCard
@@ -854,16 +1035,29 @@ function GoalCard({
     <div className="rounded-2xl border border-border bg-card p-5">
       <div className="text-xs uppercase tracking-widest text-muted-foreground">{label}</div>
       <div className="mt-2 flex items-baseline gap-2">
-        <span className="text-4xl font-black tabular-nums" style={{ color: accent }}>{current}</span>
+        <span className="text-4xl font-black tabular-nums" style={{ color: accent }}>
+          {current}
+        </span>
         <span className="text-lg text-muted-foreground">/ {value}</span>
-        <span className="ml-auto text-sm font-medium" style={{ color: accent }}>{pct}%</span>
+        <span className="ml-auto text-sm font-medium" style={{ color: accent }}>
+          {pct}%
+        </span>
       </div>
       <div className="mt-3 h-3 overflow-hidden rounded-full bg-muted">
-        <div className="h-full rounded-full transition-all duration-500" style={{ width: `${pct}%`, backgroundColor: accent }} />
+        <div
+          className="h-full rounded-full transition-all duration-500"
+          style={{ width: `${pct}%`, backgroundColor: accent }}
+        />
       </div>
       <div className="mt-5">
         <div className="mb-2 text-xs text-muted-foreground">Adjust goal: {value}</div>
-        <Slider value={[value]} min={step} max={max} step={step} onValueChange={(v) => onValueChange(v[0])} />
+        <Slider
+          value={[value]}
+          min={step}
+          max={max}
+          step={step}
+          onValueChange={(v) => onValueChange(v[0])}
+        />
       </div>
       {pct >= 100 && (
         <div className="mt-3 rounded-lg bg-emerald-500/10 px-3 py-2 text-xs font-medium text-emerald-500">
@@ -875,32 +1069,56 @@ function GoalCard({
 }
 
 function PredictionsPanel({ events, stats }: { events: PaperEvent[]; stats: Stats }) {
-  const avgPct = events.length > 0
-    ? events.reduce((n, e) => n + (e.total > 0 ? (e.score / e.total) * 100 : 0), 0) / events.length
-    : 0;
+  const avgPct =
+    events.length > 0
+      ? events.reduce((n, e) => n + (e.total > 0 ? (e.score / e.total) * 100 : 0), 0) /
+        events.length
+      : 0;
   const last3 = events.slice(-3);
-  const recentAvg = last3.length > 0
-    ? last3.reduce((n, e) => n + (e.total > 0 ? (e.score / e.total) * 100 : 0), 0) / last3.length
-    : avgPct;
+  const recentAvg =
+    last3.length > 0
+      ? last3.reduce((n, e) => n + (e.total > 0 ? (e.score / e.total) * 100 : 0), 0) / last3.length
+      : avgPct;
   const trend = recentAvg - avgPct;
   const projected = Math.round(Math.min(100, Math.max(0, recentAvg + trend)));
-  const grade = projected >= 90 ? "A*" : projected >= 80 ? "A" : projected >= 70 ? "B" : projected >= 60 ? "C" : projected >= 50 ? "D" : projected >= 40 ? "E" : "U";
+  const grade =
+    projected >= 90
+      ? "A*"
+      : projected >= 80
+        ? "A"
+        : projected >= 70
+          ? "B"
+          : projected >= 60
+            ? "C"
+            : projected >= 50
+              ? "D"
+              : projected >= 40
+                ? "E"
+                : "U";
   const color = projected >= 70 ? GREEN : projected >= 50 ? YELLOW : RED;
 
   return (
     <div className="grid gap-4 sm:grid-cols-2">
       <div className="rounded-2xl border border-border bg-card p-5">
-        <div className="text-xs uppercase tracking-widest text-muted-foreground">Projected next score</div>
+        <div className="text-xs uppercase tracking-widest text-muted-foreground">
+          Projected next score
+        </div>
         <div className="mt-4 flex items-baseline gap-3">
-          <span className="text-6xl font-black tabular-nums" style={{ color }}>{projected}%</span>
+          <span className="text-6xl font-black tabular-nums" style={{ color }}>
+            {projected}%
+          </span>
         </div>
         <div className="mt-2 text-sm text-muted-foreground">
           Based on {events.length} paper{events.length === 1 ? "" : "s"}
         </div>
       </div>
       <div className="rounded-2xl border border-border bg-card p-5">
-        <div className="text-xs uppercase tracking-widest text-muted-foreground">Predicted grade</div>
-        <div className="mt-4 text-7xl font-black" style={{ color }}>{grade}</div>
+        <div className="text-xs uppercase tracking-widest text-muted-foreground">
+          Predicted grade
+        </div>
+        <div className="mt-4 text-7xl font-black" style={{ color }}>
+          {grade}
+        </div>
         <div className="mt-2 text-sm text-muted-foreground">Approximate — keep practising.</div>
       </div>
       <div className="rounded-2xl border border-border bg-card p-5 sm:col-span-2">
@@ -908,11 +1126,15 @@ function PredictionsPanel({ events, stats }: { events: PaperEvent[]; stats: Stat
           {stats.qAttempted < 10 ? (
             "Attempt more questions to get sharper predictions."
           ) : trend > 5 ? (
-            <span className="text-emerald-500">🚀 You're on an upward trend — keep the momentum!</span>
+            <span className="text-emerald-500">
+              🚀 You're on an upward trend — keep the momentum!
+            </span>
           ) : trend < -5 ? (
             <span className="text-red-500">⚠️ Recent scores dipped — review your last paper.</span>
           ) : (
-            <span className="text-amber-500">📊 Steady performance — push for a new personal best.</span>
+            <span className="text-amber-500">
+              📊 Steady performance — push for a new personal best.
+            </span>
           )}
         </div>
       </div>
@@ -923,18 +1145,33 @@ function PredictionsPanel({ events, stats }: { events: PaperEvent[]; stats: Stat
 function Feedback({ stats }: { stats: any }) {
   const pct = stats.papersSubmitted > 0 ? (stats.papersPassed / stats.papersSubmitted) * 100 : 0;
   const msg =
-    pct >= 70 ? { t: "Excellent work! You're consistently passing.", c: "text-emerald-500" } :
-    pct >= 50 ? { t: "Solid progress — keep it up!", c: "text-amber-500" } :
-    stats.papersSubmitted > 0 ? { t: "Every attempt gets you closer. Don't give up!", c: "text-red-500" } :
-    { t: "Submit your first paper to unlock insights.", c: "text-muted-foreground" };
+    pct >= 70
+      ? { t: "Excellent work! You're consistently passing.", c: "text-emerald-500" }
+      : pct >= 50
+        ? { t: "Solid progress — keep it up!", c: "text-amber-500" }
+        : stats.papersSubmitted > 0
+          ? { t: "Every attempt gets you closer. Don't give up!", c: "text-red-500" }
+          : { t: "Submit your first paper to unlock insights.", c: "text-muted-foreground" };
   return (
-    <div className={`mt-4 rounded-xl border border-border bg-card p-4 text-sm font-medium ${msg.c}`}>
-      ✨ {msg.t}
+    <div
+      className={`mt-4 rounded-xl border border-border bg-card p-4 text-sm font-medium ${msg.c}`}
+    >
+      😶‍🌫️ {msg.t}
     </div>
   );
 }
 
-function Collapsible({ title, open, onToggle, children }: { title: string; open: boolean; onToggle: () => void; children: React.ReactNode }) {
+function Collapsible({
+  title,
+  open,
+  onToggle,
+  children,
+}: {
+  title: string;
+  open: boolean;
+  onToggle: () => void;
+  children: React.ReactNode;
+}) {
   return (
     <div className="mt-4 rounded-2xl border border-border bg-card">
       <button
@@ -950,12 +1187,20 @@ function Collapsible({ title, open, onToggle, children }: { title: string; open:
 }
 
 // Optional drawer demo for details (kept unused-but-available)
-export function _DetailsDrawer({ children, trigger }: { children: React.ReactNode; trigger: React.ReactNode }) {
+export function _DetailsDrawer({
+  children,
+  trigger,
+}: {
+  children: React.ReactNode;
+  trigger: React.ReactNode;
+}) {
   return (
     <Drawer>
       <DrawerTrigger asChild>{trigger}</DrawerTrigger>
       <DrawerContent>
-        <DrawerHeader><DrawerTitle>Details</DrawerTitle></DrawerHeader>
+        <DrawerHeader>
+          <DrawerTitle>Details</DrawerTitle>
+        </DrawerHeader>
         <div className="px-4 pb-6">{children}</div>
       </DrawerContent>
     </Drawer>
