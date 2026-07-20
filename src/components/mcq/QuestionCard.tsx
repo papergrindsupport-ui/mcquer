@@ -8,12 +8,20 @@ import {
 } from "react-icons/lu";
 import { CircuitRenderer } from "./Circuit";
 import { CircuitOptions } from "./CircuitOptions";
-import { TablesOptions } from "./TablesOptions";
 
 import { Flowchart } from "./Flowchart";
 
-import type { OptionId, Question, IntroData, Block, OptionsLayout } from "@/lib/mcq/types";
-import { Rich, SYMBOL_MAP } from "@/lib/mcq/rich";
+import type {
+  OptionId,
+  Question,
+  IntroData,
+  Block,
+  OptionsLayout,
+  KeyItem,
+  TableLayoutCell,
+  FlowchartSpec,
+} from "@/lib/mcq/types";
+import { Rich, SYMBOL_MAP, normalizeIntroSizes } from "@/lib/mcq/rich";
 import { MCQImage } from "./MCQImage";
 import { Graph } from "./Graph";
 import { TextVertical, TextHorizontal, Text2x2, TextRefs, CombinedChoice } from "./TextOptions";
@@ -192,6 +200,8 @@ export function QuestionCard({
   };
 
   const allBlocks = getBlocks(q);
+  const hasIntro = allBlocks.some((b) => b.block === "intro" || b.block === "introData");
+  const qNumClass = settings.normalizeIntroText && hasIntro ? "text-lg" : undefined;
   // For image-refs / image-zones, hoist the LAST "question" block out of the
   // normal block flow so we can render it between the reference material and
   // the options grid (matches how "combined-choice" naturally works).
@@ -275,11 +285,14 @@ export function QuestionCard({
                           <div
                             className={`text-base leading-relaxed text-foreground ${b.centered ? "text-center" : ""}`}
                           >
-                            {isFirstOverall && <QNum n={q.n} />}
-                            <Rich nodes={b.content} />
+                            {isFirstOverall && <QNum n={q.n} className={qNumClass} />}
+                            <IntroRich nodes={b.content} normalize={settings.normalizeIntroText} />
                           </div>
                         ) : (
-                          <IntroDataRenderer data={b.data} />
+                          <IntroDataRenderer
+                            data={b.data}
+                            normalizeText={settings.normalizeIntroText}
+                          />
                         )}
                       </div>
                     );
@@ -295,8 +308,8 @@ export function QuestionCard({
                   key={b.id}
                   className={`text-base leading-relaxed text-foreground ${b.centered ? "mx-auto max-w-2xl text-center" : ""}`}
                 >
-                  {isFirstOverall && <QNum n={q.n} />}
-                  <Rich nodes={b.content} />
+                  {isFirstOverall && <QNum n={q.n} className={qNumClass} />}
+                  <IntroRich nodes={b.content} normalize={settings.normalizeIntroText} />
                 </div>
               );
             if (b.block === "introData")
@@ -304,16 +317,16 @@ export function QuestionCard({
                 <div key={b.id}>
                   {isFirstOverall && (
                     <div className="mb-3 text-base">
-                      <QNum n={q.n} />
+                      <QNum n={q.n} className={qNumClass} />
                       <span className="text-muted-foreground">See figure below.</span>
                     </div>
                   )}
-                  <IntroDataRenderer data={b.data} />
+                  <IntroDataRenderer data={b.data} normalizeText={settings.normalizeIntroText} />
                 </div>
               );
             return (
               <div key={b.id} className="text-lg leading-relaxed font-medium text-foreground">
-                {isFirstOverall && <QNum n={q.n} />}
+                {isFirstOverall && <QNum n={q.n} className={qNumClass} />}
                 <Rich nodes={b.content} />
               </div>
             );
@@ -431,8 +444,43 @@ function VoltoHelpButton({
   );
 }
 
-function QNum({ n }: { n: number }) {
-  return <span className="mr-2 inline-block font-semibold text-primary">{n}.</span>;
+function QNum({ n, className }: { n: number; className?: string }) {
+  return (
+    <span className={`mr-2 inline-block font-semibold text-primary ${className ?? ""}`}>{n}.</span>
+  );
+}
+
+function IntroRich({
+  nodes,
+  normalize,
+}: {
+  nodes: import("@/lib/mcq/rich").RichNode[];
+  normalize: boolean;
+}) {
+  return <Rich nodes={normalize ? normalizeIntroSizes(nodes) : nodes} />;
+}
+
+function normalizeKeyItems(items: KeyItem[]): KeyItem[];
+function normalizeKeyItems(items: KeyItem[] | undefined): KeyItem[] | undefined;
+function normalizeKeyItems(items: KeyItem[] | undefined): KeyItem[] | undefined {
+  return items?.map((item) => ({ ...item, label: normalizeIntroSizes(item.label) }));
+}
+
+function normalizeTableGrid(grid: TableLayoutCell[][]): TableLayoutCell[][] {
+  return grid.map((row) =>
+    row.map((cell) => ({ ...cell, content: normalizeIntroSizes(cell.content) })),
+  );
+}
+
+function normalizeFlowchartSpec(spec: FlowchartSpec): FlowchartSpec {
+  return {
+    ...spec,
+    cells: spec.cells.map((row) =>
+      row.map((cell) =>
+        cell ? { ...cell, content: normalizeIntroSizes(cell.content ?? []) } : cell,
+      ),
+    ),
+  };
 }
 
 const SPAN_TO_COLS: Record<string, number> = {
@@ -496,8 +544,16 @@ function groupBlocksBySpan(blocks: Block[]): BlockGroup[] {
   return out;
 }
 
-export function IntroDataRenderer({ data }: { data: IntroData }) {
+export function IntroDataRenderer({
+  data,
+  normalizeText = false,
+}: {
+  data: IntroData;
+  normalizeText?: boolean;
+}) {
   const { hovered, sticky } = useHoverRefs();
+  const rich = (nodes: import("@/lib/mcq/rich").RichNode[]) =>
+    normalizeText ? normalizeIntroSizes(nodes) : nodes;
   if (data.kind === "image") {
     const size = data.size ?? "md";
     const sizeCls =
@@ -515,7 +571,7 @@ export function IntroDataRenderer({ data }: { data: IntroData }) {
           pos === "top" ? "border-b" : "border-t"
         } border-border bg-muted/40 px-3 py-1.5 text-center text-xs text-muted-foreground`}
       >
-        <Rich nodes={data.caption} />
+        <Rich nodes={rich(data.caption)} />
       </figcaption>
     ) : null;
     return (
@@ -536,14 +592,20 @@ export function IntroDataRenderer({ data }: { data: IntroData }) {
         </div>
         {data.caption && (
           <p className="text-center text-xs italic text-muted-foreground">
-            <Rich nodes={data.caption} />
+            <Rich nodes={rich(data.caption)} />
           </p>
         )}
       </div>
     );
   if (data.kind === "table") {
     if (data.grid && data.grid.length) {
-      return <IntroTableGrid grid={data.grid} caption={data.caption} keyItems={data.keyItems} />;
+      return (
+        <IntroTableGrid
+          grid={normalizeText ? normalizeTableGrid(data.grid) : data.grid}
+          caption={data.caption ? rich(data.caption) : data.caption}
+          keyItems={normalizeText ? normalizeKeyItems(data.keyItems) : data.keyItems}
+        />
+      );
     }
     const extraLabelCols = data.rowLabelCols ?? [];
     const extraLabelHeaders = data.rowLabelHeaders ?? [];
@@ -555,7 +617,7 @@ export function IntroDataRenderer({ data }: { data: IntroData }) {
               <tr>
                 {data.rowLabelHeader !== undefined && data.rowLabels && (
                   <th className="border-b border-l border-border/70 bg-muted/60 p-2.5 text-center text-sm font-semibold uppercase tracking-wide text-muted-foreground first:border-l-0">
-                    <Rich nodes={data.rowLabelHeader} />
+                    <Rich nodes={rich(data.rowLabelHeader)} />
                   </th>
                 )}
                 {extraLabelHeaders.map((h, i) => (
@@ -563,7 +625,7 @@ export function IntroDataRenderer({ data }: { data: IntroData }) {
                     key={`elh-${i}`}
                     className="border-b border-l border-border/70 bg-muted/60 p-2.5 text-center text-sm font-semibold uppercase tracking-wide text-muted-foreground first:border-l-0"
                   >
-                    <Rich nodes={h} />
+                    <Rich nodes={rich(h)} />
                   </th>
                 ))}
                 {data.header.map((h, i) => {
@@ -582,7 +644,7 @@ export function IntroDataRenderer({ data }: { data: IntroData }) {
                         ...(align ? { textAlign: align } : undefined),
                       }}
                     >
-                      <Rich nodes={h} />
+                      <Rich nodes={rich(h)} />
                     </th>
                   );
                 })}
@@ -597,7 +659,7 @@ export function IntroDataRenderer({ data }: { data: IntroData }) {
                         data.subHeaderBg?.[i] ? { background: data.subHeaderBg[i] } : undefined
                       }
                     >
-                      <Rich nodes={h} />
+                      <Rich nodes={rich(h)} />
                     </th>
                   ))}
                 </tr>
@@ -614,7 +676,7 @@ export function IntroDataRenderer({ data }: { data: IntroData }) {
                           : undefined
                       }
                     >
-                      <Rich nodes={h} />
+                      <Rich nodes={rich(h)} />
                     </th>
                   ))}
                 </tr>
@@ -635,7 +697,7 @@ export function IntroDataRenderer({ data }: { data: IntroData }) {
                             : undefined),
                         }}
                       >
-                        <Rich nodes={data.rowLabels[r]} />
+                        <Rich nodes={rich(data.rowLabels[r])} />
                       </td>
                     )}
                     {extraLabelCols.map((col, ci) => (
@@ -643,7 +705,7 @@ export function IntroDataRenderer({ data }: { data: IntroData }) {
                         key={`elc-${ci}`}
                         className="border-l border-border/70 bg-muted/20 p-2.5 text-sm font-medium text-muted-foreground first:border-l-0"
                       >
-                        <Rich nodes={col[r] ?? []} />
+                        <Rich nodes={rich(col[r] ?? [])} />
                       </td>
                     ))}
                     {row.map((cell, c) => {
@@ -666,7 +728,7 @@ export function IntroDataRenderer({ data }: { data: IntroData }) {
                             ...(align ? { textAlign: align } : undefined),
                           }}
                         >
-                          <Rich nodes={cell} />
+                          <Rich nodes={rich(cell)} />
                         </td>
                       );
                     })}
@@ -678,10 +740,12 @@ export function IntroDataRenderer({ data }: { data: IntroData }) {
         </div>
         {data.caption && (
           <p className="text-center text-xs italic text-muted-foreground">
-            <Rich nodes={data.caption} />
+            <Rich nodes={rich(data.caption)} />
           </p>
         )}
-        {data.keyItems && <TableKey items={data.keyItems} />}
+        {data.keyItems && (
+          <TableKey items={normalizeText ? normalizeKeyItems(data.keyItems) : data.keyItems} />
+        )}
       </div>
     );
   }
@@ -689,11 +753,11 @@ export function IntroDataRenderer({ data }: { data: IntroData }) {
     return (
       <div className="space-y-2">
         <div className="rounded-xl border border-border bg-card p-3 shadow-sm">
-          <Flowchart spec={data.spec} />
+          <Flowchart spec={normalizeText ? normalizeFlowchartSpec(data.spec) : data.spec} />
         </div>
         {data.caption && (
           <p className="text-center text-xs italic text-muted-foreground">
-            <Rich nodes={data.caption} />
+            <Rich nodes={rich(data.caption)} />
           </p>
         )}
       </div>
@@ -707,7 +771,7 @@ export function IntroDataRenderer({ data }: { data: IntroData }) {
         </div>
         {data.caption && (
           <p className="text-center text-xs italic text-muted-foreground">
-            <Rich nodes={data.caption} />
+            <Rich nodes={rich(data.caption)} />
           </p>
         )}
       </div>
@@ -742,7 +806,7 @@ export function IntroDataRenderer({ data }: { data: IntroData }) {
             }`}
           >
             <span className="text-foreground">
-              <Rich nodes={item} />
+              <Rich nodes={rich(item)} />
             </span>
           </li>
         );
@@ -903,7 +967,6 @@ export function LayoutRenderer({
           {...common}
         />
       );
-
     case "image-refs":
       return (
         <ImageRefsOptions
@@ -914,16 +977,6 @@ export function LayoutRenderer({
           orientation={layout.orientation}
           keys={keys}
           questionSlot={questionSlot}
-          {...common}
-        />
-      );
-    case "tables":
-      return (
-        <TablesOptions
-          options={layout.options}
-          orientation={layout.orientation}
-          keyItems={layout.keyItems}
-          keys={keys}
           {...common}
         />
       );

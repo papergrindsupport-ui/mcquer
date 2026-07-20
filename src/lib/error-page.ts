@@ -3,26 +3,187 @@ export function renderErrorPage(): string {
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>This page didn't load</title>
+    <title>Something went wrong</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style>
-      body { font: 15px/1.5 system-ui, -apple-system, sans-serif; background: #fafafa; color: #111; display: grid; place-items: center; min-height: 100vh; margin: 0; padding: 1.5rem; }
-      .card { max-width: 28rem; width: 100%; text-align: center; padding: 2rem; }
-      h1 { font-size: 1.25rem; margin: 0 0 0.5rem; }
-      p { color: #4b5563; margin: 0 0 1.5rem; }
-      .actions { display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; }
-      a, button { padding: 0.5rem 1rem; border-radius: 0.375rem; font: inherit; cursor: pointer; text-decoration: none; border: 1px solid transparent; }
-      .primary { background: #111; color: #fff; }
-      .secondary { background: #fff; color: #111; border-color: #d1d5db; }
+      :root {
+        color-scheme: light dark;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        font-family:
+          Inter,
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          sans-serif;
+        background: #fafafa;
+        color: #111827;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 42rem;
+        text-align: center;
+      }
+
+      .eyebrow {
+        margin: 0 0 8px;
+        font-size: 14px;
+        font-weight: 500;
+        color: #6b7280;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: 32px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+      }
+
+      .answers {
+        margin-top: 32px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        text-align: left;
+      }
+
+      .answer {
+        padding: 16px;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        background: #fff;
+      }
+
+      .answer.correct {
+        background: #f3f4f6;
+        font-weight: 600;
+      }
+
+      .footer {
+        margin-top: 24px;
+        font-size: 14px;
+        color: #6b7280;
+      }
+
+      .footer strong {
+        color: #111827;
+      }
+
+      .actions {
+        margin-top: 32px;
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      button,
+      a {
+        appearance: none;
+        border: 1px solid #e5e7eb;
+        background: #fff;
+        color: inherit;
+        padding: 10px 16px;
+        border-radius: 10px;
+        font: inherit;
+        font-weight: 500;
+        cursor: pointer;
+        text-decoration: none;
+        transition: background 0.15s ease;
+      }
+
+      button:hover,
+      a:hover {
+        background: #f3f4f6;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        body {
+          background: #09090b;
+          color: #fafafa;
+        }
+
+        .eyebrow,
+        .footer {
+          color: #a1a1aa;
+        }
+
+        .footer strong {
+          color: #fafafa;
+        }
+
+        .answer {
+          background: #09090b;
+          border-color: #27272a;
+        }
+
+        .answer.correct {
+          background: #18181b;
+        }
+
+        button,
+        a {
+          background: transparent;
+          border-color: #27272a;
+          color: #fafafa;
+        }
+
+        button:hover,
+        a:hover {
+          background: #18181b;
+        }
+      }
     </style>
   </head>
   <body>
-    <div class="card">
-      <h1>This page didn't load</h1>
-      <p>Something went wrong on our end. You can try refreshing or head back home.</p>
+    <div class="container">
+      <p class="eyebrow">Something went wrong.. DW!</p>
+
+      <h1>Choose the correct answer</h1>
+
+      <div class="answers">
+        <div class="answer">
+          A. Your internet connection is offline.
+        </div>
+
+        <div class="answer">
+          B. The question is still loading.
+        </div>
+
+        <div class="answer">
+          C. Something unexpected happened (from our side).
+        </div>
+
+        <div class="answer correct">
+          D. Retry and let's pretend nothing has happened 👀
+        </div>
+      </div>
+
+      <p class="footer">
+        Correct answer: <strong>D</strong>
+      </p>
+
       <div class="actions">
-        <button class="primary" onclick="location.reload()">Try again</button>
-        <a class="secondary" href="/">Go home</a>
+        <button onclick="location.reload()">
+          Retry
+        </button>
+
+        <a href="/">
+          Go Home
+        </a>
       </div>
     </div>
   </body>

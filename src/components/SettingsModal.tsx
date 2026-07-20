@@ -207,6 +207,12 @@ export function SettingsModal({ open, onClose, paper }: Props) {
                 onChange={(v) => update("showResultIcons", v)}
               />
               <Toggle
+                label="Normalize intro text"
+                desc="Match intro text to the question-text size: 16px becomes 19px, and any other size gets +3px."
+                value={settings.normalizeIntroText}
+                onChange={(v) => update("normalizeIntroText", v)}
+              />
+              <Toggle
                 label="Eliminator"
                 desc="Add a minus button on each option to grey it out."
                 value={settings.eliminator}

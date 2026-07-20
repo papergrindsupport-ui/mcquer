@@ -97,6 +97,30 @@ export const SYMBOL_MAP: Record<SymbolName, string> = {
   pi: "π",
   divide: "÷",
 };
+const NAMED_SIZE_PX: Record<NonNullable<Extract<RichNode, { text: string }>["size"]>, number> = {
+  xs: 12,
+  sm: 14,
+  base: 16,
+  lg: 18,
+  xl: 20,
+  "2xl": 24,
+};
+/** Normalize intro rich-text sizes so intro text matches question-text weight.
+ *  Rule: a character sized 16px (default / `size: "base"` / no size) becomes
+ *  19px; any other explicit size gets +3px. Preserves all other formatting. */
+export function normalizeIntroSizes(nodes: RichNode[]): RichNode[] {
+  return nodes.map((n) => {
+    if (typeof n === "string") return { text: n, sizePx: 19 };
+
+    if (typeof n !== "object" || n === null) return n;
+    if (!("text" in n)) return n;
+    const currentPx = typeof n.sizePx === "number" ? n.sizePx : n.size ? NAMED_SIZE_PX[n.size] : 16;
+    const nextPx = currentPx === 16 ? 19 : currentPx + 3;
+    // Strip named `size` so `sizePx` wins unambiguously.
+    const { size: _drop, ...rest } = n;
+    return { ...rest, sizePx: nextPx };
+  });
+}
 
 const SIZE_CLASS: Record<NonNullable<Extract<RichNode, { text: string }>["size"]>, string> = {
   xs: "text-xs",
