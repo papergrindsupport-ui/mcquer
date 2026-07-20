@@ -74,7 +74,7 @@ function McqPage() {
                 </Crumb>
                 <Sep />
                 <Crumb
-                  to="/mcq/$subject/$year/$session"
+                  to="/mcq/$subject/$year/"
                   params={{
                     subject: subjectShort,
                     year: String(year),
