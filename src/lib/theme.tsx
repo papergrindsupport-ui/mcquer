@@ -106,8 +106,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     const y = origin?.y ?? 40;
     const { width, height } = document.documentElement.getBoundingClientRect();
 
-    const endRadius =
-      Math.hypot(Math.max(x, width - x), Math.max(y, height - y)) + window.innerHeight;
+    const endRadius = Math.hypot(Math.max(x, width - x), Math.max(y, height - y)) + 32;
     const root = document.documentElement;
     root.style.setProperty("--vt-x", `${x}px`);
     root.style.setProperty("--vt-y", `${y}px`);
