@@ -87,7 +87,7 @@
   }
 }
 .animate-theme-icon {
-  animation: theme-icon-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: theme-icon-in 1s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 /* Circular reveal for dark/light mode switching (View Transitions API) */
