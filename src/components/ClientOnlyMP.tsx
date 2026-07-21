@@ -6,7 +6,8 @@ export function MouseParticlesClient() {
   useEffect(() => {
     const loadParticles = () => {
       import("react-mouse-particles").then((mod) => {
-        setComponent(() => mod.default);
+        const Comp = ((mod as any).default ?? mod) as React.ComponentType<any>;
+        setComponent(() => Comp);
       });
     };
 

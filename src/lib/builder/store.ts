@@ -3,6 +3,7 @@ import type { PaperQuestions, Question } from "@/lib/mcq/types";
 import type { SubjectId, SessionId } from "@/lib/papers-data";
 import { emptyQuestion, normalizeQuestion } from "./migrate";
 import { makePaperId, parsePaperId, type PaperId } from "./paperId";
+import { preloadBundledPapers } from "@/lib/mcq/papers/bundle-loader";
 
 export type Paper = {
   id: PaperId;
@@ -67,9 +68,19 @@ export function redoPaper(id: PaperId) {
   emit();
 }
 
+// Paper ids that came from the read-only bundle and haven't been user-edited.
+// Skipped when persisting so localStorage doesn't balloon with ~1MB of built-in
+// papers (they'll be re-merged from the async bundle on next boot).
+const bundledOnly = new Set<PaperId>();
+
 function persist() {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    const toSave: PapersState = {};
+    for (const [id, p] of Object.entries(state)) {
+      if (bundledOnly.has(id as PaperId)) continue;
+      toSave[id] = p;
+    }
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(toSave));
   } catch {
     /* quota */
   }
@@ -80,6 +91,7 @@ function emit() {
 
 export function hydrateFromStorage() {
   if (hydrated || typeof window === "undefined") return;
+  hydrated = true;
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (raw) {
@@ -92,36 +104,48 @@ export function hydrateFromStorage() {
   } catch {
     /* corrupt */
   }
-  // Seed any papers from src/lib/mcq/papers/bundle.ts that aren't already in
-  // localStorage. This means clearing storage doesn't lose bundled papers.
-  try {
-    const mods = import.meta.glob("../mcq/papers/bundle.ts", { eager: true }) as Record<
-      string,
-      { BUILDER_PAPERS?: Record<string, PaperQuestions> }
-    >;
-    const merged: Record<string, PaperQuestions> = {};
-    for (const mod of Object.values(mods)) {
-      if (mod.BUILDER_PAPERS) Object.assign(merged, mod.BUILDER_PAPERS);
-    }
-    const next = { ...state };
-    let changed = false;
-    for (const [id, qs] of Object.entries(merged)) {
-      if (next[id]) continue;
-      const parsed = parsePaperId(id);
-      if (!parsed) continue;
-      const questions = padQuestions(qs.map(normalizeQuestion));
-      next[id] = { id, ...parsed, questions };
-      changed = true;
-    }
-    if (changed) {
-      state = next;
-      persist();
-    }
-  } catch {
-    /* no bundle */
-  }
-  hydrated = true;
   emit();
+  // Async: fetch the bundled papers and merge them in without persisting the
+  // bundle's contents back to localStorage. Any paper the user hasn't edited
+  // stays flagged as bundle-only so persist() skips it.
+  preloadBundledPapers()
+    .then((merged) => {
+      const next: PapersState = { ...state };
+      let changed = false;
+      for (const [id, qs] of Object.entries(merged)) {
+        const parsed = parsePaperId(id);
+        if (!parsed) continue;
+        if (!next[id]) {
+          next[id] = {
+            id,
+            ...parsed,
+            questions: padQuestions(qs.map(normalizeQuestion)),
+          };
+          bundledOnly.add(id as PaperId);
+          changed = true;
+          continue;
+        }
+        // Migration: if a previously-persisted paper is byte-identical to the
+        // bundled version, promote it to bundle-only so the next persist()
+        // shrinks localStorage.
+        try {
+          if (JSON.stringify(next[id].questions) === JSON.stringify(qs)) {
+            bundledOnly.add(id as PaperId);
+            changed = true;
+          }
+        } catch {
+          /* ignore */
+        }
+      }
+      if (changed) {
+        state = next;
+        persist();
+        emit();
+      }
+    })
+    .catch(() => {
+      /* no bundle */
+    });
 }
 
 function padQuestions(qs: Question[]): Question[] {
@@ -162,6 +186,7 @@ export function createPaper(
   const questions = padQuestions((seed ?? []).map(normalizeQuestion));
   const paper: Paper = { id, subject, year, session, variant, questions };
   state = { ...state, [id]: paper };
+  bundledOnly.delete(id);
   persist();
   emit();
   return paper;
@@ -171,6 +196,7 @@ export function upsertPaperIfMissing(p: Paper) {
   if (state[p.id]) return state[p.id];
   const questions = padQuestions(p.questions.map(normalizeQuestion));
   state = { ...state, [p.id]: { ...p, questions } };
+  bundledOnly.delete(p.id);
   persist();
   emit();
   return state[p.id];
@@ -180,6 +206,7 @@ export function deletePaper(id: PaperId) {
   if (!state[id]) return;
   const { [id]: _drop, ...rest } = state;
   state = rest;
+  bundledOnly.delete(id);
   undoStacks.delete(id);
   redoStacks.delete(id);
   persist();
@@ -194,6 +221,7 @@ export function updateQuestion(id: PaperId, index: number, updater: (q: Question
   const questions = paper.questions.slice();
   questions[index] = updater(questions[index]);
   state = { ...state, [id]: { ...paper, questions } };
+  bundledOnly.delete(id);
   persist();
   emit();
 }
@@ -204,6 +232,7 @@ export function replaceQuestions(id: PaperId, qs: PaperQuestions) {
   pushUndoSnapshot(id, paper.questions);
   const questions = padQuestions(qs.map(normalizeQuestion));
   state = { ...state, [id]: { ...paper, questions } };
+  bundledOnly.delete(id);
   persist();
   emit();
 }

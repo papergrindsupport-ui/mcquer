@@ -12,6 +12,7 @@ import {
   LuChevronDown,
 } from "react-icons/lu";
 import { getCorpus, search, type SearchDoc } from "@/lib/search";
+import { preloadBundledPapers } from "@/lib/mcq/papers/bundle-loader";
 import { useSearchCtx } from "@/lib/search/context";
 import { ResultCard } from "@/components/search/ResultCard";
 import { AdvancedSearchSheet } from "@/components/search/AdvancedSearchSheet";
@@ -102,6 +103,7 @@ export const Route = createFileRoute("/search")({
       { name: "robots", content: "noindex" },
     ],
   }),
+  loader: () => preloadBundledPapers().then(() => null),
   component: SearchPage,
 });
 

@@ -1,7 +1,10 @@
 import type { PaperQuestions, Question } from "./types";
 import type { SubjectId, SessionId } from "@/lib/papers-data";
 import { CHEM_2019_FEB_V2 } from "./papers/chem-2019-feb-V2";
+import { getBundledPapersSync, subscribeBundledPapers } from "./papers/bundle-loader";
 import { getTopicsFor } from "@/lib/topics";
+
+export { preloadBundledPapers } from "./papers/bundle-loader";
 
 export type TopicalItem = {
   subject: SubjectId;
@@ -23,26 +26,20 @@ export function qLessons(q: Question): string[] {
   return q.lesson ? [q.lesson] : [];
 }
 
-// Aggregate all available papers (registry + builder bundle).
+// Aggregate all available papers (built-in registry + lazily-loaded bundle).
 function loadAllPapers(): Record<string, PaperQuestions> {
-  const all: Record<string, PaperQuestions> = {
+  return {
     "chemistry-2019-feb-V2": CHEM_2019_FEB_V2,
+    ...getBundledPapersSync(),
   };
-  try {
-    const mods = import.meta.glob("./papers/bundle.ts", { eager: true }) as Record<
-      string,
-      { BUILDER_PAPERS?: Record<string, PaperQuestions> }
-    >;
-    for (const mod of Object.values(mods)) {
-      if (mod.BUILDER_PAPERS) Object.assign(all, mod.BUILDER_PAPERS);
-    }
-  } catch {
-    /* no bundle */
-  }
-  return all;
 }
 
 let CACHE: TopicalItem[] | null = null;
+// When the bundle finishes downloading, drop the cached aggregate so the next
+// call rebuilds it with the newly-available papers.
+subscribeBundledPapers(() => {
+  CACHE = null;
+});
 
 function parseKey(
   key: string,

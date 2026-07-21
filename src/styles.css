@@ -331,6 +331,7 @@ body:has(.react-draggable-dragging) {
   --popover-foreground: oklch(0.15 0 0);
   --primary: hsl(var(--primary-h) var(--primary-s) var(--primary-l));
   --primary-foreground: oklch(0.99 0 0);
+
   --secondary: oklch(0.96 0 0);
   --secondary-foreground: oklch(0.2 0 0);
   --muted: oklch(0.96 0 0);

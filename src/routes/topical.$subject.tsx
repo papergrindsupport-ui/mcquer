@@ -5,6 +5,7 @@ import { QuestionList } from "@/components/mcq/QuestionList";
 import { CustomSelect } from "@/components/CustomSelect";
 import { getSubject, type SubjectId, type SessionId } from "@/lib/papers-data";
 import { useSearchScope } from "@/lib/search/context";
+import { preloadBundledPapers } from "@/lib/mcq/papers/bundle-loader";
 
 import {
   decodeTopicSelection,
@@ -105,6 +106,7 @@ export const Route = createFileRoute("/topical/$subject")({
       },
     ],
   }),
+  loader: () => preloadBundledPapers().then(() => null),
   component: TopicalPaper,
 });
 

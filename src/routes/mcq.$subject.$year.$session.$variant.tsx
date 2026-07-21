@@ -10,9 +10,11 @@ import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/comp
 import { ToolsMenu } from "@/components/tools/ToolsMenu";
 import { useTimers } from "@/components/timers/TimersProvider";
 import { getPaperQuestions } from "@/lib/mcq";
+import { preloadBundledPapers } from "@/lib/mcq/papers/bundle-loader";
 import { QuestionList } from "@/components/mcq/QuestionList";
 
 export const Route = createFileRoute("/mcq/$subject/$year/$session/$variant")({
+  loader: () => preloadBundledPapers().then(() => null),
   component: McqPage,
 });
 

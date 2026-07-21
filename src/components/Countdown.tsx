@@ -364,7 +364,7 @@ function TimerBox({
 }: {
   subject: SubjectId;
   settings: CountdownSettings;
-  session: (typeof EXAM_SESSIONS)[number];
+  session: (typeof EXAM_SESSIONS)[SubjectId][number];
   onOpenSettings: () => void;
   onToggleFullscreen: () => void;
   fullscreen: boolean;

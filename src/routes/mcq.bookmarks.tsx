@@ -4,6 +4,7 @@ import { LuArrowLeft, LuBookmark, LuTrash2, LuSettings } from "react-icons/lu";
 import { SettingsModal } from "@/components/SettingsModal";
 import { useSettings } from "@/lib/settings";
 import { getPaperQuestions } from "@/lib/mcq";
+import { preloadBundledPapers } from "@/lib/mcq/papers/bundle-loader";
 import {
   getBookmarks,
   subscribeBookmarks,
@@ -18,6 +19,7 @@ import { useSearchScope } from "@/lib/search/context";
 import { useScrollToHash } from "@/hooks/use-scroll-to-hash";
 
 export const Route = createFileRoute("/mcq/bookmarks")({
+  loader: () => preloadBundledPapers().then(() => null),
   component: BookmarksPage,
 });
 

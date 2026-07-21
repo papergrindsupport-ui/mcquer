@@ -1,6 +1,7 @@
 import type { Question } from "@/lib/mcq/types";
 import type { SubjectId, SessionId } from "@/lib/papers-data";
 import { getAllTopicalItems, qTopics, qLessons } from "@/lib/mcq/allQuestions";
+import { subscribeBundledPapers } from "@/lib/mcq/papers/bundle-loader";
 import { serializeQuestion } from "@/lib/volto/serialize";
 
 export type SearchScope =
@@ -135,6 +136,11 @@ export function saveSettings(s: SearchSettings) {
 // ---------- Corpus ----------
 
 let CORPUS: SearchDoc[] | null = null;
+// Invalidate the cached corpus once the async paper bundle finishes loading so
+// searches performed before load complete get rebuilt against the full dataset.
+subscribeBundledPapers(() => {
+  CORPUS = null;
+});
 
 export function getCorpus(): SearchDoc[] {
   if (CORPUS) return CORPUS;

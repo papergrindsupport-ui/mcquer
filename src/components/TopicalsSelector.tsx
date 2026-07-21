@@ -1,4 +1,5 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useSyncExternalStore } from "react";
+import { subscribeBundledPapers, areBundledPapersLoaded } from "@/lib/mcq/papers/bundle-loader";
 import { useNavigate } from "@tanstack/react-router";
 import {
   LuChevronDown,
@@ -28,12 +29,22 @@ export function TopicalsSelector() {
   const [search, setSearch] = useState("");
   const [limit, setLimit] = useState<number>(0);
 
+  // Re-render when the async paper bundle finishes loading so match counts
+  // populate as soon as data is available.
+  const bundleLoaded = useSyncExternalStore(
+    subscribeBundledPapers,
+    areBundledPapersLoaded,
+    () => false,
+  );
+
   const topics = useMemo(() => (subject ? getTopicsFor(subject as SubjectId) : []), [subject]);
 
   const totalLessons = Object.values(selection).reduce((n, s) => n + s.length, 0);
   const matchCount = useMemo(
     () => (subject ? countForSelection(subject as SubjectId, selection) : 0),
-    [subject, selection],
+    // bundleLoaded is intentionally in deps to recompute after async load.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [subject, selection, bundleLoaded],
   );
 
   // Keep slider in sync with match count.
