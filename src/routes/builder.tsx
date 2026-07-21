@@ -1,6 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { LuDownload, LuArrowLeft, LuPlus, LuTrash2, LuUndo2, LuRedo2 } from "react-icons/lu";
+import {
+  LuDownload,
+  LuArrowLeft,
+  LuPlus,
+  LuTrash2,
+  LuUndo2,
+  LuRedo2,
+  LuSettings,
+} from "react-icons/lu";
 import { getPaperQuestions } from "@/lib/mcq";
 import {
   hydrateFromStorage,
@@ -17,7 +25,13 @@ import {
 import { makePaperId } from "@/lib/builder/paperId";
 import { emptyQuestion, normalizeQuestion } from "@/lib/builder/migrate";
 import { downloadBundle } from "@/lib/builder/export";
+import {
+  serializePaperLinks,
+  serializeGradeBoundaries,
+  downloadTextFile,
+} from "@/lib/builder/meta";
 import { AddPaperModal } from "@/components/builder/AddPaperModal";
+import { PaperMetaModal } from "@/components/builder/PaperMetaModal";
 import { HowToAddGuide } from "@/components/builder/HowToAddGuide";
 import { QuestionEditor } from "@/components/builder/QuestionEditorV2";
 import { BuilderGate } from "@/components/builder/BuilderGate";
@@ -95,6 +109,7 @@ function BuilderPage() {
 
   const [activeId, setActiveId] = useState<string | null>(null);
   const [showAdd, setShowAdd] = useState(false);
+  const [metaId, setMetaId] = useState<string | null>(null);
 
   if (!ready) return null;
 
@@ -123,6 +138,24 @@ function BuilderPage() {
           </p>
         </div>
         <div className="ml-auto flex gap-2">
+          <button
+            type="button"
+            onClick={() => downloadTextFile("paper-links.ts", serializePaperLinks(papers))}
+            disabled={!Object.values(papers).some((p) => p.meta?.links)}
+            className="inline-flex cursor-pointer items-center gap-1 rounded-md border border-border bg-background px-3 py-2 text-sm hover:bg-accent disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            <LuDownload size={14} /> Download all paper links
+          </button>
+          <button
+            type="button"
+            onClick={() =>
+              downloadTextFile("grade-boundaries.ts", serializeGradeBoundaries(papers))
+            }
+            disabled={!Object.values(papers).some((p) => p.meta?.boundaries)}
+            className="inline-flex cursor-pointer items-center gap-1 rounded-md border border-border bg-background px-3 py-2 text-sm hover:bg-accent disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            <LuDownload size={14} /> Download all grade boundaries
+          </button>
           <button
             type="button"
             onClick={() => downloadBundle(papers)}
@@ -189,6 +222,14 @@ function BuilderPage() {
               </button>
               <button
                 type="button"
+                onClick={() => setMetaId(p.id)}
+                title="Links & grade boundaries"
+                className="cursor-pointer rounded-md border border-border px-2 py-1.5 text-xs hover:bg-accent"
+              >
+                <LuSettings size={12} />
+              </button>
+              <button
+                type="button"
                 onClick={() => {
                   if (confirm(`Delete paper ${p.id}? This can't be undone.`)) deletePaper(p.id);
                 }}
@@ -214,6 +255,10 @@ function BuilderPage() {
           setActiveId(id);
         }}
       />
+
+      {metaId && papers[metaId] && (
+        <PaperMetaModal paper={papers[metaId]} onClose={() => setMetaId(null)} />
+      )}
     </div>
   );
 }

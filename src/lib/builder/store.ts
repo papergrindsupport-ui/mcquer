@@ -12,7 +12,33 @@ export type Paper = {
   session: SessionId;
   variant: string;
   questions: PaperQuestions; // always length 40
+  meta?: PaperMeta;
 };
+
+export type GradeSystem = "ag" | "91";
+export type PaperMeta = {
+  links?: { qp?: string | null; ms?: string | null };
+  boundaries?: Partial<Record<GradeSystem, { grades: Record<string, number>; link?: string }>>;
+};
+
+export function updatePaperMeta(id: PaperId, meta: PaperMeta) {
+  const paper = state[id];
+  if (!paper) return;
+  const clean: PaperMeta = {};
+  if (meta.links && (meta.links.qp !== undefined || meta.links.ms !== undefined)) {
+    clean.links = { ...meta.links };
+  }
+  if (meta.boundaries && Object.keys(meta.boundaries).length) {
+    clean.boundaries = meta.boundaries;
+  }
+  state = {
+    ...state,
+    [id]: { ...paper, meta: Object.keys(clean).length ? clean : undefined },
+  };
+  bundledOnly.delete(id);
+  persist();
+  emit();
+}
 
 export type PapersState = Record<PaperId, Paper>;
 
