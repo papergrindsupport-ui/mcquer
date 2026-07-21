@@ -23,6 +23,8 @@ export type PaperExportInput = {
   filenameBase: string;
   selections: PrintSelections;
   options: PaperExportOptions;
+  /** Optional appendix listing topics/lessons included (used by /topical exports). */
+  topicAppendix?: { topic: string; lessons: string[] }[];
 };
 
 /* sRGB hex fallbacks: html2canvas historically struggles with `oklch(...)`,
@@ -234,6 +236,14 @@ export async function downloadPaperPdf(input: PaperExportInput): Promise<void> {
       doc.addImage(shot.data, "JPEG", x, y, imgW, imgH, undefined, "FAST");
       y += imgH + gap;
     }
+    if (input.topicAppendix && input.topicAppendix.length > 0) {
+      drawTopicAppendixPage(doc, input.topicAppendix, {
+        mode: options.mode,
+        pageW,
+        pageH,
+        margin,
+      });
+    }
     const totalPages = doc.getNumberOfPages();
     const footerColor: [number, number, number] =
       options.mode === "dark" ? [140, 140, 148] : [110, 110, 118];
@@ -315,4 +325,75 @@ async function rasterizeSvgImages(host: HTMLElement): Promise<void> {
 function hexToRgb(hex: string): [number, number, number] {
   const h = hex.replace("#", "");
   return [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16)];
+}
+
+function drawTopicAppendixPage(
+  doc: jsPDF,
+  entries: { topic: string; lessons: string[] }[],
+  opts: { mode: PaperExportMode; pageW: number; pageH: number; margin: number },
+) {
+  const { mode, pageW, pageH, margin } = opts;
+  const bg = PAGE_BG[mode];
+  const [br, bgc, bb] = hexToRgb(bg);
+  const fg: [number, number, number] = mode === "dark" ? [245, 245, 245] : [26, 26, 26];
+  const muted: [number, number, number] = mode === "dark" ? [160, 160, 168] : [110, 110, 118];
+  const paint = () => {
+    doc.setFillColor(br, bgc, bb);
+    doc.rect(0, 0, pageW, pageH, "F");
+  };
+
+  doc.addPage();
+  paint();
+
+  doc.setFontSize(9);
+  doc.setTextColor(...muted);
+  doc.text("APPENDIX", margin, margin + 12);
+  doc.setFontSize(18);
+  doc.setTextColor(...fg);
+  doc.text("Topics & lessons included", margin, margin + 36);
+  const totalLessons = entries.reduce((n, e) => n + e.lessons.length, 0);
+  doc.setFontSize(10);
+  doc.setTextColor(...muted);
+  doc.text(
+    `${entries.length} topic${entries.length === 1 ? "" : "s"} · ${totalLessons} lesson${totalLessons === 1 ? "" : "s"}`,
+    margin,
+    margin + 52,
+  );
+
+  let y = margin + 76;
+  const bottom = pageH - margin - 20;
+  for (const entry of entries) {
+    if (y > bottom - 30) {
+      doc.addPage();
+      paint();
+      y = margin + 20;
+    }
+    doc.setFontSize(11);
+    doc.setTextColor(...fg);
+    doc.setFont(undefined as unknown as string, "bold");
+    doc.text(entry.topic, margin, y);
+    doc.setFont(undefined as unknown as string, "normal");
+    y += 14;
+    doc.setFontSize(10);
+    if (entry.lessons.length === 0) {
+      doc.setTextColor(...muted);
+      doc.text("— (all lessons)", margin + 12, y);
+      y += 14;
+    } else {
+      for (const lesson of entry.lessons) {
+        if (y > bottom) {
+          doc.addPage();
+          paint();
+          y = margin + 20;
+        }
+        doc.setFillColor(...muted);
+        doc.circle(margin + 6, y - 3, 1.3, "F");
+        const wrapped = doc.splitTextToSize(lesson, pageW - margin * 2 - 20);
+        doc.setTextColor(...fg);
+        doc.text(wrapped, margin + 14, y);
+        y += Math.max(14, wrapped.length * 12);
+      }
+    }
+    y += 8;
+  }
 }

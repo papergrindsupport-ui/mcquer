@@ -13,7 +13,6 @@ import { useEffect, type ReactNode } from "react";
 import { Toaster } from "react-hot-toast";
 
 import appCss from "../styles.css?url";
-import { reportLovableError } from "../lib/lovable-error-reporting";
 import { ThemeProvider, useTheme } from "../lib/theme";
 import { Header, Footer } from "../components/Header";
 import { TimersProvider } from "../components/timers/TimersProvider";
@@ -77,11 +76,25 @@ function NotFoundComponent() {
 
 function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   console.error(error);
-  const router = useRouter();
-  useEffect(() => {
-    reportLovableError(error, { boundary: "tanstack_root_error_component" });
-  }, [error]);
 
+  const router = useRouter();
+
+  useEffect(() => {
+    const retries = Number(sessionStorage.getItem("error-retries") || "0");
+
+    if (retries < 1) {
+      sessionStorage.setItem("error-retries", String(retries + 1));
+
+      const timer = setTimeout(() => {
+        router.invalidate();
+        reset();
+      }, 1000);
+
+      return () => clearTimeout(timer);
+    }
+
+    sessionStorage.removeItem("error-retries");
+  }, [router, reset]);
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-6">
       <div className="w-full max-w-xl text-center">
@@ -230,7 +243,6 @@ function RootShell({ children }: { children: ReactNode }) {
     <html lang="en" className="dark" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
-
         <HeadContent />
       </head>
       <body suppressHydrationWarning>

@@ -13,6 +13,8 @@ export type PaperSettingsContext = {
   title: string;
   subtitle: string;
   filenameBase: string;
+  /** Optional appendix of topics/lessons included (only used on /topical). */
+  topicAppendix?: { topic: string; lessons: string[] }[];
 };
 
 type Props = { open: boolean; onClose: () => void; paper?: PaperSettingsContext };
@@ -63,6 +65,7 @@ export function SettingsModal({ open, onClose, paper }: Props) {
           colored: exportColored,
           includeAnswers: exportAnswers,
         },
+        topicAppendix: paper.topicAppendix,
       });
     } catch (e) {
       console.error("Paper export failed", e);
@@ -287,12 +290,6 @@ export function SettingsModal({ open, onClose, paper }: Props) {
                 desc="Remove animations across the site."
                 value={settings.reducedMotion}
                 onChange={(v) => update("reducedMotion", v)}
-              />
-              <Toggle
-                label="Remove cursor effect"
-                desc="Completely disable the mouse particles / cursor trail effect."
-                value={settings.removeCursorEffect}
-                onChange={(v) => update("removeCursorEffect", v)}
               />
             </div>
           </Section>

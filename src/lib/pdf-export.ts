@@ -91,6 +91,8 @@ export type ResultsPdfInput = {
     correct: string;
     status: "correct" | "incorrect" | "unattempted";
   }[];
+  /** Optional appendix listing topics/lessons included (used by /topical exports). */
+  topicAppendix?: { topic: string; lessons: string[] }[];
 };
 
 export function downloadResultsPdf(input: ResultsPdfInput) {
@@ -296,11 +298,82 @@ export function downloadResultsPdf(input: ResultsPdfInput) {
   });
 
   paintAllPages(doc);
+  if (input.topicAppendix && input.topicAppendix.length > 0) {
+    drawTopicAppendix(doc, input.topicAppendix);
+  }
   footer(doc, `MCQuer — ${input.subject} ${input.year} ${input.session} ${input.variant}`);
   download(
     doc,
     `mcquer-results-${input.subjectShort}-${input.year}-${input.session}-${input.variant}.pdf`,
   );
+}
+
+/** Add a page listing all topics and lessons practised. */
+function drawTopicAppendix(doc: jsPDF, entries: { topic: string; lessons: string[] }[]) {
+  const w = doc.internal.pageSize.getWidth();
+  const h = doc.internal.pageSize.getHeight();
+  const marginX = 40;
+  const bottom = h - 60;
+  doc.addPage();
+  paintBackground(doc);
+  const PRIMARY = primaryRGB();
+
+  // Header
+  doc.setFontSize(9);
+  doc.setTextColor(...MUTED);
+  doc.text("MCQUER · APPENDIX", marginX, 50);
+  doc.setFontSize(20);
+  doc.setTextColor(...FG);
+  doc.text("Topics & lessons included", marginX, 78);
+  doc.setFontSize(10);
+  doc.setTextColor(...MUTED);
+  const totalLessons = entries.reduce((n, e) => n + e.lessons.length, 0);
+  doc.text(
+    `${entries.length} topic${entries.length === 1 ? "" : "s"} · ${totalLessons} lesson${totalLessons === 1 ? "" : "s"}`,
+    marginX,
+    96,
+  );
+
+  let y = 120;
+  for (const entry of entries) {
+    // page-break check
+    if (y > bottom - 50) {
+      doc.addPage();
+      paintBackground(doc);
+      y = 60;
+    }
+    // Topic pill
+    doc.setFillColor(...PRIMARY);
+    doc.roundedRect(marginX, y - 12, doc.getTextWidth(entry.topic) + 16, 20, 4, 4, "F");
+    doc.setFontSize(11);
+    doc.setTextColor(255, 255, 255);
+    doc.text(entry.topic, marginX + 8, y + 2);
+    y += 20;
+
+    doc.setFontSize(10);
+    doc.setTextColor(...FG);
+    if (entry.lessons.length === 0) {
+      doc.setTextColor(...MUTED);
+      doc.text("— (all lessons)", marginX + 8, y + 4);
+      y += 20;
+    } else {
+      for (const lesson of entry.lessons) {
+        if (y > bottom) {
+          doc.addPage();
+          paintBackground(doc);
+          y = 60;
+        }
+        // Bullet
+        doc.setFillColor(...MUTED);
+        doc.circle(marginX + 12, y + 3, 1.4, "F");
+        const wrapped = doc.splitTextToSize(lesson, w - marginX * 2 - 24);
+        doc.setTextColor(...FG);
+        doc.text(wrapped, marginX + 20, y + 6);
+        y += Math.max(16, wrapped.length * 13);
+      }
+    }
+    y += 10;
+  }
 }
 
 /** Draw a progress donut using short arc segments (jsPDF has no arc API). */

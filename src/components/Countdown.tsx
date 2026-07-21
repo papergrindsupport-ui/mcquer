@@ -397,17 +397,29 @@ function TimerBox({
   standaloneFullscreen?: boolean;
 }) {
   const [now, setNow] = useState(() => Date.now());
+  const [vw, setVw] = useState(() => (typeof window !== "undefined" ? window.innerWidth : 1024));
   useEffect(() => {
     const iv = setInterval(() => setNow(Date.now()), 1000);
-    return () => clearInterval(iv);
+    const onResize = () => setVw(window.innerWidth);
+    window.addEventListener("resize", onResize);
+    return () => {
+      clearInterval(iv);
+      window.removeEventListener("resize", onResize);
+    };
   }, []);
 
   const target = useMemo(() => new Date(session.date).getTime(), [session.date]);
   const parts = computeParts(target, now, settings.format);
+  // Cap font size so all enabled units fit horizontally on narrow screens.
+  // Rough heuristic: each unit needs ~2.6× fontSize wide (digits + label + gap).
+  const unitCount = Math.max(1, parts.length);
+  const available = Math.max(220, vw - 48);
+  const cap = standaloneFullscreen ? settings.fontSize : Math.floor(available / (unitCount * 2.6));
+  const effectiveFontSize = Math.max(28, Math.min(settings.fontSize, cap));
 
   const containerBase = standaloneFullscreen
     ? "h-screen w-screen"
-    : "min-h-[420px] w-full aspect-[16/6.5]";
+    : "min-h-[260px] sm:min-h-[420px] w-full sm:aspect-[16/6.5]";
 
   return (
     <div
@@ -422,9 +434,9 @@ function TimerBox({
       }}
     >
       {/* Top-right controls */}
-      <div className="absolute right-3 top-3 z-10 flex items-center gap-2">
+      <div className="absolute right-2 top-2 z-10 flex items-center gap-1.5 sm:right-3 sm:top-3 sm:gap-2">
         <span
-          className="rounded-full px-3 py-1 text-xs font-semibold"
+          className="rounded-full px-2.5 py-1 text-[10px] font-semibold sm:px-3 sm:text-xs"
           style={{
             backgroundColor: "rgba(0,0,0,0.35)",
             color: settings.fg,
@@ -435,45 +447,45 @@ function TimerBox({
         <button
           onClick={onOpenSettings}
           title="Timer settings"
-          className="grid h-8 w-8 cursor-pointer place-items-center rounded-full transition-colors hover:bg-black/40"
+          className="grid h-7 w-7 cursor-pointer place-items-center rounded-full transition-colors hover:bg-black/40 sm:h-8 sm:w-8"
           style={{ backgroundColor: "rgba(0,0,0,0.35)", color: settings.fg }}
         >
-          <LuSettings size={14} />
+          <LuSettings size={13} />
         </button>
         <button
           onClick={onToggleFullscreen}
           title={fullscreen ? "Minimize" : "Fullscreen"}
-          className="grid h-8 w-8 cursor-pointer place-items-center rounded-full transition-colors hover:bg-black/40"
+          className="grid h-7 w-7 cursor-pointer place-items-center rounded-full transition-colors hover:bg-black/40 sm:h-8 sm:w-8"
           style={{ backgroundColor: "rgba(0,0,0,0.35)", color: settings.fg }}
         >
-          {fullscreen ? <LuMinimize size={14} /> : <LuMaximize size={14} />}
+          {fullscreen ? <LuMinimize size={13} /> : <LuMaximize size={13} />}
         </button>
       </div>
 
       {/* Body */}
-      <div className="flex h-full flex-col items-center justify-center px-6 py-8 text-center">
+      <div className="flex h-full flex-col items-center justify-center px-3 py-10 text-center sm:px-6 sm:py-8">
         <div
-          className="text-xs font-semibold uppercase tracking-[0.25em] opacity-80"
-          style={{ fontSize: Math.max(11, settings.fontSize * 0.14) }}
+          className="text-[10px] font-semibold uppercase tracking-[0.2em] opacity-80 sm:text-xs sm:tracking-[0.25em]"
+          style={{ fontSize: Math.max(10, effectiveFontSize * 0.13) }}
         >
           {SUBJECT_NAMES[subject]} · {session.label}
         </div>
 
-        <div className="mt-6 flex flex-wrap items-end justify-center gap-x-8 gap-y-4">
+        <div className="mt-4 flex flex-wrap items-end justify-center gap-x-3 gap-y-3 sm:mt-6 sm:gap-x-8 sm:gap-y-4">
           {parts.length === 0 ? (
             <div className="text-sm opacity-70">Enable at least one unit in settings.</div>
           ) : (
             parts.map((p, i) => (
-              <div key={p.key} className="flex items-end gap-x-8">
+              <div key={p.key} className="flex items-end gap-x-3 sm:gap-x-8">
                 {settings.showColons && i > 0 && (
                   <span
                     aria-hidden
                     className="self-center opacity-30"
                     style={{
-                      fontSize: settings.fontSize,
+                      fontSize: effectiveFontSize,
                       lineHeight: 1,
                       fontWeight: 700,
-                      marginBottom: Math.max(10, settings.fontSize * 0.14) + 6,
+                      marginBottom: Math.max(10, effectiveFontSize * 0.14) + 6,
                     }}
                   >
                     :
@@ -483,11 +495,11 @@ function TimerBox({
                   <SlidingNumber
                     value={p.value}
                     digits={p.key === "days" ? 0 : 2}
-                    fontSize={settings.fontSize}
+                    fontSize={effectiveFontSize}
                   />
                   <div
-                    className="mt-1 font-semibold tracking-[0.2em] opacity-70"
-                    style={{ fontSize: Math.max(10, settings.fontSize * 0.14) }}
+                    className="mt-1 font-semibold tracking-[0.15em] opacity-70 sm:tracking-[0.2em]"
+                    style={{ fontSize: Math.max(9, effectiveFontSize * 0.14) }}
                   >
                     {p.label}
                   </div>
@@ -498,8 +510,8 @@ function TimerBox({
         </div>
 
         <div
-          className="mt-8 opacity-70"
-          style={{ fontSize: Math.max(11, settings.fontSize * 0.13) }}
+          className="mt-6 opacity-70 sm:mt-8"
+          style={{ fontSize: Math.max(10, effectiveFontSize * 0.13) }}
         >
           {new Date(session.date).toLocaleString(undefined, {
             weekday: "long",

@@ -627,11 +627,14 @@ function Carousel({ children }: { children: React.ReactNode }) {
     <div className="relative">
       <div
         ref={scrollerRef}
-        className="scrollbar-thin -mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-2"
+        className="scrollbar-thin -mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-pl-6 scroll-pr-6 px-4 pb-2"
       >
         {Array.isArray(children)
-          ? children.map((c, i) => (
-              <div key={i} className="min-w-[240px] shrink-0 snap-start sm:min-w-[280px]">
+          ? children.map((c, i, arr) => (
+              <div
+                key={i}
+                className={`min-w-[240px] shrink-0 snap-start sm:min-w-[280px] ${i === 0 ? "ml-2" : ""} ${i === arr.length - 1 ? "mr-2" : ""}`}
+              >
                 {c}
               </div>
             ))

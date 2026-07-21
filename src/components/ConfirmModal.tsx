@@ -117,9 +117,7 @@ export function ConfirmModal({
             onClick={onConfirm}
             disabled={!canConfirm}
             className={`cursor-pointer rounded-md px-4 py-2 text-sm font-semibold text-white shadow disabled:cursor-not-allowed disabled:opacity-40 ${
-              danger
-                ? "bg-red-600 hover:bg-red-700"
-                : "bg-primary hover:opacity-90"
+              danger ? "bg-[crimson] hover:bg-[#a50f2d]" : "bg-primary hover:opacity-90"
             }`}
           >
             {confirmLabel}

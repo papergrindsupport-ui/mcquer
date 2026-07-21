@@ -186,6 +186,19 @@ export function renderErrorPage(): string {
         </a>
       </div>
     </div>
+    <script>
+  const key = "error-page-retry";
+
+  if (!sessionStorage.getItem(key)) {
+    sessionStorage.setItem(key, "1");
+
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000);
+  } else {
+    sessionStorage.removeItem(key);
+  }
+</script>
   </body>
 </html>`;
 }

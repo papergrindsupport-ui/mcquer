@@ -40,6 +40,20 @@ type Props = {
   topicalSelection?: TopicSelection;
   topicalLimit?: number;
   showNextPaper?: boolean;
+  /**
+   * When present, `questions` is the current page slice. Scoring, submit
+   * state and the nav strip are computed against `allQuestions`. Only the
+   * last page renders the submit button; after submit we jump to page 0.
+   */
+  paginate?: {
+    allQuestions: PaperQuestions;
+    allQuestionMeta?: SourceMeta[];
+    pageIndex: number;
+    pageCount: number;
+    onGoToPage: (i: number) => void;
+  };
+  /** Topic/lesson appendix for the results PDF (used on /topical). */
+  topicAppendix?: { topic: string; lessons: string[] }[];
 };
 
 const IDS: OptionId[] = ["A", "B", "C", "D"];
@@ -76,10 +90,17 @@ export function QuestionList({
   topicalLimit,
   showNextPaper = true,
   disableProgress = false,
+  paginate,
+  topicAppendix,
 }: Props) {
   const { settings } = useSettings();
   const navigate = useNavigate();
   useScrollToHash();
+
+  // Scoring domain: full set when paginating, otherwise the visible questions.
+  const scoringQuestions = paginate?.allQuestions ?? questions;
+  const scoringMeta = paginate?.allQuestionMeta ?? questionMeta;
+  const isLastPage = paginate ? paginate.pageIndex === paginate.pageCount - 1 : true;
 
   const nextCoord = useMemo(
     () => getNextPaper(subject, year, session, variant),
@@ -145,8 +166,8 @@ export function QuestionList({
 
   const selections = useMemo(() => {
     void selectionsTick;
-    return questions.map((q) => ({ q, sel: readSelected(storageKey, q.n) }));
-  }, [questions, storageKey, selectionsTick]);
+    return scoringQuestions.map((q) => ({ q, sel: readSelected(storageKey, q.n) }));
+  }, [scoringQuestions, storageKey, selectionsTick]);
 
   const score = useMemo(
     () => selections.reduce((n, { q, sel }) => n + (sel === q.answer ? 1 : 0), 0),
@@ -166,7 +187,7 @@ export function QuestionList({
       session,
       variant,
       answered,
-      total: questions.length,
+      total: scoringQuestions.length,
       submitted: submittedAll,
       score: submittedAll ? score : undefined,
       updatedAt: Date.now(),
@@ -184,7 +205,7 @@ export function QuestionList({
     year,
     session,
     variant,
-    questions.length,
+    scoringQuestions.length,
     disableProgress,
     topicalSelection,
     topicalLimit,
@@ -210,6 +231,7 @@ export function QuestionList({
   const [pendingDontShow, setPendingDontShow] = useState(false);
   const [confirmReset, setConfirmReset] = useState(false);
   const [resetNonce, setResetNonce] = useState(0);
+  const [confirmRetry, setConfirmRetry] = useState(false);
 
   const resultsRef = useRef<HTMLDivElement | null>(null);
   const questionsRef = useRef<HTMLDivElement | null>(null);
@@ -218,7 +240,7 @@ export function QuestionList({
     setSubmittedAll(true);
     bumpTick();
     // Record analytics
-    const sels = questions.map((q) => ({ q, sel: readSelected(storageKey, q.n) }));
+    const sels = scoringQuestions.map((q) => ({ q, sel: readSelected(storageKey, q.n) }));
     const answeredNow = sels.filter((x) => x.sel !== null).length;
     const scoreNow = sels.reduce((n, { q, sel }) => n + (sel === q.answer ? 1 : 0), 0);
     recordPaperSubmit({
@@ -228,17 +250,25 @@ export function QuestionList({
       session,
       variant,
       score: scoreNow,
-      total: questions.length,
+      total: scoringQuestions.length,
       answered: answeredNow,
     });
+    // Jump paginated view back to page 1 so the results card shows at top.
+    if (paginate && paginate.pageIndex !== 0) {
+      paginate.onGoToPage(0);
+    }
     setTimeout(() => {
-      resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      if (paginate) {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      } else {
+        resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
     }, 30);
-  }, [bumpTick, questions, storageKey, subject, year, session, variant]);
+  }, [bumpTick, scoringQuestions, storageKey, subject, year, session, variant, paginate]);
 
   const handleSubmit = () => {
     bumpTick();
-    const empties = questions.filter((q) => readSelected(storageKey, q.n) === null).length;
+    const empties = scoringQuestions.filter((q) => readSelected(storageKey, q.n) === null).length;
     if (empties > 0 && !dontShowEmpty) {
       setPendingDontShow(false);
       setPromptOpen(true);
@@ -263,7 +293,7 @@ export function QuestionList({
   };
 
   const clearAllStorage = () => {
-    for (const q of questions) {
+    for (const q of scoringQuestions) {
       try {
         localStorage.removeItem(`${storageKey}-q${q.n}`);
         localStorage.removeItem(`${storageKey}-q${q.n}-elim`);
@@ -301,7 +331,7 @@ export function QuestionList({
       session,
       variant,
       score,
-      total: questions.length,
+      total: scoringQuestions.length,
       grades,
       rows: selections.map(({ q, sel }) => ({
         n: q.n,
@@ -309,16 +339,17 @@ export function QuestionList({
         correct: q.answer,
         status: sel === null ? "unattempted" : sel === q.answer ? "correct" : "incorrect",
       })),
+      topicAppendix,
     });
   };
 
   return (
     <section className="space-y-4">
-      {isEndMode && submittedAll && (
+      {isEndMode && submittedAll && (!paginate || paginate.pageIndex === 0) && (
         <div ref={resultsRef}>
           <ResultsCard
             score={score}
-            total={questions.length}
+            total={scoringQuestions.length}
             statuses={selections.map(({ q, sel }) =>
               sel === null ? "empty" : sel === q.answer ? "correct" : "incorrect",
             )}
@@ -327,12 +358,24 @@ export function QuestionList({
             onChangeGradeSystem={setGradeSystem}
             onReview={handleReview}
             onDownload={handleDownload}
-            onRetry={handleRetry}
+            onRetry={() => setConfirmRetry(true)}
             onNextPaper={showNextPaper && nextCoord ? goNextPaper : undefined}
             nextPaperLabel={nextCoord ? formatPaperLabel(nextCoord) : null}
           />
+          <ConfirmModal
+            open={confirmRetry}
+            title="Retry this paper?"
+            description="This clears your answers and marking so you can attempt the paper again from scratch."
+            confirmLabel="Retry paper"
+            danger
+            onCancel={() => setConfirmRetry(false)}
+            onConfirm={() => {
+              setConfirmRetry(false);
+              handleRetry();
+            }}
+          />
           <AIFeedback
-            questions={questions}
+            questions={scoringQuestions}
             selections={selections}
             score={score}
             subject={subject}
@@ -381,25 +424,28 @@ export function QuestionList({
       )}
       {!settings.showNavStrip && <ReviewStrip storageKey={storageKey} />}
 
-      {isEndMode && (
-        <div className="flex justify-end pt-2">
-          {submittedAll ? (
-            <button
-              onClick={() => setSubmittedAll(false)}
-              className="inline-flex cursor-pointer items-center gap-1.5 rounded-md border border-border bg-background px-4 py-2 text-sm font-medium hover:bg-accent"
-            >
-              <LuRotateCcw size={14} /> Reset marking
-            </button>
-          ) : (
-            <button
-              onClick={handleSubmit}
-              className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow transition-transform active:scale-95"
-            >
-              <LuSend size={14} /> Submit paper
-            </button>
-          )}
-        </div>
-      )}
+      {isEndMode &&
+        (submittedAll
+          ? (!paginate || paginate.pageIndex === 0) && (
+              <div className="flex justify-end pt-2">
+                <button
+                  onClick={() => setSubmittedAll(false)}
+                  className="inline-flex cursor-pointer items-center gap-1.5 rounded-md border border-border bg-background px-4 py-2 text-sm font-medium hover:bg-accent"
+                >
+                  <LuRotateCcw size={14} /> Reset marking
+                </button>
+              </div>
+            )
+          : isLastPage && (
+              <div className="flex justify-end pt-2">
+                <button
+                  onClick={handleSubmit}
+                  className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow transition-transform active:scale-95"
+                >
+                  <LuSend size={14} /> Submit paper
+                </button>
+              </div>
+            ))}
 
       {/* Reset paper — always available at the end of the paper */}
       <div className="flex justify-center border-t border-border pt-6">

@@ -11,7 +11,6 @@ import {
   LuLeaf,
   LuFlaskConical,
   LuAtom,
-  LuEye,
   LuDownload,
   LuMapPin,
 } from "react-icons/lu";
@@ -91,8 +90,7 @@ export function PlannerSection() {
   const [subject, setSubject] = usePersistedState<SubjectId>(
     "igv-planner-subject",
     "biology",
-    (v): v is SubjectId =>
-      v === "biology" || v === "chemistry" || v === "physics",
+    (v): v is SubjectId => v === "biology" || v === "chemistry" || v === "physics",
   );
 
   return (
@@ -100,9 +98,7 @@ export function PlannerSection() {
       <div className="flex items-baseline gap-3 sm:gap-4">
         <span className="text-xs font-mono text-muted-foreground">05</span>
         <div className="h-px flex-1 bg-border" />
-        <h2 className="text-xl font-semibold tracking-tight sm:text-3xl">
-          Planner
-        </h2>
+        <h2 className="text-xl font-semibold tracking-tight sm:text-3xl">Planner</h2>
         <button
           onClick={() => setCollapsed((v) => !v)}
           aria-label={collapsed ? "Expand planner" : "Collapse planner"}
@@ -181,9 +177,7 @@ function TabPill({
     <button
       onClick={onClick}
       className={`inline-flex cursor-pointer items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-medium transition-colors ${
-        active
-          ? "bg-primary text-primary-foreground"
-          : "text-muted-foreground hover:bg-accent"
+        active ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent"
       }`}
     >
       {icon}
@@ -193,12 +187,8 @@ function TabPill({
 }
 
 function SubjectPlanner({ subject }: { subject: SubjectId }) {
-  const [settings, setSettings] = useState<PlannerSettings>(() =>
-    loadSettings(subject),
-  );
-  const [checks, setChecks] = useState<Record<string, CellState>>(() =>
-    loadChecks(subject),
-  );
+  const [settings, setSettings] = useState<PlannerSettings>(() => loadSettings(subject));
+  const [checks, setChecks] = useState<Record<string, CellState>>(() => loadChecks(subject));
   const [pins, setPins] = useState<PinMap>(() => loadPins(subject));
   const [submittedKeys, setSubmittedKeys] = useState<Set<string>>(() => {
     if (typeof window === "undefined") return new Set();
@@ -315,9 +305,7 @@ function SubjectPlanner({ subject }: { subject: SubjectId }) {
     }
     const subj = getSubject(subject);
     const subjYearsSet = new Set(subj.years);
-    const rowYears = settings.years
-      .filter((y) => subjYearsSet.has(y))
-      .sort((a, b) => a - b);
+    const rowYears = settings.years.filter((y) => subjYearsSet.has(y)).sort((a, b) => a - b);
 
     const rows = rowYears.map((year) => {
       const cells: PlannerPdfCell[] = cols.map((c) => {
@@ -327,13 +315,7 @@ function SubjectPlanner({ subject }: { subject: SubjectId }) {
         const cur = checks[k];
         const auto = submittedKeys.has(k);
         const state: PlannerPdfCell["state"] =
-          cur === "checked"
-            ? "checked"
-            : cur === "unchecked"
-              ? "empty"
-              : auto
-                ? "auto"
-                : "empty";
+          cur === "checked" ? "checked" : cur === "unchecked" ? "empty" : auto ? "auto" : "empty";
         const pin = pins[k];
         return {
           state,
@@ -381,7 +363,7 @@ function SubjectPlanner({ subject }: { subject: SubjectId }) {
     setViewingPin({ key: cellKey(year, session, variant), year, session, variant });
   };
 
-  const viewingPinObj: PlannerPin | null = viewingPin ? pins[viewingPin.key] ?? null : null;
+  const viewingPinObj: PlannerPin | null = viewingPin ? (pins[viewingPin.key] ?? null) : null;
 
   return (
     <div className="mt-6 animate-fade-in rounded-2xl border border-border bg-card p-5 sm:p-6">
@@ -392,9 +374,7 @@ function SubjectPlanner({ subject }: { subject: SubjectId }) {
             <span className="text-sm font-semibold tracking-tight">
               {checkedCount} / {totalPapers} papers completed
             </span>
-            <span className="text-xs font-mono text-muted-foreground">
-              {pct}%
-            </span>
+            <span className="text-xs font-mono text-muted-foreground">{pct}%</span>
           </div>
           <div className="h-2 overflow-hidden rounded-full bg-muted">
             <div
@@ -516,7 +496,12 @@ function pinDeltaShortLocal(iso: string): string {
   let ms = target - Date.now();
   const past = ms < 0;
   ms = Math.abs(ms);
-  const MIN = 60_000, HR = 3600_000, DAY = 86_400_000, WK = 7 * DAY, MO = 30 * DAY, YR = 365 * DAY;
+  const MIN = 60_000,
+    HR = 3600_000,
+    DAY = 86_400_000,
+    WK = 7 * DAY,
+    MO = 30 * DAY,
+    YR = 365 * DAY;
   let out: string;
   if (ms < MIN) out = "now";
   else if (ms >= YR) out = `${Math.floor(ms / YR)}y`;
@@ -531,14 +516,9 @@ function pinDeltaShortLocal(iso: string): string {
   return past ? `-${out}` : out;
 }
 
-
 /* -------------------- Table rendering -------------------- */
 
-function axisValues(
-  axis: Axis,
-  s: PlannerSettings,
-  ctx?: { session?: SessionId },
-): string[] {
+function axisValues(axis: Axis, s: PlannerSettings, ctx?: { session?: SessionId }): string[] {
   if (axis === "year") return s.years.map(String);
   if (axis === "session") return s.sessions;
   // variant
@@ -588,9 +568,10 @@ function PlannerTable({
     if (cfg.rowSub == null) {
       rows.push({ outer, outerIndex: oi, subCount: 1 });
     } else {
-      const ctx = cfg.rowSub === "variant" && cfg.rowOuter === "session"
-        ? { session: outer as SessionId }
-        : undefined;
+      const ctx =
+        cfg.rowSub === "variant" && cfg.rowOuter === "session"
+          ? { session: outer as SessionId }
+          : undefined;
       const subs = axisValues(cfg.rowSub, settings, ctx);
       if (subs.length === 0) {
         rows.push({ outer, outerIndex: oi, subCount: 1 });
@@ -610,9 +591,10 @@ function PlannerTable({
       cols.push({ outer });
       colGroups.push({ outer, span: 1 });
     } else {
-      const ctx = cfg.colSub === "variant" && cfg.colOuter === "session"
-        ? { session: outer as SessionId }
-        : undefined;
+      const ctx =
+        cfg.colSub === "variant" && cfg.colOuter === "session"
+          ? { session: outer as SessionId }
+          : undefined;
       const subs = axisValues(cfg.colSub, settings, ctx);
       if (subs.length === 0) {
         cols.push({ outer });
@@ -625,7 +607,10 @@ function PlannerTable({
   });
 
   // Helper: read triple from row/col using axis config
-  function tripleOf(row: Row, col: Col): { year: number; session: SessionId; variant: string } | null {
+  function tripleOf(
+    row: Row,
+    col: Col,
+  ): { year: number; session: SessionId; variant: string } | null {
     const vals: Partial<Record<Axis, string>> = {};
     vals[cfg.rowOuter] = row.outer;
     if (cfg.rowSub && row.sub != null) vals[cfg.rowSub] = row.sub;
@@ -820,7 +805,13 @@ function PlannerSettingsModal({
   };
 
   // Only years that this subject actually has papers for
-  const subjectYears = useMemo(() => getSubject(subject).years.slice().sort((a, b) => a - b), [subject]);
+  const subjectYears = useMemo(
+    () =>
+      getSubject(subject)
+        .years.slice()
+        .sort((a, b) => a - b),
+    [subject],
+  );
 
   // Sessions actually available for this subject (across its years)
   const availableSessions = useMemo(() => {
@@ -846,9 +837,7 @@ function PlannerSettingsModal({
     const nextMap = { ...local.variantsBySession, [sess]: next };
     // Auto-uncheck the session if all variants are now off
     const nextSessions =
-      next.length === 0
-        ? local.sessions.filter((s) => s !== sess)
-        : local.sessions;
+      next.length === 0 ? local.sessions.filter((s) => s !== sess) : local.sessions;
     apply({
       ...local,
       variantsBySession: nextMap,
@@ -858,7 +847,9 @@ function PlannerSettingsModal({
 
   const toggleYear = (y: number) => {
     const has = local.years.includes(y);
-    const next = has ? local.years.filter((x) => x !== y) : [...local.years, y].sort((a, b) => a - b);
+    const next = has
+      ? local.years.filter((x) => x !== y)
+      : [...local.years, y].sort((a, b) => a - b);
     apply({ ...local, years: next });
   };
 
@@ -876,9 +867,7 @@ function PlannerSettingsModal({
         <div className="flex items-center justify-between border-b border-border px-5 py-3">
           <div className="flex items-center gap-2">
             <LuSettings size={16} className="text-primary" />
-            <h3 className="text-sm font-semibold">
-              Planner settings — {getSubject(subject).name}
-            </h3>
+            <h3 className="text-sm font-semibold">Planner settings — {getSubject(subject).name}</h3>
           </div>
           <button
             onClick={onClose}
@@ -900,7 +889,10 @@ function PlannerSettingsModal({
               summary={
                 local.sessions.length === availableSessions.length
                   ? "All sessions"
-                  : local.sessions.filter((s) => availableSessions.includes(s)).map((s) => SESSION_SHORT[s]).join(", ") || "None"
+                  : local.sessions
+                      .filter((s) => availableSessions.includes(s))
+                      .map((s) => SESSION_SHORT[s])
+                      .join(", ") || "None"
               }
             >
               <div className="space-y-2 p-3">
@@ -1003,15 +995,6 @@ function PlannerSettingsModal({
                         {l.desc}
                       </div>
                     </div>
-                    <span
-                      onMouseEnter={(e) => e.stopPropagation()}
-                      className="group/eye relative grid h-7 w-7 shrink-0 place-items-center rounded-md border border-border bg-background text-muted-foreground transition-colors hover:border-primary hover:text-primary"
-                    >
-                      <LuEye size={13} />
-                      <span className="pointer-events-none absolute right-full top-1/2 z-30 mr-2 -translate-y-1/2 scale-90 rounded-lg border border-border bg-popover p-3 opacity-0 shadow-2xl transition-all duration-150 group-hover/eye:scale-100 group-hover/eye:opacity-100">
-                        <LayoutPreviewLarge id={l.id} />
-                      </span>
-                    </span>
                   </button>
                 );
               })}
@@ -1040,74 +1023,7 @@ function PlannerSettingsModal({
   return typeof document !== "undefined" ? createPortal(modal, document.body) : modal;
 }
 
-function LayoutPreviewLarge({ id }: { id: LayoutId }) {
-  return (
-    <div className="w-[220px]">
-      <svg width="220" height="160" viewBox="0 0 220 160" className="block">
-        <rect x="1" y="1" width="218" height="158" rx="8" fill="hsl(var(--background))" stroke="hsl(var(--border))" />
-        {previewLinesLarge(id).map((l, i) => (
-          <line
-            key={i}
-            x1={l.x1}
-            y1={l.y1}
-            x2={l.x2}
-            y2={l.y2}
-            stroke="hsl(var(--primary))"
-            strokeOpacity={l.sub ? 0.35 : 0.9}
-            strokeWidth={l.sub ? 1 : 1.5}
-          />
-        ))}
-      </svg>
-      <div className="mt-2 text-center text-[0.65rem] uppercase tracking-wider text-muted-foreground">
-        Layout preview
-      </div>
-    </div>
-  );
-}
-
-function previewLinesLarge(id: LayoutId) {
-  type L = { x1: number; y1: number; x2: number; y2: number; sub?: boolean };
-  const out: L[] = [];
-  const W = 220, H = 160;
-  const hLine = (y: number, sub = false) => out.push({ x1: 8, y1: y, x2: W - 8, y2: y, sub });
-  const vLine = (x: number, sub = false) => out.push({ x1: x, y1: 8, x2: x, y2: H - 8, sub });
-  switch (id) {
-    case "L1":
-      [40, 80, 120].forEach((y) => hLine(y));
-      [53, 66, 93, 106].forEach((y) => hLine(y, true));
-      [55, 95, 135, 175].forEach((x) => vLine(x));
-      break;
-    case "L2":
-      [48, 80, 112].forEach((y) => hLine(y));
-      [77, 145].forEach((x) => vLine(x));
-      [37, 57, 97, 117, 177, 197].forEach((x) => vLine(x, true));
-      break;
-    case "L3":
-      [55, 105].forEach((y) => hLine(y));
-      [77, 145].forEach((x) => vLine(x));
-      [37, 57, 97, 117, 177, 197].forEach((x) => vLine(x, true));
-      break;
-    case "L4":
-      [55, 105].forEach((y) => hLine(y));
-      [30, 55, 80, 105, 130, 155].forEach((y) => hLine(y, true));
-      [77, 145].forEach((x) => vLine(x));
-      break;
-    case "L5":
-      [55, 105].forEach((y) => hLine(y));
-      [77, 145].forEach((x) => vLine(x));
-      [50, 65, 100, 115, 155, 170].forEach((x) => vLine(x, true));
-      break;
-  }
-  return out;
-}
-
-function MiniCheck({
-  checked,
-  onChange,
-}: {
-  checked: boolean;
-  onChange: () => void;
-}) {
+function MiniCheck({ checked, onChange }: { checked: boolean; onChange: () => void }) {
   return (
     <span
       role="checkbox"
@@ -1121,9 +1037,7 @@ function MiniCheck({
         }
       }}
       className={`grid h-4 w-4 shrink-0 cursor-pointer place-items-center rounded border transition-colors ${
-        checked
-          ? "border-primary bg-primary text-primary-foreground"
-          : "border-border bg-surface"
+        checked ? "border-primary bg-primary text-primary-foreground" : "border-border bg-surface"
       }`}
     >
       {checked && <LuCheck size={11} />}
@@ -1167,14 +1081,17 @@ function Dropdown({
 function LayoutPreview({ id, active }: { id: LayoutId; active: boolean }) {
   const stroke = active ? "hsl(var(--primary))" : "hsl(var(--muted-foreground))";
   return (
-    <svg
-      width="52"
-      height="40"
-      viewBox="0 0 52 40"
-      className="shrink-0 opacity-90"
-      aria-hidden
-    >
-      <rect x="0.5" y="0.5" width="51" height="39" rx="4" fill="none" stroke={stroke} strokeOpacity="0.3" />
+    <svg width="52" height="40" viewBox="0 0 52 40" className="shrink-0 opacity-90" aria-hidden>
+      <rect
+        x="0.5"
+        y="0.5"
+        width="51"
+        height="39"
+        rx="4"
+        fill="none"
+        stroke={stroke}
+        strokeOpacity="0.3"
+      />
       {previewLines(id).map((l, i) => (
         <line
           key={i}

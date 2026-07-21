@@ -377,15 +377,13 @@ function Landing() {
 
 function DashboardGate() {
   const entries = useProgressEntries();
-  const visible = entries.filter((entry) => entry.kind !== "topical");
-  if (visible.length === 0) return null;
+  if (entries.length === 0) return null;
   return <Dashboard />;
 }
 
 function PlannerGate() {
   const entries = useProgressEntries();
-  const visible = entries.filter((entry) => entry.kind !== "topical");
-  if (visible.length === 0) return null;
+  if (entries.length === 0) return null;
   return <PlannerSection />;
 }
 

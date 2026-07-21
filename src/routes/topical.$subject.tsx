@@ -1,8 +1,10 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useMemo } from "react";
-import { LuArrowLeft, LuChevronLeft, LuChevronRight } from "react-icons/lu";
+import { useMemo, useState } from "react";
+import { LuArrowLeft, LuChevronLeft, LuChevronRight, LuSettings } from "react-icons/lu";
 import { QuestionList } from "@/components/mcq/QuestionList";
 import { CustomSelect } from "@/components/CustomSelect";
+import { SettingsModal } from "@/components/SettingsModal";
+import { useSettings, type SubmissionMode } from "@/lib/settings";
 import { getSubject, type SubjectId, type SessionId } from "@/lib/papers-data";
 import { useSearchScope } from "@/lib/search/context";
 import { preloadBundledPapers } from "@/lib/mcq/papers/bundle-loader";
@@ -114,6 +116,8 @@ function TopicalPaper() {
   const params = Route.useParams();
   const search = Route.useSearch();
   const navigate = useNavigate();
+  const { settings, update } = useSettings();
+  const [settingsOpen, setSettingsOpen] = useState(false);
 
   const subjectId = params.subject as SubjectId;
   const subj = ["biology", "chemistry", "physics"].includes(subjectId)
@@ -182,29 +186,36 @@ function TopicalPaper() {
     );
   }
 
-  // Slice for current page (page-mode). All-mode shows every question on one long page.
-  const visibleItems =
-    mode === "all" ? allMatched : allMatched.slice((safePage - 1) * PER_PAGE, safePage * PER_PAGE);
-
-  // Renumber for display (1..N within this page/set), while preserving the
-  // source paper metadata that should be shown under each question.
-  const questions = visibleItems.map((it, i) => ({ ...it.q, n: i + 1 }));
-  const questionMeta = visibleItems.map((it) => ({
+  // Global numbering across the whole matched set — keeps localStorage keys
+  // stable when paginating in "all" mode (so scoring/answers stay aligned).
+  const allQuestions = allMatched.map((it, i) => ({ ...it.q, n: i + 1 }));
+  const allMeta = allMatched.map((it) => ({
     year: it.year,
     session: it.session,
     variant: it.variant,
     originalQuestionNumber: it.q.n,
   }));
 
+  const startIdx = (safePage - 1) * PER_PAGE;
+  const endIdx = safePage * PER_PAGE;
+  const pageQuestions = allQuestions.slice(startIdx, endIdx);
+  const pageMeta = allMeta.slice(startIdx, endIdx);
+
   const selectionSummary = Object.entries(selection)
     .map(([t, ls]) => `${t} (${ls.length})`)
     .join(" · ");
 
-  // Stable per-paper storage key (per page in page-mode; whole set in all-mode).
-  const storageKey =
-    mode === "all"
-      ? `topical-${subjectId}-${sort}-all`
-      : `topical-${subjectId}-${sort}-p${safePage}`;
+  // Stable storage key across pages so "submit all" scores the whole set.
+  const storageKey = `topical-${subjectId}-${sort}${limit > 0 ? `-l${limit}` : ""}`;
+
+  // Merge search-mode ("page"|"all") and submission-mode into a single 4-way
+  // dropdown value while keeping both stores in sync.
+  const combinedValue: "page" | "all" | "instant" | "per-question" =
+    settings.submissionMode === "instant"
+      ? "instant"
+      : settings.submissionMode === "per-question"
+        ? "per-question"
+        : mode;
 
   const setSearch = (patch: Partial<Search>) => {
     navigate({
@@ -213,6 +224,31 @@ function TopicalPaper() {
       search: { ...search, ...patch } as never,
     });
   };
+
+  const onCombinedChange = (v: string) => {
+    if (v === "instant" || v === "per-question") {
+      update("submissionMode", v as SubmissionMode);
+      setSearch({ mode: "page", page: 1 });
+    } else {
+      update("submissionMode", "end");
+      setSearch({ mode: v as "page" | "all", page: 1 });
+    }
+  };
+
+  const topicAppendix = Object.entries(selection).map(([topic, lessons]) => ({
+    topic,
+    lessons,
+  }));
+
+  const paperTitle = `${subj.name} · Topical practice`;
+  const paperSubtitle = selectionSummary
+    ? `${subj.name} — ${selectionSummary}`
+    : `${subj.name} — Topical practice`;
+  const filenameBase = `mcquer-topical-${subjectId}-${sort}${limit > 0 ? `-l${limit}` : ""}`;
+
+  // Show pagination controls whenever there is more than one page — including
+  // in "all" mode (per spec: keep paginating even when submitting all at once).
+  const showPagination = totalPages > 1;
 
   return (
     <div className="mx-auto max-w-5xl px-3 pt-6 pb-24 sm:px-4 sm:pt-8">
@@ -249,26 +285,35 @@ function TopicalPaper() {
               onChange={(v) => setSearch({ sort: v as TopicalSort, page: 1 })}
             />
           </div>
-          <div className="w-48">
+          <div className="w-52">
             <CustomSelect
               label="Submit mode"
-              value={mode}
+              value={combinedValue}
               placeholder="Mode"
               options={[
                 { value: "page", label: "Submit each page" },
                 { value: "all", label: "Submit all at once" },
+                { value: "instant", label: "Instant marking" },
+                { value: "per-question", label: "Submit per question" },
               ]}
-              onChange={(v) => setSearch({ mode: v as "page" | "all", page: 1 })}
+              onChange={onCombinedChange}
             />
           </div>
+          <button
+            onClick={() => setSettingsOpen(true)}
+            aria-label="Settings"
+            className="inline-flex h-9 w-9 cursor-pointer items-center justify-center rounded-lg border border-border bg-background text-foreground transition-colors hover:bg-accent sm:h-10 sm:w-10"
+          >
+            <LuSettings size={16} />
+          </button>
         </div>
       </header>
 
-      {mode === "page" && (
+      {showPagination && (
         <div className="mb-4 flex items-center justify-between rounded-xl border border-border bg-card px-4 py-2 text-sm">
           <span className="text-muted-foreground">
-            Page {safePage} of {totalPages} · {questions.length} question
-            {questions.length === 1 ? "" : "s"}
+            Page {safePage} of {totalPages} · {pageQuestions.length} question
+            {pageQuestions.length === 1 ? "" : "s"}
           </span>
           <div className="flex items-center gap-1.5">
             <button
@@ -291,19 +336,27 @@ function TopicalPaper() {
 
       <QuestionList
         key={storageKey}
-        questions={questions}
+        questions={pageQuestions}
         storageKey={storageKey}
         subject={subjectId}
         year={0}
         session={"feb" as SessionId}
-        variant={mode === "all" ? "TOPICAL" : `TOPICAL-P${safePage}`}
-        questionMeta={questionMeta}
+        variant="TOPICAL"
+        questionMeta={pageMeta}
         topicalSelection={selection}
         topicalLimit={limit}
         showNextPaper={false}
+        paginate={{
+          allQuestions,
+          allQuestionMeta: allMeta,
+          pageIndex: safePage - 1,
+          pageCount: totalPages,
+          onGoToPage: (i) => setSearch({ page: i + 1 }),
+        }}
+        topicAppendix={topicAppendix}
       />
 
-      {mode === "page" && totalPages > 1 && (
+      {showPagination && (
         <div className="mt-6 flex items-center justify-between rounded-xl border border-border bg-card px-4 py-3 text-sm">
           <button
             disabled={safePage <= 1}
@@ -330,6 +383,19 @@ function TopicalPaper() {
           </button>
         </div>
       )}
+
+      <SettingsModal
+        open={settingsOpen}
+        onClose={() => setSettingsOpen(false)}
+        paper={{
+          questions: allQuestions,
+          storageKey,
+          title: paperTitle,
+          subtitle: paperSubtitle,
+          filenameBase,
+          topicAppendix,
+        }}
+      />
     </div>
   );
 }

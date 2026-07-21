@@ -29,6 +29,12 @@ export function SearchModal() {
   const inputRef = useRef<HTMLInputElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
+  const [closing, setClosing] = useState(false);
+  const handleClose = () => {
+    if (closing) return;
+    setClosing(true);
+    setTimeout(() => close(), 160);
+  };
 
   useEffect(() => {
     inputRef.current?.focus();
@@ -77,7 +83,7 @@ export function SearchModal() {
     } else if (e.key === "Enter" && results[activeIdx]) {
       const r = results[activeIdx];
       const subj = getSubject(r.doc.subject);
-      close();
+      handleClose();
       navigate({
         to: "/mcq/$subject/$year/$session/$variant",
         params: {
@@ -92,7 +98,7 @@ export function SearchModal() {
   };
 
   const openFullSearch = () => {
-    close();
+    handleClose();
     navigate({
       to: "/search",
       search: { q: query, strict: settings.strict ? 1 : 0 },
@@ -117,11 +123,11 @@ export function SearchModal() {
 
   return (
     <div
-      className="fixed inset-0 z-[70] flex animate-fade-in items-start justify-center bg-background/60 px-4 pt-[8vh] backdrop-blur-md"
-      onClick={close}
+      className={`fixed inset-0 z-[70] flex items-start justify-center bg-background/60 px-4 pt-[8vh] backdrop-blur-md ${closing ? "igv-search-fade-out" : "igv-search-fade-in"}`}
+      onClick={handleClose}
     >
       <div
-        className="relative w-full max-w-2xl animate-scale-in overflow-hidden rounded-2xl border border-border bg-card shadow-2xl"
+        className={`relative w-full max-w-2xl overflow-hidden rounded-2xl border border-border bg-card shadow-2xl ${closing ? "igv-search-scale-out" : "igv-search-scale-in"}`}
         onClick={(e) => e.stopPropagation()}
         onDragOver={(e) => {
           if (e.dataTransfer.types.includes("Files")) {
@@ -190,7 +196,7 @@ export function SearchModal() {
           </button>
           <button
             title="Close"
-            onClick={close}
+            onClick={handleClose}
             className="grid h-8 w-8 cursor-pointer place-items-center rounded-md text-muted-foreground hover:bg-accent hover:text-foreground"
           >
             <LuX size={16} />
@@ -237,7 +243,7 @@ export function SearchModal() {
                   <ResultCard
                     result={r}
                     active={i === activeIdx}
-                    onNavigate={close}
+                    onNavigate={handleClose}
                     compact
                     query={query}
                   />

@@ -89,7 +89,36 @@
 .animate-theme-icon {
   animation: theme-icon-in 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
-
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+@keyframes scale-out {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+}
+.igv-search-fade-in {
+  animation: fade-in 0.18s ease-out both;
+}
+.igv-search-scale-in {
+  animation: scale-in 0.18s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.igv-search-fade-out {
+  animation: fade-out 0.16s ease-in both;
+}
+.igv-search-scale-out {
+  animation: scale-out 0.16s ease-in both;
+}
 /* Circular reveal for dark/light mode switching (View Transitions API) */
 /* Simple fade for dark/light mode switching (View Transitions API) */
 @keyframes theme-fade-out {
