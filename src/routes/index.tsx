@@ -167,12 +167,12 @@ function Landing() {
 
   return (
     <div className="mx-auto max-w-6xl px-4 sm:px-6">
-      {decorReady && (
+      {/* {decorReady && (
         <Suspense fallback={null}>
           <StarsBackground className="pointer-events-none" />
           <ShootingStars className="pointer-events-none" />
         </Suspense>
-      )}
+      )} */}
       {/* Hero */}
       <section className="pt-16 pb-12 sm:pt-24 sm:pb-20">
         <div className="mx-auto max-w-3xl text-center">

@@ -288,6 +288,12 @@ export function SettingsModal({ open, onClose, paper }: Props) {
                 value={settings.reducedMotion}
                 onChange={(v) => update("reducedMotion", v)}
               />
+              <Toggle
+                label="Remove cursor effect"
+                desc="Completely disable the mouse particles / cursor trail effect."
+                value={settings.removeCursorEffect}
+                onChange={(v) => update("removeCursorEffect", v)}
+              />
             </div>
           </Section>
         </div>

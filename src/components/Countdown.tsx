@@ -155,15 +155,41 @@ type CountdownSettings = {
   showColons: boolean;
 };
 
-const DEFAULT_SETTINGS = (): CountdownSettings => ({
-  sessionId: "on26",
-  format: { days: true, hours: true, minutes: true, seconds: true },
-  bg: "#082f49",
-  fg: "#7dd3fc",
-  fontSize: 120,
-  fontFamily: "Fredoka",
-  showColons: false,
-});
+function clampPct(n: number, min = 0, max = 100) {
+  return Math.min(max, Math.max(min, n));
+}
+
+function readPrimaryHSL(): { h: number; s: number; l: number } {
+  if (typeof document === "undefined") return { h: 350, s: 78, l: 58 };
+  const cs = getComputedStyle(document.documentElement);
+  const h = parseFloat(cs.getPropertyValue("--primary-h")) || 350;
+  const s = parseFloat(cs.getPropertyValue("--primary-s")) || 78;
+  const l = parseFloat(cs.getPropertyValue("--primary-l")) || 58;
+  return { h, s, l };
+}
+
+function isDarkMode(): boolean {
+  if (typeof document === "undefined") return true;
+  return document.documentElement.classList.contains("dark");
+}
+
+const DEFAULT_SETTINGS = (): CountdownSettings => {
+  const { h, s, l } = readPrimaryHSL();
+  const dark = isDarkMode();
+  const bg = dark ? "#1a1a1a" : "#f4f4f5";
+  const fg = dark
+    ? `hsl(${h}, ${s}%, ${clampPct(l + 20, 40, 88)}%)`
+    : `hsl(${h}, ${s}%, ${clampPct(l - 25, 15, 55)}%)`;
+  return {
+    sessionId: "on26",
+    format: { days: true, hours: true, minutes: true, seconds: true },
+    bg,
+    fg,
+    fontSize: 120,
+    fontFamily: "Fredoka",
+    showColons: false,
+  };
+};
 
 const SUBJECT_ICONS: Record<SubjectId, typeof LuLeaf> = {
   biology: LuLeaf,

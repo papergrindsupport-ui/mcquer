@@ -87,16 +87,25 @@
   }
 }
 .animate-theme-icon {
-  animation: theme-icon-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: theme-icon-in 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 /* Circular reveal for dark/light mode switching (View Transitions API) */
-@keyframes theme-clip-in {
+/* Simple fade for dark/light mode switching (View Transitions API) */
+@keyframes theme-fade-out {
   from {
-    clip-path: circle(0 at var(--vt-x) var(--vt-y));
+    opacity: 1;
   }
   to {
-    clip-path: circle(var(--vt-r) at var(--vt-x) var(--vt-y));
+    opacity: 0;
+  }
+}
+@keyframes theme-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
 ::view-transition-old(root),
@@ -106,13 +115,12 @@
 }
 ::view-transition-old(root) {
   z-index: 1;
+  animation: theme-fade-out 0.3s ease both;
 }
 ::view-transition-new(root) {
   z-index: 2;
-  animation: theme-clip-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: theme-fade-in 0.3s ease both;
 }
-/* Suppress the body color transition while the reveal plays,
-   so the new theme snaps in cleanly under the expanding clip. */
 html.theme-transition body {
   transition: none !important;
 }
@@ -714,4 +722,42 @@ html span.cc-2gk6o {
 
 button {
   cursor: pointer !important;
+}
+.topical-slider {
+  appearance: none;
+  height: 8px;
+  border-radius: 9999px;
+  background: linear-gradient(
+    to right,
+    var(--color-primary) 0%,
+    var(--color-primary) var(--value),
+    var(--color-muted) var(--value),
+    var(--color-muted) 100%
+  );
+}
+
+.topical-slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 9999px;
+  background: var(--color-primary);
+  border: 2px solid var(--color-background);
+  box-shadow: 0 2px 6px rgb(0 0 0 / 0.2);
+  cursor: pointer;
+  transition: transform 150ms ease;
+}
+
+.topical-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+}
+
+.topical-slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 9999px;
+  background: var(--color-primary);
+  border: 2px solid var(--color-background);
+  box-shadow: 0 2px 6px rgb(0 0 0 / 0.2);
+  cursor: pointer;
 }

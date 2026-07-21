@@ -22,6 +22,7 @@ export type Settings = {
   showNavStrip: boolean;
   navStripPosition: NavStripPosition;
   normalizeIntroText: boolean;
+  removeCursorEffect: boolean;
 };
 
 const DEFAULTS: Settings = {
@@ -36,6 +37,7 @@ const DEFAULTS: Settings = {
   showNavStrip: false,
   normalizeIntroText: true,
   navStripPosition: "right",
+  removeCursorEffect: false,
 };
 
 type Ctx = {

@@ -76,57 +76,16 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     document.documentElement.classList.toggle("dark", m === "dark");
   };
 
-  const setMode = (m: Mode, origin?: { x: number; y: number }) => {
+  const setMode = (m: Mode) => {
     setModeState(m);
     localStorage.setItem("igv-mode", m);
-
-    const doc = document as Document & {
-      startViewTransition?: (cb: () => void) => { ready: Promise<void> };
-    };
-    const prefersReduced =
-      typeof window !== "undefined" &&
-      window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
-
-    if (!doc.startViewTransition || prefersReduced) {
-      applyMode(m);
-      return;
-    }
-
-    const x = origin?.x ?? window.innerWidth - 40;
-    const y = origin?.y ?? 40;
-    const endRadius = Math.hypot(
-      Math.max(x, window.innerWidth - x),
-      Math.max(y, window.innerHeight - y),
-    );
-    const root = document.documentElement;
-    root.style.setProperty("--vt-x", `${x}px`);
-    root.style.setProperty("--vt-y", `${y}px`);
-    root.style.setProperty("--vt-r", `${endRadius}px`);
-    root.classList.add("theme-transition");
-
-    const transition = doc.startViewTransition(() => applyMode(m));
-    transition.ready.finally(() => {
-      // cleanup after the animation ends
-      setTimeout(() => root.classList.remove("theme-transition"), 700);
-    });
+    document.documentElement.classList.toggle("dark", m === "dark");
   };
-  const toggleMode = (origin?: { x: number; y: number }) =>
-    setMode(mode === "dark" ? "light" : "dark", origin);
+  const toggleMode = (_origin?: { x: number; y: number }) =>
+    setMode(mode === "dark" ? "light" : "dark");
   const setPalette = (p: PaletteId) => {
     setPaletteState(p);
     localStorage.setItem("igv-palette", p);
-    // Animate the color swap (skip for the custom color picker,
-    // where continuous drag looks best without a transition delay).
-    if (p !== "custom" && typeof document !== "undefined") {
-      const prefersReduced =
-        typeof window !== "undefined" &&
-        window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
-      if (!prefersReduced) {
-        const root = document.documentElement;
-        root.classList.add("palette-transition");
-        window.setTimeout(() => root.classList.remove("palette-transition"), 600);
-      }
-    }
     applyPalette(p, customColor);
   };
   const setCustomColor = (c: HSL) => {

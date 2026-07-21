@@ -169,7 +169,12 @@ export function TopicalsSelector() {
           value={displayLimit}
           onChange={(e) => setLimit(Number(e.target.value))}
           disabled={effectiveMax === 0}
-          className="w-full cursor-pointer accent-primary disabled:cursor-not-allowed disabled:opacity-40"
+          style={
+            {
+              "--value": `${effectiveMax ? (displayLimit / effectiveMax) * 100 : 0}%`,
+            } as React.CSSProperties
+          }
+          className="topical-slider w-full disabled:cursor-not-allowed disabled:opacity-40"
         />
       </div>
 
