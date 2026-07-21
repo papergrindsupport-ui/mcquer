@@ -1,6 +1,6 @@
 export type ChatMessage = { role: "system" | "user" | "assistant"; content: unknown };
 
-type GeminiPart = { text: string };
+type GeminiPart = { text: string } | { inline_data: { mime_type: string; data: string } };
 type GeminiContent = { role: "user" | "model"; parts: GeminiPart[] };
 
 function toText(content: unknown): string {
@@ -8,17 +8,40 @@ function toText(content: unknown): string {
   if (Array.isArray(content)) {
     const texts = content.flatMap((part) => {
       if (!part || typeof part !== "object") return [];
-      const maybePart = part as { type?: string; text?: unknown };
-      if (maybePart.type === "text" && typeof maybePart.text === "string") {
-        return [maybePart.text];
-      }
+      const p = part as { type?: string; text?: unknown };
+      if (p.type === "text" && typeof p.text === "string") return [p.text];
       return [];
     });
-    if (texts.length) return texts.join("\n");
-    return JSON.stringify(content);
+    return texts.join("\n");
   }
   if (content && typeof content === "object") return JSON.stringify(content);
   return String(content ?? "");
+}
+
+function toParts(content: unknown): GeminiPart[] {
+  if (typeof content === "string") return [{ text: content }];
+  if (!Array.isArray(content)) return [{ text: toText(content) }];
+  const parts: GeminiPart[] = [];
+  for (const part of content) {
+    if (!part || typeof part !== "object") continue;
+    const p = part as {
+      type?: string;
+      text?: unknown;
+      image_url?: { url?: string };
+    };
+    if (p.type === "text" && typeof p.text === "string") {
+      parts.push({ text: p.text });
+    } else if (p.type === "image_url" && p.image_url?.url) {
+      const url = p.image_url.url;
+      const m = /^data:([^;]+);base64,(.*)$/.exec(url);
+      if (m) {
+        parts.push({ inline_data: { mime_type: m[1], data: m[2] } });
+      } else {
+        parts.push({ text: url });
+      }
+    }
+  }
+  return parts.length ? parts : [{ text: "" }];
 }
 
 export function getGeminiConfig() {
@@ -38,7 +61,7 @@ export function buildGeminiBody(messages: ChatMessage[], options?: { json?: bool
     .filter((message) => message.role !== "system")
     .map((message) => ({
       role: message.role === "assistant" ? "model" : "user",
-      parts: [{ text: toText(message.content) }],
+      parts: toParts(message.content),
     }));
 
   const body: Record<string, unknown> = { contents };

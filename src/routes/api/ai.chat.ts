@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-
-type ChatMessage = { role: "system" | "user" | "assistant"; content: unknown };
+import { buildGeminiBody, extractGeminiText, type ChatMessage } from "@/lib/ai/gemini";
 
 export const Route = createFileRoute("/api/ai/chat")({
   server: {
@@ -24,17 +23,18 @@ export const Route = createFileRoute("/api/ai/chat")({
         const envModel = process.env.GEMINI_MODEL;
         const model = (body.model ?? envModel ?? "gemini-3.5-flash").replace(/^google\//, "");
 
-        // Gemini frequently returns 503 (model overloaded) or 429 under load.
-        // Retry a couple times with backoff before surfacing the error.
         const doFetch = () =>
-          fetch("https://generativelanguage.googleapis.com/v1beta/openai/chat/completions", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${key}`,
+          fetch(
+            `https://generativelanguage.googleapis.com/v1beta/models/${model}:streamGenerateContent?alt=sse`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "x-goog-api-key": key,
+              },
+              body: JSON.stringify(buildGeminiBody(messages)),
             },
-            body: JSON.stringify({ model, messages, stream: true }),
-          });
+          );
 
         let upstream = await doFetch();
         for (
@@ -53,10 +53,46 @@ export const Route = createFileRoute("/api/ai/chat")({
           });
         }
 
-        return new Response(upstream.body, {
+        // Transform native Gemini SSE frames into OpenAI-compatible delta
+        // frames so the existing client parser keeps working.
+        const decoder = new TextDecoder();
+        const encoder = new TextEncoder();
+        const reader = upstream.body.getReader();
+        const stream = new ReadableStream({
+          async pull(controller) {
+            const { done, value } = await reader.read();
+            if (done) {
+              controller.enqueue(encoder.encode("data: [DONE]\n\n"));
+              controller.close();
+              return;
+            }
+            const chunk = decoder.decode(value, { stream: true });
+            for (const line of chunk.split("\n")) {
+              const l = line.trim();
+              if (!l.startsWith("data:")) continue;
+              const payload = l.slice(5).trim();
+              if (!payload || payload === "[DONE]") continue;
+              try {
+                const json = JSON.parse(payload);
+                const text = extractGeminiText(json);
+                if (text) {
+                  const frame = { choices: [{ delta: { content: text } }] };
+                  controller.enqueue(encoder.encode(`data: ${JSON.stringify(frame)}\n\n`));
+                }
+              } catch {
+                /* ignore partial frames */
+              }
+            }
+          },
+          cancel(reason) {
+            reader.cancel(reason);
+          },
+        });
+
+        return new Response(stream, {
           status: 200,
           headers: {
-            "Content-Type": upstream.headers.get("Content-Type") ?? "text/event-stream",
+            "Content-Type": "text/event-stream",
             "Cache-Control": "no-cache",
           },
         });

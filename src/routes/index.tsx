@@ -652,8 +652,9 @@ function RecentPapersSection() {
                       ) : (
                         <div className="flex items-center justify-between text-[11px] uppercase tracking-widest text-muted-foreground">
                           <span>Submitted</span>
-                          <span>
-                            {e.score ?? 0}/{e.total}
+                          <span className="text-2xl">
+                            <span className="font-bold text-foreground"> {e.score ?? 0}</span>/
+                            {e.total}
                           </span>
                         </div>
                       )}

@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-
-type ChatMessage = { role: "system" | "user" | "assistant"; content: unknown };
+import { buildGeminiBody, extractGeminiText, type ChatMessage } from "@/lib/ai/gemini";
 
 /**
  * Non-streaming completion. Used for the initial "explain this answer"
@@ -34,18 +33,17 @@ export const Route = createFileRoute("/api/ai/complete")({
         const model = (body.model ?? envModel ?? "gemini-3.5-flash").replace(/^google\//, "");
 
         const doFetch = () =>
-          fetch("https://generativelanguage.googleapis.com/v1beta/openai/chat/completions", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${key}`,
+          fetch(
+            `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "x-goog-api-key": key,
+              },
+              body: JSON.stringify(buildGeminiBody(messages, { json: body.json })),
             },
-            body: JSON.stringify({
-              model,
-              messages,
-              ...(body.json ? { response_format: { type: "json_object" } } : {}),
-            }),
-          });
+          );
 
         // Gemini often returns 503 (overloaded) / 429 under load — retry with backoff.
         let upstream = await doFetch();
@@ -66,7 +64,7 @@ export const Route = createFileRoute("/api/ai/complete")({
         }
         try {
           const parsed = JSON.parse(raw);
-          const content: string = parsed?.choices?.[0]?.message?.content ?? "";
+          const content: string = extractGeminiText(parsed);
           return Response.json({ content });
         } catch {
           return new Response("Bad upstream JSON", { status: 502 });

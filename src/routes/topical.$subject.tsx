@@ -8,6 +8,7 @@ import { useSettings, type SubmissionMode } from "@/lib/settings";
 import { getSubject, type SubjectId, type SessionId } from "@/lib/papers-data";
 import { useSearchScope } from "@/lib/search/context";
 import { preloadBundledPapers } from "@/lib/mcq/papers/bundle-loader";
+import { ToolsMenu } from "@/components/tools/ToolsMenu";
 
 import {
   decodeTopicSelection,
@@ -383,6 +384,7 @@ function TopicalPaper() {
           </button>
         </div>
       )}
+      {!settings.hideTools && <ToolsMenu />}
 
       <SettingsModal
         open={settingsOpen}
