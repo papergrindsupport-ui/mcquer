@@ -6,11 +6,11 @@ import {
   LuRotateCcw,
   LuLink,
   LuTrophy,
-  LuSparkles,
   LuArrowRight,
 } from "react-icons/lu";
 import type { GradeInfo, GradeSystem } from "@/lib/mcq/grade-boundaries";
 import { computeGrade, gradeSystemLabel } from "@/lib/mcq/grade-boundaries";
+import { Heart } from "lucide-react";
 
 type ResultsBucket = "high" | "mid" | "low";
 
@@ -152,7 +152,7 @@ export function ResultsCard({
             <span className="text-2xl font-semibold text-muted-foreground">/ {total}</span>
           </div>
           <p className="mt-3 flex max-w-md items-start gap-2 text-sm text-muted-foreground">
-            <LuSparkles size={14} className={`mt-0.5 shrink-0 ${accent.text}`} /> {quote}
+            <Heart size={14} className={`mt-0.5 shrink-0 ${accent.text}`} /> {quote}
           </p>
         </div>
 

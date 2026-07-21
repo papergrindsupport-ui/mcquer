@@ -15,6 +15,7 @@ import { serializeQuestion, questionTopicHint } from "@/lib/volto/serialize";
 import { streamChat, completeJSON, type ChatMessage } from "@/lib/volto/client";
 import { collectQuestionImages, buildImageParts } from "@/lib/volto/images";
 import type { OptionId } from "@/lib/mcq/types";
+import { Bot, GraduationCap } from "lucide-react";
 
 type ChatMsg = {
   id: string;
@@ -352,7 +353,7 @@ export function VoltoPanel({
         {/* Header */}
         <header className="flex items-center gap-3 border-b border-border px-4 py-3">
           <div className="grid h-9 w-9 place-items-center rounded-full bg-gradient-to-br from-primary to-primary/60 text-primary-foreground shadow">
-            <LuSparkles size={16} />
+            <GraduationCap size={16} />
           </div>
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2">

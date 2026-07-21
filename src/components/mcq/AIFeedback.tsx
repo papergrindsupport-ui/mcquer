@@ -6,6 +6,7 @@ import { completeJSON, type ChatContentPart } from "@/lib/volto/client";
 import { Markdown } from "@/components/volto/Markdown";
 import { getSubject, getSessionById, type SubjectId, type SessionId } from "@/lib/papers-data";
 import { collectQuestionImages, buildImageParts } from "@/lib/volto/images";
+import { Info } from "lucide-react";
 
 type Props = {
   questions: PaperQuestions;
@@ -121,7 +122,7 @@ export function AIFeedback({
             </>
           ) : (
             <>
-              <LuSparkles size={16} className="transition-transform group-hover:scale-110" />
+              <Info size={16} className="transition-transform group-hover:scale-110" />
               Get AI feedback & topic breakdown
             </>
           )}

@@ -10,7 +10,6 @@ import {
   LuChevronUp,
   LuChevronLeft,
   LuChevronRight,
-  LuSparkles,
   LuTrophy,
   LuFlame,
   LuPencil,
@@ -18,7 +17,6 @@ import {
   LuPlus,
   LuX,
   LuTrash2,
-  LuSparkles as LuSparklesIcon,
 } from "react-icons/lu";
 import { CustomSelect } from "@/components/CustomSelect";
 import { ConfirmModal } from "@/components/ConfirmModal";
@@ -66,6 +64,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
+import { Info, LucideCircleQuestionMark } from "lucide-react";
 
 const GREEN = "#10b981";
 const RED = "#ef4444";
@@ -357,7 +356,7 @@ export function Dashboard() {
                 <DTab value="papers" icon={<LuChartBar size={14} />}>
                   Papers
                 </DTab>
-                <DTab value="questions" icon={<LuSparkles size={14} />}>
+                <DTab value="questions" icon={<LucideCircleQuestionMark size={14} />}>
                   Questions
                 </DTab>
                 <DTab value="confidence" icon={<LuBrain size={14} />}>
@@ -540,7 +539,7 @@ function AiFeedbackButton({
       title="Get personalised AI feedback from Volto"
       className="inline-flex h-9 cursor-pointer items-center gap-1.5 rounded-full border border-primary/40 bg-primary/10 px-3 text-xs font-medium text-primary hover:bg-primary/20"
     >
-      <LuSparklesIcon size={13} />
+      <Info size={13} />
       <span className="hidden sm:inline">AI feedback</span>
     </button>
   );
