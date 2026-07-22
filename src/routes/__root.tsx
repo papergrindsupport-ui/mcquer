@@ -86,15 +86,14 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
       sessionStorage.setItem("error-retries", String(retries + 1));
 
       const timer = setTimeout(() => {
-        router.invalidate();
-        reset();
+        window.location.reload();
       }, 1000);
 
       return () => clearTimeout(timer);
     }
 
     sessionStorage.removeItem("error-retries");
-  }, [router, reset]);
+  }, []);
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-6">
       <div className="w-full max-w-xl text-center">
@@ -116,7 +115,7 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
           </div>
 
           <div className="rounded-xl border border-border bg-muted p-4 font-medium">
-            D. Retry and lets pretend nothing has happened 👀
+            D. Retry and let&apos;s pretend nothing has happened 👀
           </div>
         </div>
 

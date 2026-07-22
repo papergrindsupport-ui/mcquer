@@ -24,6 +24,11 @@ export const Route = createFileRoute("/mcq/bookmarks")({
 });
 
 type Resolved = { b: Bookmark; q: Question };
+const subjectShortcut = {
+  biology: "bio",
+  physics: "phys",
+  chemistry: "chem",
+};
 
 function BookmarksPage() {
   const [bookmarks, setBookmarks] = useState<Bookmark[]>(() => getBookmarks());
@@ -102,11 +107,18 @@ function BookmarksPage() {
               className="relative"
             >
               <div className="mb-2 flex items-center justify-between px-1 text-xs text-muted-foreground">
-                <span>
-                  <span className="font-medium text-foreground capitalize">{b.subject}</span>
-                  {" · "}
-                  {b.year} {b.session.toUpperCase()} {b.variant} · Q{b.n}
-                </span>
+                <a
+                  href={`/mcq/${subjectShortcut[b.subject]}/${b.year}/${b.session}/${b.variant}/#q-${b.n}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-inherit hover:text-white transition-colors"
+                >
+                  <span>
+                    <span className="font-medium text-foreground capitalize">{b.subject}</span>
+                    {" · "}
+                    {b.year} {b.session.toUpperCase()} {b.variant} · Q{b.n}
+                  </span>
+                </a>
                 <button
                   onClick={() => toggleBookmark(b)}
                   className="inline-flex cursor-pointer items-center gap-1.5 rounded-md border border-border bg-background px-2 py-1 hover:border-red-500/40 hover:bg-red-500/10 hover:text-red-500"

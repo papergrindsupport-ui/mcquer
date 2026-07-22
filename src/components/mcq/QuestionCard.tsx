@@ -176,6 +176,11 @@ export function QuestionCard({
   useEffect(() => {
     onRevealedChange?.(q.n, revealed);
   }, [revealed, q.n, onRevealedChange]);
+  const subjectShortcut = {
+    biology: "bio",
+    physics: "phys",
+    chemistry: "chem",
+  };
 
   const handleSelect = (id: OptionId) => {
     if (eliminated.includes(id)) return;
@@ -269,10 +274,17 @@ export function QuestionCard({
             </div>
           )}
           {sourceMeta && (
-            <div className="mb-3 text-[11px] font-medium uppercase tracking-[0.2em] text-muted-foreground/80">
-              {effectiveYear} {SESSION_SHORT[effectiveSession]} {effectiveVariant} · Q
-              {effectiveQuestionNumber}
-            </div>
+            <a
+              href={`/mcq/${subjectShortcut[subject.toLowerCase()]}/${effectiveYear}/${effectiveSession}/${effectiveVariant}/#q-${effectiveQuestionNumber}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-muted-foreground/80 transition-colors hover:text-white"
+            >
+              <div className="mb-3 text-[11px] font-medium uppercase tracking-[0.2em]">
+                {effectiveYear} {SESSION_SHORT[effectiveSession]} {effectiveVariant} · Q
+                {effectiveQuestionNumber}
+              </div>
+            </a>
           )}
           {groups.map((group, gi) => {
             if (group.kind === "row") {
