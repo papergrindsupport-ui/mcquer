@@ -50,6 +50,11 @@ const PlannerSection = lazy(() =>
 const LeaderboardSection = lazy(() =>
   import("@/components/Leaderboard").then((m) => ({ default: m.LeaderboardSection })),
 );
+const codeMap = {
+  "0610": "0610 / 0970",
+  "0625": "0625 / 0975",
+  "0620": "0620 / 0985",
+};
 const TopicalsSelector = lazy(() =>
   import("@/components/TopicalsSelector").then((m) => ({ default: m.TopicalsSelector })),
 );
@@ -174,7 +179,7 @@ function Landing() {
         </Suspense>
       )} */}
       {/* Hero */}
-      <section className="pt-16 pb-12 sm:pt-24 sm:pb-20">
+      <section className="pt-16 pb-12 sm:pt-24 sm:pb-17">
         <div className="mx-auto max-w-3xl text-center">
           {/* <div className=" mb-5 inline-flex animate-fade-in items-center gap-2 rounded-full border border-border bg-surface px-3 py-1 text-xs text-muted-foreground ">
             <span className="h-1.5 w-1.5 rounded-full bg-primary" />
@@ -239,8 +244,8 @@ function Landing() {
                 </div>
                 <div>
                   <div className="text-xl font-semibold tracking-tight">{s.name}</div>
-                  <div className="mt-1 text-sm text-muted-foreground">
-                    Paper {s.code} · {s.years.length} years
+                  <div className="mt-1 text-sm text-muted-foreground/70">
+                    {codeMap[s.code] || s.code}
                   </div>
                 </div>
                 <div className="mt-auto flex items-center gap-1.5 text-xs text-muted-foreground">
@@ -281,7 +286,7 @@ function Landing() {
             </div>
             <div>
               <div className="text-xl font-semibold tracking-tight">Topicals</div>
-              <div className="mt-1 text-sm text-muted-foreground">
+              <div className="mt-1 text-sm text-muted-foreground/70">
                 Classified by topic &amp; lesson
               </div>
             </div>
