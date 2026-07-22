@@ -52,8 +52,8 @@ const LeaderboardSection = lazy(() =>
 );
 const codeMap = {
   "0610": "0610 / 0970",
-  "0625": "0625 / 0975",
-  "0620": "0620 / 0985",
+  "0625": "0625 / 0972",
+  "0620": "0620 / 0971",
 };
 const TopicalsSelector = lazy(() =>
   import("@/components/TopicalsSelector").then((m) => ({ default: m.TopicalsSelector })),
