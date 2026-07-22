@@ -1,4 +1,4 @@
-const CURRENT_VERSION = "v2.4";
+const CURRENT_VERSION = "v2.5";
 
 export function checkAppVersion() {
   const userVersion = localStorage.getItem("app_version");
