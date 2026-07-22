@@ -27608,6 +27608,3152 @@ export const BUILDER_PAPERS: Record<string, PaperQuestions> = {
     ]
   }
 ],
+  "biology-2024-june-V3": [
+  {
+    "n": 1,
+    "blocks": [
+      {
+        "id": "bmrvedfm5-0-zks3d",
+        "block": "question",
+        "content": [
+          "Which characteristic do ",
+          {
+            "text": "all",
+            "bold": true
+          },
+          " living organisms show?"
+        ]
+      }
+    ],
+    "layout": {
+      "type": "text-vertical",
+      "options": {
+        "A": [
+          "breathing"
+        ],
+        "B": [
+          "excretion"
+        ],
+        "C": [
+          "photosynthesis"
+        ],
+        "D": [
+          "tropism"
+        ]
+      }
+    },
+    "answer": "B",
+    "topics": [
+      "Characteristics of Living Organisms"
+    ],
+    "lessons": [
+      "Characteristics of Living Organisms"
+    ]
+  },
+  {
+    "n": 2,
+    "blocks": [
+      {
+        "id": "bmrvedfm5-1-5ps39",
+        "block": "question",
+        "content": [
+          "What kind of skin do amphibians have?"
+        ]
+      }
+    ],
+    "layout": {
+      "type": "text-vertical",
+      "options": {
+        "A": [
+          "dry without scales"
+        ],
+        "B": [
+          "dry with scales"
+        ],
+        "C": [
+          "moist without scales"
+        ],
+        "D": [
+          "moist with scales"
+        ]
+      }
+    },
+    "answer": "C",
+    "topics": [
+      "Characteristics of Living Organisms"
+    ],
+    "lessons": [
+      "Characteristics of Living Organisms"
+    ]
+  },
+  {
+    "n": 3,
+    "blocks": [
+      {
+        "id": "bmrveeo8r-14-nt167",
+        "block": "intro",
+        "content": [
+          "Some components of cells are listed."
+        ]
+      }
+    ],
+    "layout": {
+      "type": "combined-choice",
+      "statements": [
+        [
+          "cell membrane"
+        ],
+        [
+          "cell wall"
+        ],
+        [
+          "chloroplasts"
+        ],
+        [
+          "cytoplasm"
+        ]
+      ],
+      "options": {
+        "A": [
+          1,
+          2
+        ],
+        "B": [
+          1,
+          4
+        ],
+        "C": [
+          2,
+          3
+        ],
+        "D": [
+          3,
+          4
+        ]
+      },
+      "orientation": "horizontal",
+      "shrinkToFit": true,
+      "questionText": [
+        {
+          "br": true
+        },
+        {
+          "text": "Which cell components are present in plant cells but absent in animal cells?",
+          "sizePx": 18
+        },
+        {
+          "br": true
+        },
+        {
+          "br": true
+        }
+      ]
+    },
+    "answer": "C",
+    "topics": [
+      "Characteristics of Living Organisms"
+    ],
+    "lessons": [
+      "Characteristics of Living Organisms"
+    ]
+  },
+  {
+    "n": 4,
+    "blocks": [
+      {
+        "id": "bmrvege7u-15-ozvgm",
+        "block": "intro",
+        "content": [
+          "The image shows a pollen grain from a grass plant."
+        ]
+      },
+      {
+        "id": "bmrveh7f7-16-785ye",
+        "block": "introData",
+        "data": {
+          "kind": "image",
+          "image": {
+            "src": "",
+            "alt": "",
+            "invertOnDark": true
+          },
+          "size": "md"
+        }
+      },
+      {
+        "id": "bmrvehdbi-17-6eeh6",
+        "block": "intro",
+        "content": [
+          "The image has a length of 60 mm.",
+          {
+            "br": true
+          },
+          {
+            "br": true
+          },
+          "The actual length of the pollen grain is 500 μm.",
+          {
+            "br": true
+          }
+        ]
+      },
+      {
+        "id": "bmrvedfm5-3-8ksln",
+        "block": "question",
+        "content": [
+          "What is the magnification of the pollen grain?"
+        ]
+      }
+    ],
+    "layout": {
+      "type": "text-horizontal",
+      "options": {
+        "A": [
+          "×0.12 "
+        ],
+        "B": [
+          "×30"
+        ],
+        "C": [
+          "x120"
+        ],
+        "D": [
+          "x30,000"
+        ]
+      }
+    },
+    "answer": "C",
+    "topics": [
+      "Characteristics of Living Organisms"
+    ],
+    "lessons": [
+      "Characteristics of Living Organisms"
+    ]
+  },
+  {
+    "n": 5,
+    "blocks": [
+      {
+        "id": "bmrvedfm5-4-0dsmy",
+        "block": "question",
+        "content": [
+          "What will increase the rate of diffusion across a gas exchange surface?"
+        ]
+      }
+    ],
+    "layout": {
+      "type": "text-vertical",
+      "options": {
+        "A": [
+          "a decrease in the concentration gradient"
+        ],
+        "B": [
+          "a decrease in the diffusion distance"
+        ],
+        "C": [
+          "a decrease in the kinetic energy of molecules"
+        ],
+        "D": [
+          "a decrease in the surface area of the gas exchange surface"
+        ]
+      }
+    },
+    "answer": "B",
+    "topics": [
+      "Characteristics of Living Organisms"
+    ],
+    "lessons": [
+      "Characteristics of Living Organisms"
+    ]
+  },
+  {
+    "n": 6,
+    "blocks": [
+      {
+        "id": "bmrvedfm5-5-c71eb",
+        "block": "question",
+        "content": [
+          "What happens when potato plant cells are placed in pure water?"
+        ]
+      }
+    ],
+    "layout": {
+      "type": "text-vertical",
+      "options": {
+        "A": [
+          "Water enters the cells and they become plasmolysed."
+        ],
+        "B": [
+          "Water enters the cells and they become turgid."
+        ],
+        "C": [
+          "Water leaves the cells and they become plasmolysed."
+        ],
+        "D": [
+          "Water leaves the cells and they become turgid."
+        ]
+      }
+    },
+    "answer": "B",
+    "topics": [
+      "Characteristics of Living Organisms"
+    ],
+    "lessons": [
+      "Characteristics of Living Organisms"
+    ]
+  },
+  {
+    "n": 7,
+    "blocks": [
+      {
+        "id": "bmrvelnpz-18-543hz",
+        "block": "intro",
+        "content": [
+          "The diagrams show four molecules.",
+          {
+            "br": true
+          },
+          {
+            "br": true
+          },
+          "C represents carbon, H represents hydrogen, O represents oxygen and N represents nitrogen."
+        ]
+      },
+      {
+        "id": "bmrvedfm5-6-b3qwo",
+        "block": "question",
+        "content": [
+          "Which structure is an amino acid?"
+        ]
+      }
+    ],
+    "layout": {
+      "type": "images",
+      "options": {
+        "A": {
+          "src": "",
+          "alt": "A",
+          "size": "lg",
+          "invertOnDark": true
+        },
+        "B": {
+          "src": "",
+          "alt": "B",
+          "size": "lg",
+          "invertOnDark": true
+        },
+        "C": {
+          "src": "",
+          "alt": "C",
+          "size": "lg",
+          "invertOnDark": true
+        },
+        "D": {
+          "src": "",
+          "alt": "D",
+          "size": "lg",
+          "invertOnDark": true
+        }
+      },
+      "orientation": "horizontal"
+    },
+    "answer": "B",
+    "topics": [
+      "Characteristics of Living Organisms"
+    ],
+    "lessons": [
+      "Characteristics of Living Organisms"
+    ]
+  },
+  {
+    "n": 8,
+    "blocks": [
+      {
+        "id": "bmrveozvh-1a-4jelu",
+        "block": "intro",
+        "content": [
+          "The diagram shows the effect of changing the temperature on the time taken for an enzyme to digest starch."
+        ]
+      },
+      {
+        "id": "bmrvepk8u-1b-70m0y",
+        "block": "introData",
+        "data": {
+          "kind": "image",
+          "image": {
+            "src": "",
+            "alt": "",
+            "invertOnDark": true
+          },
+          "size": "md"
+        }
+      },
+      {
+        "id": "bmrvedfm5-7-sdzxd",
+        "block": "question",
+        "content": [
+          "Which statement about the results is correct?"
+        ]
+      }
+    ],
+    "layout": {
+      "type": "text-vertical",
+      "options": {
+        "A": [
+          "The optimum temperature is at X and the rate of reaction decreases between X and Y."
+        ],
+        "B": [
+          "The optimum temperature is at X and the rate of reaction increases between X and Y."
+        ],
+        "C": [
+          "The optimum temperature is at Y and the rate of reaction decreases between X and Y."
+        ],
+        "D": [
+          "The optimum temperature is at Y and the rate of reaction increases between X and Y"
+        ]
+      }
+    },
+    "answer": "D",
+    "topics": [
+      "Characteristics of Living Organisms"
+    ],
+    "lessons": [
+      "Characteristics of Living Organisms"
+    ]
+  },
+  {
+    "n": 9,
+    "blocks": [
+      {
+        "id": "bmrvedfm5-8-c49te",
+        "block": "question",
+        "content": [
+          "Which structure contains the pigment that transfers energy from light into chemical energy?"
+        ]
+      }
+    ],
+    "layout": {
+      "type": "text-vertical",
+      "options": {
+        "A": [
+          "chloroplast"
+        ],
+        "B": [
+          "mitochondrion"
+        ],
+        "C": [
+          "nucleus"
+        ],
+        "D": [
+          "ribosome"
+        ]
+      }
+    },
+    "answer": "A",
+    "topics": [
+      "Characteristics of Living Organisms"
+    ],
+    "lessons": [
+      "Characteristics of Living Organisms"
+    ]
+  },
+  {
+    "n": 10,
+    "blocks": [
+      {
+        "id": "bmrvedfm5-9-12dp7",
+        "block": "question",
+        "content": [
+          "Which region in the leaf of a green plant contains phloem?"
+        ]
+      }
+    ],
+    "layout": {
+      "type": "text-vertical",
+      "options": {
+        "A": [
+          "palisade mesophyll"
+        ],
+        "B": [
+          "spongy mesophyll"
+        ],
+        "C": [
+          "upper epidermis"
+        ],
+        "D": [
+          "vascular bundle"
+        ]
+      }
+    },
+    "answer": "D",
+    "topics": [
+      "Characteristics of Living Organisms"
+    ],
+    "lessons": [
+      "Characteristics of Living Organisms"
+    ]
+  },
+  {
+    "n": 11,
+    "blocks": [
+      {
+        "id": "bmrvesaam-1c-iak0r",
+        "block": "intro",
+        "content": [
+          "The table shows the percentage of the daily recommended intake of nutrients in a serving of four foods."
+        ]
+      },
+      {
+        "id": "bmrvedfm5-a-b0xy5",
+        "block": "question",
+        "content": [
+          "Which food would be the best choice to prevent scurvy?"
+        ]
+      }
+    ],
+    "layout": {
+      "type": "table",
+      "grid": [
+        [
+          {
+            "content": [
+              "percentage of daily recommended intake in a serving of food"
+            ],
+            "header": true,
+            "align": "center",
+            "rowSpan": 1,
+            "colSpan": 4,
+            "hidden": false
+          },
+          {
+            "content": [
+              {
+                "text": "X"
+              }
+            ],
+            "header": true,
+            "align": "center",
+            "hidden": true
+          },
+          {
+            "content": [
+              {
+                "text": "Y"
+              }
+            ],
+            "header": true,
+            "align": "center",
+            "hidden": true
+          },
+          {
+            "content": [
+              {
+                "text": "Z"
+              }
+            ],
+            "header": true,
+            "align": "center",
+            "hidden": true
+          }
+        ],
+        [
+          {
+            "content": [
+              "calcium"
+            ],
+            "align": "center",
+            "header": true
+          },
+          {
+            "content": [
+              "iron"
+            ],
+            "align": "center",
+            "header": true
+          },
+          {
+            "content": [
+              "vitamin C"
+            ],
+            "align": "center",
+            "header": true
+          },
+          {
+            "content": [
+              "vitamin D"
+            ],
+            "align": "center",
+            "header": true
+          }
+        ],
+        [
+          {
+            "content": [
+              "71"
+            ],
+            "align": "center"
+          },
+          {
+            "content": [
+              "1"
+            ],
+            "align": "center"
+          },
+          {
+            "content": [
+              "0"
+            ],
+            "align": "center"
+          },
+          {
+            "content": [
+              "6"
+            ],
+            "align": "center"
+          }
+        ],
+        [
+          {
+            "content": [
+              "24"
+            ],
+            "align": "center"
+          },
+          {
+            "content": [
+              "11"
+            ],
+            "align": "center"
+          },
+          {
+            "content": [
+              "2"
+            ],
+            "align": "center"
+          },
+          {
+            "content": [
+              "73"
+            ],
+            "align": "center"
+          }
+        ],
+        [
+          {
+            "content": [
+              "3"
+            ],
+            "align": "center"
+          },
+          {
+            "content": [
+              "3"
+            ],
+            "align": "center"
+          },
+          {
+            "content": [
+              "72"
+            ],
+            "align": "center"
+          },
+          {
+            "content": [
+              "0"
+            ],
+            "align": "center"
+          }
+        ],
+        [
+          {
+            "content": [
+              "1"
+            ],
+            "align": "center"
+          },
+          {
+            "content": [
+              "72"
+            ],
+            "align": "center"
+          },
+          {
+            "content": [
+              "1"
+            ],
+            "align": "center"
+          },
+          {
+            "content": [
+              "0"
+            ],
+            "align": "center"
+          }
+        ]
+      ],
+      "optionsAxis": "rows",
+      "optionAt": {
+        "A": 2,
+        "B": 3,
+        "C": 4,
+        "D": 5
+      }
+    },
+    "answer": "A",
+    "topics": [
+      "Characteristics of Living Organisms"
+    ],
+    "lessons": [
+      "Characteristics of Living Organisms"
+    ]
+  },
+  {
+    "n": 12,
+    "blocks": [
+      {
+        "id": "bmrvedfm5-b-me1zx",
+        "block": "question",
+        "content": [
+          "What is the correct order of the processes that take place in the alimentary canal?"
+        ]
+      }
+    ],
+    "layout": {
+      "type": "text-vertical",
+      "options": {
+        "A": [
+          "absorption, digestion, ingestion, egestion"
+        ],
+        "B": [
+          "digestion, ingestion, egestion, absorption"
+        ],
+        "C": [
+          "egestion, digestion, absorption, ingestion"
+        ],
+        "D": [
+          "ingestion, digestion, absorption, egestion"
+        ]
+      }
+    },
+    "answer": "D",
+    "topics": [
+      "Characteristics of Living Organisms"
+    ],
+    "lessons": [
+      "Characteristics of Living Organisms"
+    ]
+  },
+  {
+    "n": 13,
+    "blocks": [
+      {
+        "id": "bmrvedfm5-c-5i5nl",
+        "block": "question",
+        "content": [
+          "Why does chewing food speed up digestion?"
+        ]
+      }
+    ],
+    "layout": {
+      "type": "text-vertical",
+      "options": {
+        "A": [
+          "Bacteria in the food are killed."
+        ],
+        "B": [
+          "Food is mixed with protease."
+        ],
+        "C": [
+          "The surface area of the food is increased."
+        ],
+        "D": [
+          "The taste of food is improved."
+        ]
+      }
+    },
+    "answer": "A",
+    "topics": [
+      "Characteristics of Living Organisms"
+    ],
+    "lessons": [
+      "Characteristics of Living Organisms"
+    ]
+  },
+  {
+    "n": 14,
+    "blocks": [
+      {
+        "id": "bmrvedfm5-d-6oey4",
+        "block": "question",
+        "content": [
+          "Which substances are produced by the action of amylase on starch?"
+        ]
+      }
+    ],
+    "layout": {
+      "type": "text-vertical",
+      "options": {
+        "A": [
+          "amino acids"
+        ],
+        "B": [
+          "fatty acids and glycerol"
+        ],
+        "C": [
+          "salts"
+        ],
+        "D": [
+          "sugars"
+        ]
+      }
+    },
+    "answer": "D",
+    "topics": [
+      "Characteristics of Living Organisms"
+    ],
+    "lessons": [
+      "Characteristics of Living Organisms"
+    ]
+  },
+  {
+    "n": 15,
+    "blocks": [
+      {
+        "id": "bmrvey5nx-1d-2588f",
+        "block": "intro",
+        "content": [
+          "The diagram shows a section through a villus."
+        ]
+      },
+      {
+        "id": "bmrveyvzl-1e-8ednb",
+        "block": "introData",
+        "data": {
+          "kind": "image",
+          "image": {
+            "src": "",
+            "alt": "",
+            "invertOnDark": true
+          },
+          "size": "md"
+        }
+      },
+      {
+        "id": "bmrvedfm5-e-vosyv",
+        "block": "question",
+        "content": [
+          "Several hours after a meal, where will the highest concentrations of amino acids and of glucose be found in the villus?"
+        ]
+      }
+    ],
+    "layout": {
+      "type": "table",
+      "grid": [
+        [
+          {
+            "content": [
+              "highest concentration of amino acids"
+            ],
+            "header": true,
+            "align": "center"
+          },
+          {
+            "content": [
+              "highest concentration of glucose"
+            ],
+            "header": true,
+            "align": "center"
+          }
+        ],
+        [
+          {
+            "content": [
+              "1"
+            ],
+            "align": "center"
+          },
+          {
+            "content": [
+              "1"
+            ],
+            "align": "center"
+          }
+        ],
+        [
+          {
+            "content": [
+              "1"
+            ],
+            "align": "center"
+          },
+          {
+            "content": [
+              "2"
+            ],
+            "align": "center"
+          }
+        ],
+        [
+          {
+            "content": [
+              "2"
+            ],
+            "align": "center"
+          },
+          {
+            "content": [
+              "1"
+            ],
+            "align": "center"
+          }
+        ],
+        [
+          {
+            "content": [
+              "3"
+            ],
+            "align": "center"
+          },
+          {
+            "content": [
+              "3"
+            ],
+            "align": "center"
+          }
+        ]
+      ],
+      "optionsAxis": "rows",
+      "optionAt": {
+        "A": 1,
+        "B": 2,
+        "C": 3,
+        "D": 4
+      }
+    },
+    "answer": "A",
+    "topics": [
+      "Characteristics of Living Organisms"
+    ],
+    "lessons": [
+      "Characteristics of Living Organisms"
+    ]
+  },
+  {
+    "n": 16,
+    "blocks": [
+      {
+        "id": "bmrvf0b1r-1f-z0d0l",
+        "block": "intro",
+        "content": [
+          "The diagram shows a cross-section of a plant root."
+        ]
+      },
+      {
+        "id": "bmrvf0qq4-1g-vxgyo",
+        "block": "introData",
+        "data": {
+          "kind": "image",
+          "image": {
+            "src": "",
+            "alt": "",
+            "invertOnDark": true
+          },
+          "size": "md"
+        }
+      },
+      {
+        "id": "bmrvedfm5-f-vqmlj",
+        "block": "question",
+        "content": [
+          "What is a function of the part labelled Q?"
+        ]
+      }
+    ],
+    "layout": {
+      "type": "text-vertical",
+      "options": {
+        "A": [
+          "storage of starch"
+        ],
+        "B": [
+          "structural support"
+        ],
+        "C": [
+          "transport of amino acids"
+        ],
+        "D": [
+          "transport of glucose"
+        ]
+      }
+    },
+    "answer": "B",
+    "topics": [
+      "Characteristics of Living Organisms"
+    ],
+    "lessons": [
+      "Characteristics of Living Organisms"
+    ]
+  },
+  {
+    "n": 17,
+    "blocks": [
+      {
+        "id": "bmrvedfm5-g-65lqp",
+        "block": "question",
+        "content": [
+          "Which part of the heart separates the deoxygenated and oxygenated blood?"
+        ]
+      }
+    ],
+    "layout": {
+      "type": "text-vertical",
+      "options": {
+        "A": [
+          "atrium muscle wall"
+        ],
+        "B": [
+          "atrioventricular valve"
+        ],
+        "C": [
+          "septum"
+        ],
+        "D": [
+          "ventricle muscle wall"
+        ]
+      }
+    },
+    "answer": "C",
+    "topics": [
+      "Characteristics of Living Organisms"
+    ],
+    "lessons": [
+      "Characteristics of Living Organisms"
+    ]
+  },
+  {
+    "n": 18,
+    "blocks": [
+      {
+        "id": "bmrvf1x9o-1h-q8pkz",
+        "block": "intro",
+        "content": [
+          "The diagrams show four components of blood."
+        ]
+      },
+      {
+        "id": "bmrvedfm5-h-x9agi",
+        "block": "question",
+        "content": [
+          "Which component produces antibodies?"
+        ]
+      }
+    ],
+    "layout": {
+      "type": "images",
+      "options": {
+        "A": {
+          "src": "",
+          "alt": "A"
+        },
+        "B": {
+          "src": "",
+          "alt": "B"
+        },
+        "C": {
+          "src": "",
+          "alt": "C"
+        },
+        "D": {
+          "src": "",
+          "alt": "D"
+        }
+      },
+      "orientation": "horizontal"
+    },
+    "answer": "B",
+    "topics": [
+      "Characteristics of Living Organisms"
+    ],
+    "lessons": [
+      "Characteristics of Living Organisms"
+    ]
+  },
+  {
+    "n": 19,
+    "blocks": [
+      {
+        "id": "bmrvf3h5t-1i-2i1q3",
+        "block": "intro",
+        "content": [
+          "The cholera bacterium produces a toxin. The toxin causes the secretion of chloride ions into the lumen of the small intestine."
+        ]
+      },
+      {
+        "id": "bmrvedfm5-i-mi0mu",
+        "block": "question",
+        "content": [
+          "Why does this cause diarrhoea?"
+        ]
+      }
+    ],
+    "layout": {
+      "type": "text-vertical",
+      "options": {
+        "A": [
+          "The water potential in the lumen of the small intestine decreases and water moves into the small intestine by osmosis."
+        ],
+        "B": [
+          "The water potential in the lumen of the small intestine increases and water moves into the small intestine by osmosis."
+        ],
+        "C": [
+          "The water potential in the lumen of the small intestine decreases and water moves out of the small intestine by osmosis."
+        ],
+        "D": [
+          "The water potential in the lumen of the small intestine increases and water moves out of the small intestine by osmosis."
+        ]
+      }
+    },
+    "answer": "A",
+    "topics": [
+      "Characteristics of Living Organisms"
+    ],
+    "lessons": [
+      "Characteristics of Living Organisms"
+    ]
+  },
+  {
+    "n": 20,
+    "blocks": [
+      {
+        "id": "bmrvedfm5-j-qp76r",
+        "block": "question",
+        "content": [
+          "Which structure contains cartilage?"
+        ]
+      }
+    ],
+    "layout": {
+      "type": "text-vertical",
+      "options": {
+        "A": [
+          "alveoli"
+        ],
+        "B": [
+          "diaphragm"
+        ],
+        "C": [
+          " intercostal muscle"
+        ],
+        "D": [
+          "trachea"
+        ]
+      }
+    },
+    "answer": "D",
+    "topics": [
+      "Characteristics of Living Organisms"
+    ],
+    "lessons": [
+      "Characteristics of Living Organisms"
+    ]
+  },
+  {
+    "n": 21,
+    "blocks": [
+      {
+        "id": "bmrvfcwf9-0-kiehu",
+        "block": "intro",
+        "content": [
+          "The diagram shows the human breathing system."
+        ]
+      }
+    ],
+    "layout": {
+      "type": "image-zones",
+      "image": {
+        "src": "",
+        "alt": "",
+        "invertOnDark": true
+      },
+      "zones": [
+        {
+          "label": "1",
+          "points": [
+            [
+              8,
+              8
+            ],
+            [
+              40,
+              8
+            ],
+            [
+              40,
+              40
+            ],
+            [
+              8,
+              40
+            ]
+          ]
+        },
+        {
+          "label": "2",
+          "points": [
+            [
+              60,
+              8
+            ],
+            [
+              92,
+              8
+            ],
+            [
+              92,
+              40
+            ],
+            [
+              60,
+              40
+            ]
+          ]
+        },
+        {
+          "label": "3",
+          "points": [
+            [
+              8,
+              60
+            ],
+            [
+              40,
+              60
+            ],
+            [
+              40,
+              92
+            ],
+            [
+              8,
+              92
+            ]
+          ]
+        },
+        {
+          "label": "4",
+          "points": [
+            [
+              60,
+              60
+            ],
+            [
+              92,
+              60
+            ],
+            [
+              92,
+              92
+            ],
+            [
+              60,
+              92
+            ]
+          ]
+        }
+      ],
+      "options": {
+        "A": {
+          "refs": [
+            1,
+            3
+          ]
+        },
+        "B": {
+          "refs": [
+            1
+          ]
+        },
+        "C": {
+          "refs": [
+            2,
+            3
+          ]
+        },
+        "D": {
+          "refs": [
+            2,
+            4
+          ]
+        }
+      },
+      "orientation": "horizontal",
+      "questionText": [
+        {
+          "br": true
+        },
+        {
+          "text": "Which labels show structures that produce changes in volume and pressure during ventilation ofthe lungs?",
+          "sizePx": 18
+        },
+        {
+          "br": true
+        },
+        {
+          "br": true
+        }
+      ]
+    },
+    "answer": "A",
+    "topics": [
+      "Characteristics of Living Organisms"
+    ],
+    "lessons": [
+      "Characteristics of Living Organisms"
+    ]
+  },
+  {
+    "n": 22,
+    "blocks": [
+      {
+        "id": "bmrvffuf5-1-gfbf4",
+        "block": "intro",
+        "content": [
+          "The graph shows the lactic acid concentration in the blood during exercise and during recovery after exercise."
+        ]
+      },
+      {
+        "id": "bmrvfgnbk-2-rudym",
+        "block": "introData",
+        "data": {
+          "kind": "image",
+          "image": {
+            "src": "",
+            "alt": "",
+            "invertOnDark": true
+          },
+          "size": "md"
+        }
+      },
+      {
+        "id": "bmrvfgqpj-3-fqyb3",
+        "block": "question",
+        "content": [
+          "Which process accounts for the shape of the graph at Z?"
+        ]
+      }
+    ],
+    "layout": {
+      "type": "text-vertical",
+      "options": {
+        "A": [
+          "aerobic respiration of lactic acid in the kidney"
+        ],
+        "B": [
+          "aerobic respiration of lactic acid in the liver"
+        ],
+        "C": [
+          "anaerobic respiration of lactic acid in the kidney"
+        ],
+        "D": [
+          "anaerobic respiration of lactic acid in the liver"
+        ]
+      }
+    },
+    "answer": "B",
+    "topics": [
+      "Characteristics of Living Organisms"
+    ],
+    "lessons": [
+      "Characteristics of Living Organisms"
+    ]
+  },
+  {
+    "n": 23,
+    "blocks": [
+      {
+        "id": "bmrvedfm5-m-358pg",
+        "block": "question",
+        "content": [
+          "Which process takes place as the filtrate from a glomerulus passes along a nephron?"
+        ]
+      }
+    ],
+    "layout": {
+      "type": "text-vertical",
+      "options": {
+        "A": [
+          "production of amino acids"
+        ],
+        "B": [
+          "excretion of oxygen"
+        ],
+        "C": [
+          "production of urea"
+        ],
+        "D": [
+          "reabsorption of glucose"
+        ]
+      }
+    },
+    "answer": "D",
+    "topics": [
+      "Characteristics of Living Organisms"
+    ],
+    "lessons": [
+      "Characteristics of Living Organisms"
+    ]
+  },
+  {
+    "n": 24,
+    "blocks": [
+      {
+        "id": "bmrvfhz8j-4-01o3y",
+        "block": "intro",
+        "content": [
+          "A person moves from bright light into a dark room."
+        ]
+      },
+      {
+        "id": "bmrvedfm5-n-gvsnf",
+        "block": "question",
+        "content": [
+          {
+            "text": "What changes occur in their eyes?",
+            "sizePx": 18
+          }
+        ]
+      }
+    ],
+    "layout": {
+      "type": "table",
+      "grid": [
+        [
+          {
+            "content": [
+              "pupil"
+            ],
+            "header": true,
+            "align": "center"
+          },
+          {
+            "content": [
+              "radial muscles"
+            ],
+            "header": true,
+            "align": "center"
+          },
+          {
+            "content": [
+              "circular muscles"
+            ],
+            "header": true,
+            "align": "center"
+          }
+        ],
+        [
+          {
+            "content": [
+              "constricts"
+            ],
+            "align": "center"
+          },
+          {
+            "content": [
+              "contract"
+            ],
+            "align": "center"
+          },
+          {
+            "content": [
+              "relax"
+            ],
+            "align": "center"
+          }
+        ],
+        [
+          {
+            "content": [
+              "constricts"
+            ],
+            "align": "center"
+          },
+          {
+            "content": [
+              "relax"
+            ],
+            "align": "center"
+          },
+          {
+            "content": [
+              "contract"
+            ],
+            "align": "center"
+          }
+        ],
+        [
+          {
+            "content": [
+              "dilates"
+            ],
+            "align": "center"
+          },
+          {
+            "content": [
+              "contract"
+            ],
+            "align": "center"
+          },
+          {
+            "content": [
+              "relax"
+            ],
+            "align": "center"
+          }
+        ],
+        [
+          {
+            "content": [
+              "dilates"
+            ],
+            "align": "center"
+          },
+          {
+            "content": [
+              "relax"
+            ],
+            "align": "center"
+          },
+          {
+            "content": [
+              "contract"
+            ],
+            "align": "center"
+          }
+        ]
+      ],
+      "optionsAxis": "rows",
+      "optionAt": {
+        "A": 1,
+        "B": 2,
+        "C": 3,
+        "D": 4
+      }
+    },
+    "answer": "A",
+    "topics": [
+      "Characteristics of Living Organisms"
+    ],
+    "lessons": [
+      "Characteristics of Living Organisms"
+    ]
+  },
+  {
+    "n": 25,
+    "blocks": [
+      {
+        "id": "bmrvfk4h5-5-n0ewk",
+        "block": "intro",
+        "content": [
+          "A person who had ",
+          {
+            "text": "not",
+            "bold": true
+          },
+          " eaten for a few hours was given an injection of adrenaline.",
+          {
+            "br": true
+          },
+          {
+            "br": true
+          },
+          "The person’s blood glucose concentration was measured for 3.5 hours.",
+          {
+            "br": true
+          },
+          {
+            "br": true
+          },
+          "The graph shows the results."
+        ]
+      },
+      {
+        "id": "bmrvflc26-6-ksg0v",
+        "block": "question",
+        "content": [
+          "What is the correct explanation for the change in blood glucose concentration immediately after the injection of adrenaline?"
+        ]
+      }
+    ],
+    "layout": {
+      "type": "text-vertical",
+      "options": {
+        "A": [
+          "Adrenaline causes less glucose to be converted to glucagon."
+        ],
+        "B": [
+          "Adrenaline causes less glucagon to be converted to glucose."
+        ],
+        "C": [
+          "Adrenaline causes more glucose to be converted to glycogen."
+        ],
+        "D": [
+          "Adrenaline causes more glycogen to be converted to glucose."
+        ]
+      }
+    },
+    "answer": "A",
+    "topics": [
+      "Characteristics of Living Organisms"
+    ],
+    "lessons": [
+      "Characteristics of Living Organisms"
+    ]
+  },
+  {
+    "n": 26,
+    "blocks": [
+      {
+        "id": "bmrvedfm5-p-58fzf",
+        "block": "question",
+        "content": [
+          "Which statement about insulin is correct?"
+        ]
+      }
+    ],
+    "layout": {
+      "type": "text-vertical",
+      "options": {
+        "A": [
+          "Insulin is produced by the liver when the blood glucose concentration is high. Its target cells are in the pancreas."
+        ],
+        "B": [
+          "Insulin is produced by the liver when the blood glucose concentration is low. Its target cells are in the pancreas."
+        ],
+        "C": [
+          "Insulin is produced by the pancreas when the blood glucose concentration is high. Its target cells are in the liver."
+        ],
+        "D": [
+          "Insulin is produced by the pancreas when the blood glucose concentration is low. Its target cells are in the liver."
+        ]
+      }
+    },
+    "answer": "A",
+    "topics": [
+      "Characteristics of Living Organisms"
+    ],
+    "lessons": [
+      "Characteristics of Living Organisms"
+    ]
+  },
+  {
+    "n": 27,
+    "blocks": [
+      {
+        "id": "bmrvedfm5-q-hkt6p",
+        "block": "question",
+        "content": [
+          "What is a function of the placenta?"
+        ]
+      }
+    ],
+    "layout": {
+      "type": "text-vertical",
+      "options": {
+        "A": [
+          "acts as a barrier to prevent some toxins reaching the fetus"
+        ],
+        "B": [
+          "exchanges blood between the mother and the fetus"
+        ],
+        "C": [
+          "prevents the transfer of excretory products from the fetus"
+        ],
+        "D": [
+          "protects the fetus from mechanical damage"
+        ]
+      }
+    },
+    "answer": "A",
+    "topics": [
+      "Characteristics of Living Organisms"
+    ],
+    "lessons": [
+      "Characteristics of Living Organisms"
+    ]
+  },
+  {
+    "n": 28,
+    "blocks": [
+      {
+        "id": "bmrvft36q-1l-xv5sl",
+        "block": "question",
+        "content": [
+          "Which diagram shows the correct inheritance of sex chromosomes?"
+        ]
+      }
+    ],
+    "layout": {
+      "type": "tables",
+      "options": {
+        "A": [
+          [
+            {
+              "content": [],
+              "align": "center"
+            },
+            {
+              "content": [
+                {
+                  "text": "W"
+                }
+              ],
+              "header": true,
+              "align": "center"
+            },
+            {
+              "content": [
+                {
+                  "text": "X"
+                }
+              ],
+              "header": true,
+              "align": "center"
+            },
+            {
+              "content": [
+                {
+                  "text": "Y"
+                }
+              ],
+              "header": true,
+              "align": "center"
+            },
+            {
+              "content": [
+                {
+                  "text": "Z"
+                }
+              ],
+              "header": true,
+              "align": "center"
+            }
+          ],
+          [
+            {
+              "content": [],
+              "align": "center"
+            },
+            {
+              "content": [],
+              "align": "center"
+            },
+            {
+              "content": [],
+              "align": "center"
+            },
+            {
+              "content": [],
+              "align": "center"
+            },
+            {
+              "content": [],
+              "align": "center"
+            }
+          ],
+          [
+            {
+              "content": [],
+              "align": "center"
+            },
+            {
+              "content": [],
+              "align": "center"
+            },
+            {
+              "content": [],
+              "align": "center"
+            },
+            {
+              "content": [],
+              "align": "center"
+            },
+            {
+              "content": [],
+              "align": "center"
+            }
+          ],
+          [
+            {
+              "content": [],
+              "align": "center"
+            },
+            {
+              "content": [],
+              "align": "center"
+            },
+            {
+              "content": [],
+              "align": "center"
+            },
+            {
+              "content": [],
+              "align": "center"
+            },
+            {
+              "content": [],
+              "align": "center"
+            }
+          ],
+          [
+            {
+              "content": [],
+              "align": "center"
+            },
+            {
+              "content": [],
+              "align": "center"
+            },
+            {
+              "content": [],
+              "align": "center"
+            },
+            {
+              "content": [],
+              "align": "center"
+            },
+            {
+              "content": [],
+              "align": "center"
+            }
+          ]
+        ],
+        "B": [
+          [
+            {
+              "content": [],
+              "align": "center"
+            },
+            {
+              "content": [
+                {
+                  "text": "W"
+                }
+              ],
+              "header": true,
+              "align": "center"
+            },
+            {
+              "content": [
+                {
+                  "text": "X"
+                }
+              ],
+              "header": true,
+              "align": "center"
+            },
+            {
+              "content": [
+                {
+                  "text": "Y"
+                }
+              ],
+              "header": true,
+              "align": "center"
+            },
+            {
+              "content": [
+                {
+                  "text": "Z"
+                }
+              ],
+              "header": true,
+              "align": "center"
+            }
+          ],
+          [
+            {
+              "content": [],
+              "align": "center"
+            },
+            {
+              "content": [],
+              "align": "center"
+            },
+            {
+              "content": [],
+              "align": "center"
+            },
+            {
+              "content": [],
+              "align": "center"
+            },
+            {
+              "content": [],
+              "align": "center"
+            }
+          ],
+          [
+            {
+              "content": [],
+              "align": "center"
+            },
+            {
+              "content": [],
+              "align": "center"
+            },
+            {
+              "content": [],
+              "align": "center"
+            },
+            {
+              "content": [],
+              "align": "center"
+            },
+            {
+              "content": [],
+              "align": "center"
+            }
+          ],
+          [
+            {
+              "content": [],
+              "align": "center"
+            },
+            {
+              "content": [],
+              "align": "center"
+            },
+            {
+              "content": [],
+              "align": "center"
+            },
+            {
+              "content": [],
+              "align": "center"
+            },
+            {
+              "content": [],
+              "align": "center"
+            }
+          ],
+          [
+            {
+              "content": [],
+              "align": "center"
+            },
+            {
+              "content": [],
+              "align": "center"
+            },
+            {
+              "content": [],
+              "align": "center"
+            },
+            {
+              "content": [],
+              "align": "center"
+            },
+            {
+              "content": [],
+              "align": "center"
+            }
+          ]
+        ],
+        "C": [
+          [
+            {
+              "content": [],
+              "align": "center"
+            },
+            {
+              "content": [
+                {
+                  "text": "W"
+                }
+              ],
+              "header": true,
+              "align": "center"
+            },
+            {
+              "content": [
+                {
+                  "text": "X"
+                }
+              ],
+              "header": true,
+              "align": "center"
+            },
+            {
+              "content": [
+                {
+                  "text": "Y"
+                }
+              ],
+              "header": true,
+              "align": "center"
+            },
+            {
+              "content": [
+                {
+                  "text": "Z"
+                }
+              ],
+              "header": true,
+              "align": "center"
+            }
+          ],
+          [
+            {
+              "content": [],
+              "align": "center"
+            },
+            {
+              "content": [],
+              "align": "center"
+            },
+            {
+              "content": [],
+              "align": "center"
+            },
+            {
+              "content": [],
+              "align": "center"
+            },
+            {
+              "content": [],
+              "align": "center"
+            }
+          ],
+          [
+            {
+              "content": [],
+              "align": "center"
+            },
+            {
+              "content": [],
+              "align": "center"
+            },
+            {
+              "content": [],
+              "align": "center"
+            },
+            {
+              "content": [],
+              "align": "center"
+            },
+            {
+              "content": [],
+              "align": "center"
+            }
+          ],
+          [
+            {
+              "content": [],
+              "align": "center"
+            },
+            {
+              "content": [],
+              "align": "center"
+            },
+            {
+              "content": [],
+              "align": "center"
+            },
+            {
+              "content": [],
+              "align": "center"
+            },
+            {
+              "content": [],
+              "align": "center"
+            }
+          ],
+          [
+            {
+              "content": [],
+              "align": "center"
+            },
+            {
+              "content": [],
+              "align": "center"
+            },
+            {
+              "content": [],
+              "align": "center"
+            },
+            {
+              "content": [],
+              "align": "center"
+            },
+            {
+              "content": [],
+              "align": "center"
+            }
+          ]
+        ],
+        "D": [
+          [
+            {
+              "content": [],
+              "align": "center"
+            },
+            {
+              "content": [
+                {
+                  "text": "W"
+                }
+              ],
+              "header": true,
+              "align": "center"
+            },
+            {
+              "content": [
+                {
+                  "text": "X"
+                }
+              ],
+              "header": true,
+              "align": "center"
+            },
+            {
+              "content": [
+                {
+                  "text": "Y"
+                }
+              ],
+              "header": true,
+              "align": "center"
+            },
+            {
+              "content": [
+                {
+                  "text": "Z"
+                }
+              ],
+              "header": true,
+              "align": "center"
+            }
+          ],
+          [
+            {
+              "content": [],
+              "align": "center"
+            },
+            {
+              "content": [],
+              "align": "center"
+            },
+            {
+              "content": [],
+              "align": "center"
+            },
+            {
+              "content": [],
+              "align": "center"
+            },
+            {
+              "content": [],
+              "align": "center"
+            }
+          ],
+          [
+            {
+              "content": [],
+              "align": "center"
+            },
+            {
+              "content": [],
+              "align": "center"
+            },
+            {
+              "content": [],
+              "align": "center"
+            },
+            {
+              "content": [],
+              "align": "center"
+            },
+            {
+              "content": [],
+              "align": "center"
+            }
+          ],
+          [
+            {
+              "content": [],
+              "align": "center"
+            },
+            {
+              "content": [],
+              "align": "center"
+            },
+            {
+              "content": [],
+              "align": "center"
+            },
+            {
+              "content": [],
+              "align": "center"
+            },
+            {
+              "content": [],
+              "align": "center"
+            }
+          ],
+          [
+            {
+              "content": [],
+              "align": "center"
+            },
+            {
+              "content": [],
+              "align": "center"
+            },
+            {
+              "content": [],
+              "align": "center"
+            },
+            {
+              "content": [],
+              "align": "center"
+            },
+            {
+              "content": [],
+              "align": "center"
+            }
+          ]
+        ]
+      }
+    },
+    "answer": "B",
+    "topics": [
+      "Characteristics of Living Organisms"
+    ],
+    "lessons": [
+      "Characteristics of Living Organisms"
+    ]
+  },
+  {
+    "n": 29,
+    "blocks": [
+      {
+        "id": "bmrvedfm5-t-zpn9l",
+        "block": "question",
+        "content": [
+          "Which of the statements about the production of a protein are correct?"
+        ]
+      }
+    ],
+    "layout": {
+      "type": "combined-choice",
+      "statements": [
+        [
+          "The sequence of bases in the gene determines the amino acid sequence used to make a protein."
+        ],
+        [
+          "The mRNA molecules are made in the nucleus and they remain there."
+        ],
+        [
+          "The ribosomes assemble amino acids together to make a protein."
+        ]
+      ],
+      "options": {
+        "A": [
+          1,
+          2
+        ],
+        "B": [
+          1,
+          3
+        ],
+        "C": [
+          2,
+          3
+        ],
+        "D": [
+          2
+        ]
+      },
+      "orientation": "horizontal"
+    },
+    "answer": "B",
+    "topics": [
+      "Characteristics of Living Organisms"
+    ],
+    "lessons": [
+      "Characteristics of Living Organisms"
+    ]
+  },
+  {
+    "n": 30,
+    "blocks": [
+      {
+        "id": "bmrvfy5ok-1m-xksnq",
+        "block": "intro",
+        "content": [
+          "In mice, the allele for brown fur is dominant to the allele for white fur.",
+          {
+            "br": true
+          },
+          {
+            "br": true
+          },
+          "The diagram shows the inheritance of fur colour in a family of mice."
+        ]
+      }
+    ],
+    "layout": {
+      "type": "image-zones",
+      "image": {
+        "src": "",
+        "alt": "",
+        "invertOnDark": true
+      },
+      "zones": [
+        {
+          "label": "1",
+          "points": [
+            [
+              8,
+              8
+            ],
+            [
+              40,
+              8
+            ],
+            [
+              40,
+              40
+            ],
+            [
+              8,
+              40
+            ]
+          ]
+        },
+        {
+          "label": "2",
+          "points": [
+            [
+              60,
+              8
+            ],
+            [
+              92,
+              8
+            ],
+            [
+              92,
+              40
+            ],
+            [
+              60,
+              40
+            ]
+          ]
+        },
+        {
+          "label": "4",
+          "points": [
+            [
+              8,
+              60
+            ],
+            [
+              40,
+              60
+            ],
+            [
+              40,
+              92
+            ],
+            [
+              8,
+              92
+            ]
+          ]
+        },
+        {
+          "label": "6",
+          "points": [
+            [
+              60,
+              60
+            ],
+            [
+              92,
+              60
+            ],
+            [
+              92,
+              92
+            ],
+            [
+              60,
+              92
+            ]
+          ]
+        },
+        {
+          "label": "7",
+          "points": [
+            [
+              20,
+              20
+            ],
+            [
+              50,
+              20
+            ],
+            [
+              50,
+              50
+            ],
+            [
+              20,
+              50
+            ]
+          ]
+        },
+        {
+          "label": "8",
+          "points": [
+            [
+              20,
+              20
+            ],
+            [
+              50,
+              20
+            ],
+            [
+              50,
+              50
+            ],
+            [
+              20,
+              50
+            ]
+          ]
+        },
+        {
+          "label": "10",
+          "points": [
+            [
+              33.22927562761506,
+              14.273884239888424
+            ],
+            [
+              50,
+              20
+            ],
+            [
+              50,
+              50
+            ],
+            [
+              20,
+              50
+            ]
+          ]
+        }
+      ],
+      "options": {
+        "A": {
+          "refs": [
+            1,
+            3
+          ]
+        },
+        "B": {
+          "refs": [
+            2,
+            6
+          ]
+        },
+        "C": {
+          "refs": [
+            4,
+            5
+          ]
+        },
+        "D": {
+          "refs": [
+            5,
+            7
+          ]
+        }
+      },
+      "questionText": [
+        {
+          "br": true
+        },
+        {
+          "text": "Which two individuals are heterozygous for fur colour?",
+          "sizePx": 18
+        },
+        {
+          "br": true
+        },
+        {
+          "br": true
+        }
+      ],
+      "orientation": "horizontal",
+      "optionLabels": {
+        "A": [
+          {
+            "text": "1 and 4"
+          }
+        ],
+        "B": [
+          {
+            "text": "2 and 8"
+          }
+        ],
+        "C": [
+          {
+            "text": "6 and 7"
+          }
+        ],
+        "D": [
+          {
+            "text": "7 and 10"
+          }
+        ]
+      }
+    },
+    "answer": "A",
+    "topics": [
+      "Characteristics of Living Organisms"
+    ],
+    "lessons": [
+      "Characteristics of Living Organisms"
+    ]
+  },
+  {
+    "n": 31,
+    "blocks": [
+      {
+        "id": "bmrvg3g05-1o-bzp57",
+        "block": "intro",
+        "content": [
+          "Desert plants have evolved to survive in places where very little water is available."
+        ]
+      },
+      {
+        "id": "bmrvg3kog-1p-lp2sp",
+        "block": "question",
+        "content": [
+          "Which process is reduced to enable them to retain as much water as possible?"
+        ]
+      }
+    ],
+    "layout": {
+      "type": "text-vertical",
+      "options": {
+        "A": [
+          "transpiration"
+        ],
+        "B": [
+          "translocation"
+        ],
+        "C": [
+          "respiration"
+        ],
+        "D": [
+          "digestion"
+        ]
+      }
+    },
+    "answer": "D",
+    "topics": [
+      "Characteristics of Living Organisms"
+    ],
+    "lessons": [
+      "Characteristics of Living Organisms"
+    ]
+  },
+  {
+    "n": 32,
+    "blocks": [
+      {
+        "id": "bmrvg432h-1q-v3tbl",
+        "block": "intro",
+        "content": [
+          "These events may happen when an antibiotic is used to treat a bacterial infection."
+        ]
+      },
+      {
+        "id": "bmrvg4s6m-1r-c9112",
+        "block": "introData",
+        "data": {
+          "kind": "list",
+          "ordered": true,
+          "style": "ordered",
+          "items": [
+            [
+              "The antibiotic kills most of the bacteria."
+            ],
+            [
+              "The antibiotic-resistant bacteria reproduce."
+            ],
+            [
+              "The antibiotic-resistant bacteria survive."
+            ],
+            [
+              "Some bacteria mutate and are resistant to the antibiotic."
+            ]
+          ]
+        }
+      },
+      {
+        "id": "bmrvg59qb-1s-pvrx7",
+        "block": "question",
+        "content": [
+          "Which sequence may produce a strain of antibiotic-resistant bacteria?"
+        ]
+      }
+    ],
+    "layout": {
+      "type": "text-vertical",
+      "options": {
+        "A": [
+          "1 → 2 → 3 → 4"
+        ],
+        "B": [
+          "2 → 3 → 1 → 4"
+        ],
+        "C": [
+          "3 → 1 → 4 → 2"
+        ],
+        "D": [
+          "4 → 1 → 3 → 2"
+        ]
+      }
+    },
+    "answer": "D",
+    "topics": [
+      "Characteristics of Living Organisms"
+    ],
+    "lessons": [
+      "Characteristics of Living Organisms"
+    ]
+  },
+  {
+    "n": 33,
+    "blocks": [
+      {
+        "id": "bmrvg5ue5-1t-wbmjo",
+        "block": "intro",
+        "content": [
+          "The graphs show the beak length of offspring of a wild bird population in 2000 and in 2020. The graphs are drawn to the same scale."
+        ]
+      },
+      {
+        "id": "bmrvg6j5y-1u-3zf95",
+        "block": "introData",
+        "data": {
+          "kind": "image",
+          "image": {
+            "src": "",
+            "alt": ""
+          },
+          "size": "lg"
+        },
+        "span": "half"
+      },
+      {
+        "id": "bmrvg6nlw-1v-84scc",
+        "block": "introData",
+        "data": {
+          "kind": "image",
+          "image": {
+            "src": "",
+            "alt": ""
+          },
+          "size": "lg"
+        },
+        "span": "half"
+      },
+      {
+        "id": "bmrvedfm5-x-lru1o",
+        "block": "question",
+        "content": [
+          "Which change has taken place in the overall beak length of the bird population, and what type of selection has brought this about?"
+        ]
+      }
+    ],
+    "layout": {
+      "type": "table",
+      "grid": [
+        [
+          {
+            "content": [
+              "change in the beak length of the bird population"
+            ],
+            "header": true,
+            "align": "center"
+          },
+          {
+            "content": [
+              "type of selection"
+            ],
+            "header": true,
+            "align": "center"
+          }
+        ],
+        [
+          {
+            "content": [
+              "decrease"
+            ],
+            "align": "center"
+          },
+          {
+            "content": [
+              "artificial"
+            ],
+            "align": "center"
+          }
+        ],
+        [
+          {
+            "content": [
+              "decrease"
+            ],
+            "align": "center"
+          },
+          {
+            "content": [
+              "natural"
+            ],
+            "align": "center"
+          }
+        ],
+        [
+          {
+            "content": [
+              "increase"
+            ],
+            "align": "center"
+          },
+          {
+            "content": [
+              "artificial"
+            ],
+            "align": "center"
+          }
+        ],
+        [
+          {
+            "content": [
+              "increase"
+            ],
+            "align": "center"
+          },
+          {
+            "content": [
+              "natural"
+            ],
+            "align": "center"
+          }
+        ]
+      ],
+      "optionsAxis": "rows",
+      "optionAt": {
+        "A": 1,
+        "B": 2,
+        "C": 3,
+        "D": 4
+      }
+    },
+    "answer": "D",
+    "topics": [
+      "Characteristics of Living Organisms"
+    ],
+    "lessons": [
+      "Characteristics of Living Organisms"
+    ]
+  },
+  {
+    "n": 34,
+    "blocks": [
+      {
+        "id": "bmrvedfm5-y-jt8db",
+        "block": "question",
+        "content": [
+          "What is the principal source of energy input into an ecosystem?"
+        ]
+      }
+    ],
+    "layout": {
+      "type": "text-vertical",
+      "options": {
+        "A": [
+          "decomposers"
+        ],
+        "B": [
+          "herbivores"
+        ],
+        "C": [
+          "producers"
+        ],
+        "D": [
+          "the Sun"
+        ]
+      }
+    },
+    "answer": "D",
+    "topics": [
+      "Characteristics of Living Organisms"
+    ],
+    "lessons": [
+      "Characteristics of Living Organisms"
+    ]
+  },
+  {
+    "n": 35,
+    "blocks": [
+      {
+        "id": "bmrvgkzj3-1-65ido",
+        "block": "intro",
+        "content": [
+          "The diagram shows part of the nitrogen cycle."
+        ]
+      },
+      {
+        "id": "bmrvglibz-2-gloct",
+        "block": "question",
+        "content": [
+          "Which numbers represent decomposing bacteria and nitrifying bacteria?"
+        ]
+      }
+    ],
+    "layout": {
+      "type": "table",
+      "grid": [
+        [
+          {
+            "content": [
+              "decomposing ",
+              "bacteria"
+            ],
+            "header": true,
+            "align": "center"
+          },
+          {
+            "content": [
+              "nitrifying bacteria"
+            ],
+            "header": true,
+            "align": "center"
+          }
+        ],
+        [
+          {
+            "content": [
+              "1"
+            ],
+            "align": "center"
+          },
+          {
+            "content": [
+              "3"
+            ],
+            "align": "center"
+          }
+        ],
+        [
+          {
+            "content": [
+              "1"
+            ],
+            "align": "center"
+          },
+          {
+            "content": [
+              "4"
+            ],
+            "align": "center"
+          }
+        ],
+        [
+          {
+            "content": [
+              "2"
+            ],
+            "align": "center"
+          },
+          {
+            "content": [
+              "3"
+            ],
+            "align": "center"
+          }
+        ],
+        [
+          {
+            "content": [
+              "2"
+            ],
+            "align": "center"
+          },
+          {
+            "content": [
+              "4"
+            ],
+            "align": "center"
+          }
+        ]
+      ],
+      "optionsAxis": "rows",
+      "optionAt": {
+        "A": 1,
+        "B": 2,
+        "C": 3,
+        "D": 4
+      }
+    },
+    "answer": "C",
+    "topics": [
+      "Characteristics of Living Organisms"
+    ],
+    "lessons": [
+      "Characteristics of Living Organisms"
+    ]
+  },
+  {
+    "n": 36,
+    "blocks": [
+      {
+        "id": "bmrvedfm5-z-fqplq",
+        "block": "question",
+        "content": [
+          "What is a description of biodiversity?"
+        ]
+      }
+    ],
+    "layout": {
+      "type": "text-vertical",
+      "options": {
+        "A": [
+          "the number of different animal species that live in an area"
+        ],
+        "B": [
+          "the number of different plant species that live in an area"
+        ],
+        "C": [
+          "the number of different species that live in an area"
+        ],
+        "D": [
+          "the number of individuals of a particular species that live in an area"
+        ]
+      }
+    },
+    "answer": "C",
+    "topics": [
+      "Characteristics of Living Organisms"
+    ],
+    "lessons": [
+      "Characteristics of Living Organisms"
+    ]
+  },
+  {
+    "n": 37,
+    "blocks": [
+      {
+        "id": "bmrvgmxeq-3-u5813",
+        "block": "intro",
+        "content": [
+          "A list of different stages that occur in the process of eutrophication is given."
+        ]
+      },
+      {
+        "id": "bmrvgn8rj-4-z228l",
+        "block": "introData",
+        "data": {
+          "kind": "list",
+          "ordered": true,
+          "style": "ordered",
+          "items": [
+            [
+              "reduction in dissolved oxygen"
+            ],
+            [
+              "increase in nitrate ions"
+            ],
+            [
+              "death of organisms requiring dissolved oxygen"
+            ],
+            [
+              "growth of producers"
+            ],
+            [
+              "increased aerobic respiration by decomposers"
+            ],
+            [
+              "death of producers followed by their decomposition"
+            ]
+          ]
+        }
+      },
+      {
+        "id": "bmrvedfm5-10-b1i8e",
+        "block": "question",
+        "content": [
+          "What is the correct order in which these processes occur during eutrophication?"
+        ]
+      }
+    ],
+    "layout": {
+      "type": "text-vertical",
+      "options": {
+        "A": [
+          "1 → 3 → 5 → 2 → 6 → 4"
+        ],
+        "B": [
+          "2 → 4 → 1 → 6 → 5 → 3"
+        ],
+        "C": [
+          "2 → 4 → 6 → 5 → 1 → 3"
+        ],
+        "D": [
+          "5 → 1 → 3 → 6 → 2 → 4"
+        ]
+      }
+    },
+    "answer": "A",
+    "topics": [
+      "Characteristics of Living Organisms"
+    ],
+    "lessons": [
+      "Characteristics of Living Organisms"
+    ]
+  },
+  {
+    "n": 38,
+    "blocks": [
+      {
+        "id": "bmrvgogn0-5-9u8to",
+        "block": "intro",
+        "content": [
+          "Lignin is used to make a sustainable resource known as bioplastic."
+        ]
+      },
+      {
+        "id": "bmrvedfm5-11-gctz0",
+        "block": "question",
+        "content": [
+          "Why is bioplastic a sustainable resource?"
+        ]
+      }
+    ],
+    "layout": {
+      "type": "text-vertical",
+      "options": {
+        "A": [
+          "Lignin can be produced as rapidly as it is removed from the environment."
+        ],
+        "B": [
+          "Lignin is found in xylem tissue."
+        ],
+        "C": [
+          "Lignin is strong."
+        ],
+        "D": [
+          "Lignin is waterproof."
+        ]
+      }
+    },
+    "answer": "A",
+    "topics": [
+      "Characteristics of Living Organisms"
+    ],
+    "lessons": [
+      "Characteristics of Living Organisms"
+    ]
+  },
+  {
+    "n": 39,
+    "blocks": [
+      {
+        "id": "bmrvedfm5-12-fskny",
+        "block": "question",
+        "content": [
+          "Which bacterial cell structure is useful in genetic modification?"
+        ]
+      }
+    ],
+    "layout": {
+      "type": "text-vertical",
+      "options": {
+        "A": [
+          "cell membrane"
+        ],
+        "B": [
+          "cell wall"
+        ],
+        "C": [
+          "cytoplasm"
+        ],
+        "D": [
+          "plasmid"
+        ]
+      }
+    },
+    "answer": "A",
+    "topics": [
+      "Characteristics of Living Organisms"
+    ],
+    "lessons": [
+      "Characteristics of Living Organisms"
+    ]
+  },
+  {
+    "n": 40,
+    "blocks": [
+      {
+        "id": "bmrvgpja4-6-g1jx7",
+        "block": "intro",
+        "content": [
+          "A crop plant has been genetically modified to make it resistant to herbicides."
+        ]
+      },
+      {
+        "id": "bmrvedfm5-13-c3vnl",
+        "block": "question",
+        "content": [
+          "What is a possible disadvantage of introducing this new crop plant?"
+        ]
+      }
+    ],
+    "layout": {
+      "type": "text-vertical",
+      "options": {
+        "A": [
+          "The loss of weeds reduces competition."
+        ],
+        "B": [
+          "Some of the weeds might become resistant to the herbicide."
+        ],
+        "C": [
+          "The crop plant is unharmed and produces a higher yield."
+        ],
+        "D": [
+          "The new gene will appear in new generations of the crop plant."
+        ]
+      }
+    },
+    "answer": "A",
+    "topics": [
+      "Characteristics of Living Organisms"
+    ],
+    "lessons": [
+      "Characteristics of Living Organisms"
+    ]
+  }
+],
   "biology-2025-feb-V2": [
   {
     "n": 1,

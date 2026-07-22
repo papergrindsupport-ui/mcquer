@@ -86,7 +86,12 @@ function McqPage() {
                   {sessionShort}
                 </Crumb>
                 <Sep />
-                <li className="text-foreground">{variant}</li>
+                <Crumb
+                  to="/mcq/$subject/$year/$session"
+                  params={{ subject: subjectShort, year: String(year), session, variant }}
+                >
+                  {variant}
+                </Crumb>{" "}
               </ol>
             </nav>
           </div>

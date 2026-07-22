@@ -8,7 +8,7 @@ import {
 } from "react-icons/lu";
 import { CircuitRenderer } from "./Circuit";
 import { CircuitOptions } from "./CircuitOptions";
-
+import { TablesOptions } from "./TablesOptions";
 import { Flowchart } from "./Flowchart";
 
 import type {
@@ -57,8 +57,10 @@ function getRefsForOption(layout: OptionsLayout, id: OptionId): number[] {
     case "text-refs":
       return layout.options[id]?.refs ?? [];
     case "image-refs":
+
     case "image-zones":
       return layout.options[id]?.refs ?? [];
+
     default:
       return [];
   }
@@ -977,6 +979,16 @@ export function LayoutRenderer({
           orientation={layout.orientation}
           keys={keys}
           questionSlot={questionSlot}
+          {...common}
+        />
+      );
+    case "tables":
+      return (
+        <TablesOptions
+          options={layout.options}
+          orientation={layout.orientation}
+          keyItems={layout.keyItems}
+          keys={keys}
           {...common}
         />
       );
