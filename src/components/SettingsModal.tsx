@@ -6,6 +6,7 @@ import type { PaperQuestions, OptionId } from "@/lib/mcq/types";
 import { OPTION_IDS } from "@/lib/mcq/types";
 import { downloadPaperPdf, type PaperExportMode } from "@/lib/mcq/paper-export";
 import type { PrintSelections } from "@/components/mcq/PaperPrint";
+import { useTheme } from "@/lib/theme";
 
 export type PaperSettingsContext = {
   questions: PaperQuestions;
@@ -38,6 +39,7 @@ export function SettingsModal({ open, onClose, paper }: Props) {
 
   // Export state
   const [exportMode, setExportMode] = useState<PaperExportMode>("dark");
+  const { setMode } = useTheme();
   const [exportColored, setExportColored] = useState(true);
   const [exportAnswers, setExportAnswers] = useState(true);
   const [exporting, setExporting] = useState(false);
@@ -73,7 +75,10 @@ export function SettingsModal({ open, onClose, paper }: Props) {
       setExporting(false);
     }
   };
-
+  const setexmode = (mode) => {
+    setMode(mode);
+    setExportMode(mode);
+  };
   return (
     <div
       className="fixed inset-0 z-[80] grid place-items-center bg-black/70 p-4 backdrop-blur-sm"
@@ -136,13 +141,16 @@ export function SettingsModal({ open, onClose, paper }: Props) {
             >
               <div className="space-y-4">
                 <SegRow label="Theme">
-                  <Seg active={exportMode === "dark"} onClick={() => setExportMode("dark")}>
+                  <Seg active={exportMode === "dark"} onClick={() => setexmode("dark")}>
                     Dark
                   </Seg>
-                  <Seg active={exportMode === "light"} onClick={() => setExportMode("light")}>
+                  <Seg active={exportMode === "light"} onClick={() => setexmode("light")}>
                     Light
                   </Seg>
                 </SegRow>
+                <p className="mb-2 text-center text-xs text-muted-foreground ">
+                  Your site theme might change, just change it back after exporting your pdf
+                </p>
                 <SegRow label="Colour">
                   <Seg active={exportColored} onClick={() => setExportColored(true)}>
                     Colour
@@ -174,8 +182,10 @@ export function SettingsModal({ open, onClose, paper }: Props) {
                   )}
                 </button>
                 {exporting && (
-                  <p className="text-center text-xs text-muted-foreground">
-                    Rendering rich text, tables, graphs and images…
+                  <p className="mb-2 text-center text-xs text-muted-foreground">
+                    Rendering... Do NOT close this modal until building is finished! due to the
+                    beauty of the exported pdf, the site might lag while building, just give it
+                    2mins!
                   </p>
                 )}
               </div>
